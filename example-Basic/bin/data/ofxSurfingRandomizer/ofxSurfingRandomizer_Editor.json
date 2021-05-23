@@ -1,36 +1,44 @@
 {
     "Editor": {
         "Params": {
-            "amount": "0",
-            "lineWidth": "0",
-            "lineWidth3": "0",
-            "next": "0",
-            "prev": "0",
+            "amount": "1",
+            "amount2": "1",
+            "lineWidth": "1",
+            "lineWidth3": "1",
+            "next": "1",
+            "prev": "1",
             "separation": "1",
+            "separation3": "1",
             "shapeType": "1",
             "shapeType2": "1",
             "size": "1",
             "size2": "1",
-            "speed": "1"
+            "speed": "1",
+            "speed3": "1"
         },
         "paramsGroup": {
             "amount": {
                 "Max": "25",
                 "Min": "0",
-                "amount": "0"
+                "amount": "7"
+            },
+            "amount2": {
+                "Max": "22",
+                "Min": "2",
+                "amount2": "21"
             },
             "lineWidth": {
                 "Max": "1",
                 "Min": "0",
-                "lineWidth": "0"
+                "lineWidth": "0.815149"
             },
             "lineWidth3": {
                 "Max": "1",
                 "Min": "0",
-                "lineWidth3": "0"
+                "lineWidth3": "0.841853"
             },
             "next": {
-                "next": "0"
+                "next": "1"
             },
             "prev": {
                 "prev": "1"
@@ -38,32 +46,42 @@
             "separation": {
                 "Max": "100",
                 "Min": "1",
-                "separation": "99.4169"
+                "separation": "67.1521"
+            },
+            "separation3": {
+                "Max": "90.1",
+                "Min": "10.9",
+                "separation3": "83.1727"
             },
             "shapeType": {
                 "Max": "50",
                 "Min": "-50",
-                "shapeType": "20"
+                "shapeType": "-43"
             },
             "shapeType2": {
                 "Max": "50",
                 "Min": "-50",
-                "shapeType2": "-49"
+                "shapeType2": "-26"
             },
             "size": {
                 "Max": "100",
                 "Min": "0",
-                "size": "23"
+                "size": "65"
             },
             "size2": {
                 "Max": "100",
                 "Min": "0",
-                "size2": "78"
+                "size2": "8"
             },
             "speed": {
                 "Max": "1",
                 "Min": "0",
-                "speed": "0.684744"
+                "speed": "0.409925"
+            },
+            "speed3": {
+                "Max": "0.9",
+                "Min": "0.1",
+                "speed3": "0.339875"
             }
         }
     }

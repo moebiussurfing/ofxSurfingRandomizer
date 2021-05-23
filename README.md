@@ -1,22 +1,24 @@
 # ofxSurfingRandomizer
 
 ## Overview
-An **openFrameworks** add-on to perform a ranged randomization between the minimun and maximum values of selected ```ofParameters``` on a group.
+An **openFrameworks** add-on to perform ranged randomization between a settable minimum and maximum value of all the selected ```ofParameters``` on a group.
 
-## Screencast 
+## Screenshot 
 <!-- <img src="docs/readme_images/ofxSurfingRandomizer.gif" width="80%" height="80%"> -->
 <img src="readme_images/Capture.PNG">
 
-
 ## Features
-- Just pass your ```ofParameterGroup``` parameters container.
-- Only ```float```, ```int``` and ´´´bool´´´ types yet.
+- Only ```float```, ```int``` and ```bool``` types yet.
 - Auto Store/Recall all the settings.
-- Reset, Store/Recall memory states and other helpers.
+- Reset, Store/Recall a memory state and other helpers.
 - **ImGui** based GUI ready to integrate.
 
 ## Usage
- 
+- Just pass your ```ofParameterGroup``` parameters container.
+- Enable the parameter that you want to perform the randomization.
+- Set the minimum and maximum range to fit the random inside. 
+- Limits will be also inside the min/max of the parameters.
+
 **ofApp.h**
 ```.cpp
 #include "ofxSurfingRandomizer.h"
@@ -35,31 +37,14 @@ ofParameter<int> shapeType;
 ```.cpp
 void ofApp::setup() 
 {
-	params.setName("paramsGroup");
-	params.add(lineWidth.set("lineWidth", 0.5, 0.0, 1.0));
-	params.add(separation.set("separation", 50.0, 1.0, 100.0));
-	params.add(speed.set("speed", 0.5, 0.0, 1.0));
-	params.add(amount.set("amount", 1, 1, 10));
-	params.add(speed.set("shapeType", 0, 0, 3));
+  params.setName("paramsGroup");
+  params.add(lineWidth.set("lineWidth", 0.5, 0.0, 1.0));
+  params.add(separation.set("separation", 50.0, 1.0, 100.0));
+  params.add(speed.set("speed", 0.5, 0.0, 1.0));
+  params.add(amount.set("amount", 1, 1, 10));
+  params.add(speed.set("shapeType", 0, 0, 3));
 
-	data.setup(params);
-}
-
-void ofApp::draw() {
-
-	data.draw();
-}
-
-void ofApp::keyPressed(int key) {
-
-	if (key == ' ')
-	{
-		data.doRandomize();
-	}
-	if (key == OF_KEY_RETURN)
-	{
-		data.doResetParams();
-	}
+  data.setup(params);
 }
 ```
 
@@ -67,10 +52,10 @@ void ofApp::keyPressed(int key) {
   <summary>Dependencies</summary>
   <p>
 
-Clone these add-ons and include into the **OF PROJECT GENERATOR** to allow compile your projects or the examples:
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test)  [FORK|BRANCH]  
+Clone these add-ons and include into the **OF PROJECT GENERATOR**:
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test)  [ FORK | BRANCH ]  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [Only for **example-Basic**]  
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [ Only for **example-Basic** ]  
 
 *Thanks a lot to all these ofxAddons coders.*  
   </p>
@@ -85,9 +70,9 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR** to allow compi
 </details>
 
 ## TODO
-* Add more types: 2D/3D vectors and colors. Using templates [?] ...
-[ ANY HELP/PULL ON THIS IS REALLY APPRECIATED! ]
-* Undo engine
+* Add more types: 2D/3D vectors and colors. Using templates [?] ...  
+[ ANY HELP/PULL ON THIS IS APPRECIATED! ]  
+* Add Undo engine to improve exploration.
 
 ## Author
 An add-on by **@moebiusSurfing**  

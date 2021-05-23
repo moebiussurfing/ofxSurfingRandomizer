@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 ofxSurfingRandomizer::ofxSurfingRandomizer() {
+	ofAddListener(ofEvents().draw, this, &ofxSurfingRandomizer::draw);
 	//ofAddListener(ofEvents().update, this, &ofxSurfingRandomizer::update);
 	//ofAddListener(ofEvents().keyPressed, this, &ofxSurfingRandomizer::keyPressed);
 
@@ -24,6 +25,7 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 
 //--------------------------------------------------------------
 ofxSurfingRandomizer::~ofxSurfingRandomizer() {
+	ofRemoveListener(ofEvents().draw, this, &ofxSurfingRandomizer::draw);
 	//ofRemoveListener(ofEvents().update, this, &ofxSurfingRandomizer::update);
 	//ofRemoveListener(ofEvents().keyPressed, this, &ofxSurfingRandomizer::keyPressed);
 
@@ -32,6 +34,8 @@ ofxSurfingRandomizer::~ofxSurfingRandomizer() {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
+	ofAddListener(ofEvents().draw, this, &ofxSurfingRandomizer::draw, OF_EVENT_ORDER_AFTER_APP);
+
 	ofxSurfingHelpers::CheckFolder(path_Global);
 
 	params = group;//store the external target params
@@ -40,13 +44,8 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	// gui
 	guiManager.setup();//initiate ImGui
-	//guiManager.setup(gui);
 	//guiManager.setUseAdvancedSubPanel(true);
 }
-
-////--------------------------------------------------------------
-//void ofxSurfingRandomizer::update(){
-//}
 
 //--------------------------------------------------------------
 //void ofxSurfingRandomizer::update(ofEventArgs & args)
@@ -54,7 +53,8 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 //}
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::draw() {
+void ofxSurfingRandomizer::draw(ofEventArgs & args) {
+	if (!bGui) return;
 
 	guiManager.begin();
 	{

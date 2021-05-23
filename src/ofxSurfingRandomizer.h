@@ -19,7 +19,7 @@ public:
 	~ofxSurfingRandomizer();
 
 	void setup(ofParameterGroup& group);
-	void draw();
+	void draw(ofEventArgs & args);
 	void exit();
 
 private:
@@ -43,7 +43,6 @@ private:
 	//-
 
 	ofxSurfing_ImGui_LayoutManager guiManager;
-	//ofxImGui::Gui gui;
 
 	//-
 
@@ -59,11 +58,14 @@ private:
 	vector<ofParameter<bool>> enablersForParams;
 
 	ofParameterGroup params_AppState;
-	ofParameter<bool> bGui;
 	ofParameter<bool> bParams;
 	ofParameter<bool> bEditor;
 	ofParameter<bool> bControls;
 
+public:
+	ofParameter<bool> bGui;
+
+private:
 	//settings
 	string path_Global = "ofxSurfingRandomizer/";
 	string path_Editor;//the editor settings
