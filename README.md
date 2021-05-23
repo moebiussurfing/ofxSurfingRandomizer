@@ -9,15 +9,19 @@ An **openFrameworks** add-on to perform ranged randomization between the settabl
 
 ## Features
 - Only ```float```, ```int``` and ```bool``` types yet.
+- Workflow Helpers:
+  * Select NONE/ALL parameters.
+  * Reset all parameters to minimum.
+  * Reset Min/Max ranges to parameter limits.
+  * Store/Recall a memory state to improve exploring.
 - Auto Store/Recall all the settings.
-- Reset, Store/Recall a memory state and other helpers.
 - **ImGui** based GUI ready to integrate.
 
 ## Usage
 - Just pass your ```ofParameterGroup``` parameters container.
-- Enable the parameter that you want to perform the randomization.
-- Set the minimum and maximum range to fit the random inside. 
-- Limits will be also inside the min/max of the parameters.
+- Enable all the parameters that you want to perform the randomization to.
+- Set the minimum and maximum range sliders to fit the random inside them. 
+- Notice that limits will be also inside the Min/Max of the parameters.
 
 **ofApp.h**
 ```.cpp
