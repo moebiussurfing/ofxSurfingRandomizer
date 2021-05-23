@@ -2,15 +2,19 @@
 
 #include "ofMain.h"
 #include "ofxSurfingRandomizer.h"
+#include "ofxWindowApp.h"
 
 class ofApp : public ofBaseApp{
+
 public:
     void setup();
     void update();
     void draw();
 
-	// all the parameters for the scene 
+	// the parameters to randomize
 	ofParameterGroup params;
+	ofParameter<bool> bPrevious;
+	ofParameter<bool> bNext;
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;
 	ofParameter<float> speed;
@@ -28,4 +32,6 @@ public:
 	ofParameter<int> shapeType3;
 
 	ofxSurfingRandomizer data;
+
+	ofxWindowApp windowApp;
 };
