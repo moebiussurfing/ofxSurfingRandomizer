@@ -34,12 +34,12 @@ ofxSurfingRandomizer::~ofxSurfingRandomizer() {
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	ofxSurfingHelpers::CheckFolder(path_Global);
 
-	params = group;
+	params = group;//store the external target params
 
-	setupEditor(group);
+	setupEditor(group);//build the editor for all the params
 
 	// gui
-	guiManager.setup();
+	guiManager.setup();//initiate ImGui
 	//guiManager.setup(gui);
 	//guiManager.setUseAdvancedSubPanel(true);
 }
@@ -455,14 +455,16 @@ void ofxSurfingRandomizer::exit() {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 {
-	params_EditorGroups.clear();
+	// clear
+
+	params_EditorGroups.clear();// a group for each param
 	params_EditorGroups.setName(params.getName());
 
-	params_EditorEnablers.clear();
+	enablersForParams.clear();// an enabler toggler for each param
+	params_EditorEnablers.clear();// an enabler toggler for each param
 	params_EditorEnablers.setName("Params");
 
-	enablersForParams.clear();
-
+	// initiate
 	addGroup(group);
 
 	//-
@@ -486,15 +488,11 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 		//--
 
-		// group
-		auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(pa);
-
 		// different types
+		auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(pa);// group
 		auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(pa);
 		auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(pa);
 		auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(pa);
-
-		// parameter, try everything we know how to handle.
 
 		//auto type = pa->type();
 		//bool isFloat = type == typeid(ofParameter<float>).name();
@@ -502,84 +500,26 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 		//bool isBool = type == typeid(ofParameter<bool>).name();
 
 		//---
-/*
-//			// x,y,z vectors
-//#if OF_VERSION_MINOR >= 10
-//			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-//			if (parameterVec2f)
-//			{
-//				ofParameter<bool> b{ parameterVec2f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				continue;
-//			}
-//			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-//			if (parameterVec3f)
-//			{
-//				ofParameter<bool> b{ parameterVec3f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				continue;
-//			}
-//			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-//			if (parameterVec4f)
-//			{
-//				ofParameter<bool> b{ parameterVec4f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				continue;
-//			}
-//#endif
-//			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-//			if (parameterOfVec2f)
-//			{
-//				//ofxImGui::AddParameter(*parameterOfVec2f);
-//				ofParameter<bool> b{ parameterOfVec2f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				continue;
-//			}
-//			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-//			if (parameterOfVec3f)
-//			{
-//				//ofxImGui::AddParameter(*parameterOfVec3f);
-//				ofParameter<bool> b{ parameterOfVec3f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				continue;
-//			}
-//			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-//			if (parameterOfVec4f)
-//			{
-//				ofParameter<bool> b{ parameterOfVec4f->getName(), false };
-//				//params_EditorGroups.push_back(b);
-//				//ofxImGui::AddParameter(*parameterOfVec4f);
-//				continue;
-//			}
-			// colors
-			//auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-			//if (parameterColor)
-			//{
-			//	ofParameter<bool> b{ parameterColor->getName(), false };
-			//	enablersForParams.push_back(b);
-			//	continue;
-			//}
-			//auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-			//if (parameterFloatColor)
-			//{
-			//	ofParameter<bool> b{ parameterFloatColor->getName(), false };
-			//	enablersForParams.push_back(b);
-			//	continue;
-			//}
-			//-
-*/
-//---
 
-// group
+		//if (false) {}
+
+		// group
 		if (parameterGroup)
 		{
 			//if (!parameterGroup->isSerializable()) continue;
 			////if (!parameterGroup->isSerializable()) return;
 
+			//TODO:
+			//bug: multiple nested..
 			addGroup(*parameterGroup);
+
+			//auto g0 = group.getGroup(parameterGroup->getName());
+			//addGroup(g0);
 
 			continue;
 		}
+
+		//-
 
 		// float
 		else if (parameterFloat)
@@ -607,10 +547,13 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-			//params_EditorEnablers.add(b0);
+
+			params_EditorEnablers.add(b0);
 
 			continue;
 		}
+
+		//-
 
 		// int
 		else if (parameterInt)
@@ -638,12 +581,14 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-			//params_EditorEnablers.add(b0);
+
+			params_EditorEnablers.add(b0);
 
 			continue;
 		}
 
-		//TODO:
+		//-
+
 		// bool
 		else if (parameterBool && 1)
 		{
@@ -662,7 +607,8 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-			//params_EditorEnablers.add(b0);
+
+			params_EditorEnablers.add(b0);
 
 			continue;
 		}
@@ -672,17 +618,10 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 	//----
 
-	// create an enabler bool/toggle for each parameter
-	for (auto pb : enablersForParams)
-	{
-		params_EditorEnablers.add(pb);
-	}
+	//TODO:
+	//// create an enabler bool/toggle for each parameter
+	//for (auto pb : enablersForParams)
+	//{
+	//	params_EditorEnablers.add(pb);
+	//}
 }
-
-//params_EditorGroups.add(parameter);
-//f0.makeReferenceTo(parameterFloat.cast<float>());
-//params_EditorGroups.add(parameter.cast<float>());
-//params_EditorGroups.add(parameterFloat);
-//ofParameter<float> prop = static_cast<ofParameter<float>&>(parameter);
-//ofParameter<float> prop = parameter.cast<float>();
-//params_EditorGroups.add(parameter);

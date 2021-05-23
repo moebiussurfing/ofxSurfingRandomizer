@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// the parameters to randomize
+	// params to randomize
 	params.setName("paramsGroup");// main container
 	params2.setName("paramsGroup2");// nested
 	params3.setName("paramsGroup3");// nested
@@ -15,16 +15,14 @@ void ofApp::setup()
 	params.add(amount.set("amount", 10, 0, 25));
 	params.add(bPrevious.set("prev", false));//bools
 	params.add(bNext.set("next", false));
-	////nested 1
-	//params2.add(shapeType2.set("shapeType2", 0, -50, 50));
-	//params2.add(size2.set("size2", 100, 0, 100));
+	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
+	params2.add(size2.set("size2", 100, 0, 100));
 	//params2.add(amount2.set("amount2", 10, 0, 25));
-	////nested 2
-	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
+	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	//params3.add(separation3.set("separation3", 50, 1, 100));
 	//params3.add(speed3.set("speed3", 0.5, 0, 1));
-	//params2.add(params3);
-	//params.add(params2);
+	params2.add(params3);
+	params.add(params2);
 
 	// randomizer
 	data.setup(params);
