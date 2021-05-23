@@ -62,6 +62,9 @@ void ofxSurfingRandomizer::draw() {
 		ImGuiColorEditFlags _flagsw = ImGuiWindowFlags_None;
 		string name;
 
+		bool bOpen;
+		ImGuiColorEditFlags _flagc;
+
 		//widgets sizes
 		float _spcx;
 		float _spcy;
@@ -107,89 +110,107 @@ void ofxSurfingRandomizer::draw() {
 			{
 				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-				ImGui::Text("PANELS");
-				ofxSurfingHelpers::AddBigToggle(bParams, _w50, _h);
-				ImGui::SameLine();
-				ofxSurfingHelpers::AddBigToggle(bEditor, _w50, _h);
-				//ofxSurfingHelpers::AddBigToggle(bControls, _w50, _h);
-				ImGui::Dummy(ImVec2(0.0f, 10.0f));
+				//-
+
+				bOpen = true;
+				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+				if (ImGui::CollapsingHeader("PANELS", _flagc))
+				{
+					//ImGui::Text("PANELS");
+					ofxSurfingHelpers::AddBigToggle(bParams, _w50, _h);
+					ImGui::SameLine();
+					ofxSurfingHelpers::AddBigToggle(bEditor, _w50, _h);
+					//ofxSurfingHelpers::AddBigToggle(bControls, _w50, _h);
+				}
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
 				//-
 
-				ImGui::Text("COMMANDS");
+				bOpen = true;
+				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+				if (ImGui::CollapsingHeader("COMMANDS", _flagc))
+				{
+					//ImGui::Text("COMMANDS");
 
-				if (ImGui::Button("RANDOMiZE!", ImVec2(_w100, 2 * _h)))
-				{
-					doRandomize();
-				}
+					if (ImGui::Button("RANDOMiZE!", ImVec2(_w100, 2 * _h)))
+					{
+						doRandomize();
+					}
 
-				if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
-				{
-					doResetParams();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("RESET RANGES", ImVec2(_w50, _h / 2)))
-				{
-					doResetRanges();
-				}
+					if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
+					{
+						doResetParams();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("RESET RANGES", ImVec2(_w50, _h / 2)))
+					{
+						doResetRanges();
+					}
 
-				//state memory
-				if (ImGui::Button("RECALL", ImVec2(_w50, _h / 2)))
-					//if (ImGui::Button("LOAD STATE", ImVec2(_w50, _h/2)))
-				{
-					doLoadState();
+					//state memory
+					if (ImGui::Button("RECALL", ImVec2(_w50, _h / 2)))
+						//if (ImGui::Button("LOAD STATE", ImVec2(_w50, _h/2)))
+					{
+						doLoadState();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("MEMORiZE", ImVec2(_w50, _h / 2)))
+						//if (ImGui::Button("SAVE STATE", ImVec2(_w50, _h/2)))
+					{
+						doSaveState();
+					}
 				}
-				ImGui::SameLine();
-				if (ImGui::Button("MEMORiZE", ImVec2(_w50, _h / 2)))
-					//if (ImGui::Button("SAVE STATE", ImVec2(_w50, _h/2)))
-				{
-					doSaveState();
-				}
-				ImGui::Dummy(ImVec2(0.0f, 10.0f));
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
 				//-
 
 				// enable toggles
 
-				ImGui::Text("ENABLE PARAMETERS");
-
-				static bool bNone, bAll;
-				if (ImGui::Button("NONE", ImVec2(_w50, _h / 2)))
+				bOpen = true;
+				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+				if (ImGui::CollapsingHeader("ENABLE PARAMETERS", _flagc))
 				{
-					doDisableAll();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("ALL", ImVec2(_w50, _h / 2)))
-				{
-					doEnableAll();
-				}
-				ImGui::Dummy(ImVec2(0.0f, 5.0f));
+					//ImGui::Text("ENABLE PARAMETERS");
 
-				for (int i = 0; i < params_EditorEnablers.size(); i++)
-				{
-					auto &p = params_EditorEnablers[i];// ofAbstractParameter
-					auto type = p.type();
-					bool isBool = type == typeid(ofParameter<bool>).name();
-					//bool isGroup = type == typeid(ofParameterGroup).name();
-					//bool isFloat = type == typeid(ofParameter<float>).name();
-					//bool isInt = type == typeid(ofParameter<int>).name();
-					string name = p.getName();
-
-					if (isBool)//just in case... 
+					static bool bNone, bAll;
+					if (ImGui::Button("NONE", ImVec2(_w50, _h / 2)))
 					{
-						ofParameter<bool> pb = p.cast<bool>();
-						ofxSurfingHelpers::AddBigToggle(pb, _w100, _h / 2, false);
+						doDisableAll();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("ALL", ImVec2(_w50, _h / 2)))
+					{
+						doEnableAll();
+					}
+					ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
-						//TODO:
-						//auto tmpRef = pb.get();
-						//const auto& info = typeid(ParameterType); 
-						//if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-						//{
-						//	parameter.set(tmpRef);
-						//	return true;
-						//}
+					for (int i = 0; i < params_EditorEnablers.size(); i++)
+					{
+						auto &p = params_EditorEnablers[i];// ofAbstractParameter
+						auto type = p.type();
+						bool isBool = type == typeid(ofParameter<bool>).name();
+						//bool isGroup = type == typeid(ofParameterGroup).name();
+						//bool isFloat = type == typeid(ofParameter<float>).name();
+						//bool isInt = type == typeid(ofParameter<int>).name();
+						string name = p.getName();
+
+						if (isBool)//just in case... 
+						{
+							ofParameter<bool> pb = p.cast<bool>();
+							ofxSurfingHelpers::AddBigToggle(pb, _w100, _h / 2, false);
+
+							//TODO:
+							//auto tmpRef = pb.get();
+							//const auto& info = typeid(ParameterType); 
+							//if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
+							//{
+							//	parameter.set(tmpRef);
+							//	return true;
+							//}
+						}
 					}
 				}
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
 				//-
 
@@ -547,9 +568,9 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 			//}
 			//-
 */
-		//---
+//---
 
-		// group
+// group
 		if (parameterGroup)
 		{
 			//if (!parameterGroup->isSerializable()) continue;

@@ -14,38 +14,38 @@
             "amount": {
                 "Max": "25",
                 "Min": "0",
-                "amount": "21"
+                "amount": "6"
             },
             "lineWidth": {
                 "Max": "1",
                 "Min": "0",
-                "lineWidth": "0.911313"
+                "lineWidth": "0.188574"
             },
             "next": {
                 "next": "1"
             },
             "prev": {
-                "prev": "1"
+                "prev": "0"
             },
             "separation": {
                 "Max": "100",
                 "Min": "1",
-                "separation": "83.8298"
+                "separation": "72.6146"
             },
             "shapeType": {
                 "Max": "50",
                 "Min": "-50",
-                "shapeType": "16"
+                "shapeType": "-46"
             },
             "size": {
                 "Max": "100",
                 "Min": "0",
-                "size": "92"
+                "size": "1"
             },
             "speed": {
                 "Max": "1",
                 "Min": "0",
-                "speed": "0.715812"
+                "speed": "0.182195"
             }
         }
     }
