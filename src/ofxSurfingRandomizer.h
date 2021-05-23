@@ -1,9 +1,8 @@
 #pragma once
-
 #include "ofMain.h"
-#include "ofxImGui.h"
+
 #include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGui.h"
+#include "ofxSurfing_ImGui_LayoutManager.h"
 
 #define DEFALUT_MIN_PCT 0.2f
 #define DEFALUT_MAX_PCT 0.8f
@@ -12,18 +11,21 @@ class ofxSurfingRandomizer
 {
 
 public:
-
 	ofxSurfingRandomizer();
 	~ofxSurfingRandomizer();
+	
+	void draw();
+	void exit();
 
 	void setup(ofParameterGroup& group);
 	void drawWidgets();
-	void exit();
     void doRamdomize();
     void doReset();
 
-private:
+	ofxImGui::Gui gui;
+	ofxSurfing_ImGui_LayoutManager guiManager;
 
+private:
 	void setup_RandomizerPowered(ofParameterGroup& group);
 	void addGroupToRandomizerPowered(ofParameterGroup& group);
 
@@ -36,6 +38,5 @@ private:
 
 	//vector<ofAbstractParameter> randomizersPowered_Vector;
 	vector<ofParameter<bool>> randomizersPowered_TogglesVector;
-	
 };
 

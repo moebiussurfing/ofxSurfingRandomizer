@@ -1,4 +1,5 @@
 #include "ofxSurfingRandomizer.h"
+
 //--------------------------------------------------------------
 ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	//ofAddListener(ofEvents().update, this, &ofxSurfingRandomizer::update);
@@ -15,6 +16,9 @@ ofxSurfingRandomizer::~ofxSurfingRandomizer() {
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	//TODO:
 	setup_RandomizerPowered(group);
+
+	// gui
+	guiManager.setup(gui);
 }
 
 ////--------------------------------------------------------------
@@ -25,6 +29,16 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 //void ofxSurfingRandomizer::update(ofEventArgs & args)
 //{
 //}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::draw() {
+
+	guiManager.begin();
+	{
+		drawWidgets();
+	}
+	guiManager.end();
+}
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawWidgets() {
@@ -66,6 +80,7 @@ void ofxSurfingRandomizer::drawWidgets() {
         doReset();
     }
 }
+
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::doReset() {
     for (auto p : randomizersPowered_TogglesVector)
@@ -100,7 +115,6 @@ void ofxSurfingRandomizer::doReset() {
             p0.set((int)(p1));
         }
     }
-
 }
 
 //--------------------------------------------------------------
