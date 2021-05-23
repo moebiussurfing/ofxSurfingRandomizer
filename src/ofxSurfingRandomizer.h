@@ -4,8 +4,11 @@
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_ImGui_LayoutManager.h"
 
-#define DEFAULT_MIN_PCT 0.2f
-#define DEFAULT_MAX_PCT 0.8f
+//#include "range_slider.h"
+//#include "range_slider.inl"
+
+#define DEFAULT_MIN_PCT 0.1f
+#define DEFAULT_MAX_PCT 0.9f
 
 class ofxSurfingRandomizer
 {
@@ -18,7 +21,7 @@ public:
 	void exit();
 
 	void setup(ofParameterGroup& group);
-	void drawWidgets();
+	void drawParams();
     void doRandomize();
     void doReset();
 

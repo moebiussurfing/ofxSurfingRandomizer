@@ -56,16 +56,29 @@ void ofxSurfingRandomizer::draw() {
 
 		if (guiManager.auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		name = "Controls";
+		name = "Parameters";
 		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 		{
-			drawWidgets();
+			drawParams();
 
-			guiManager.drawAdvancedSubPanel();
+			////TODO:
+			////range sliders widgets
+			//static float vmin = 0;
+			//static float vmax = 100;
+			//static float v_min = 0;
+			//static float v_max = 100;
+			//static float power = 0.001f;
+			////TODO:
+			//static ofParameter<float> parameterMin{ "Min", 0.5, 0, 1 };
+			//static ofParameter<float> parameterMax{ "Max", 0.5, 0, 1 };
+			//static float speed = 0.001;
+			////bool ofxImGui::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
+			////ImGui::RangeSliderFloat("range", &vmin, &vmax, v_min, v_max, "(%.3f, %.3f)", power);
+			//ofxImGui::AddRange("range", parameterMin, parameterMax, speed);
 		}
 		ofxImGui::EndWindow(mainSettings);
 
-		name = "Toggles";
+		name = "Controls";
 		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 		{
 			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
@@ -92,10 +105,7 @@ void ofxSurfingRandomizer::draw() {
 			}
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
-			//ofxImGui::AddGroup(params_RandomizersPowered_Toggles, mainSettings);
-
-			//for (auto &pt : params_RandomizersPowered_Toggles) {
-
+			// enable toggles
 			for (int i = 0; i < params_RandomizersPowered_Toggles.size(); i++)
 			{
 				auto &p = params_RandomizersPowered_Toggles[i];// ofAbstractParameter
@@ -108,9 +118,7 @@ void ofxSurfingRandomizer::draw() {
 
 				if (isBool) {
 					ofParameter<bool> pb = p.cast<bool>();
-					//ofxImGui::AddParameter(pb);
-
-					ofxSurfingHelpers::AddBigToggle(pb, _w100, _h, false);
+					ofxSurfingHelpers::AddBigToggle(pb, _w100, _h / 2, false);
 
 					//auto tmpRef = pb.get();
 					//const auto& info = typeid(ParameterType); 
@@ -122,42 +130,35 @@ void ofxSurfingRandomizer::draw() {
 				}
 			}
 
-
-			//for (int i = 0; i < group.size(); i++)
+			//TODO:
+			//// simple ranges
+			//for (int i = 0; i < params_RandomizersPowered_Toggles.size(); i++)
 			//{
-			//	auto type = group[i].type();
-			//	bool isGroup = type == typeid(ofParameterGroup).name();
-			//	bool isFloat = type == typeid(ofParameter<float>).name();
-			//	bool isInt = type == typeid(ofParameter<int>).name();
+			//	auto &p = params_RandomizersPowered_Toggles[i];// ofAbstractParameter
+			//	auto type = p.type();
 			//	bool isBool = type == typeid(ofParameter<bool>).name();
-			//	string str = group[i].getName();
-
-			//	if (isFloat)
-			//	{
-			//		float v = outputs[i].getValue();
-			//		float min = group[i].cast<float>().getMin();
-			//		float max = group[i].cast<float>().getMax();
-			//		v = ofMap(v, 0, 1, min, max);
-			//		ImGui::SliderFloat(str.c_str(), &v, min, max);
-			//	}
-			//	else if (isInt)
-			//	{
-			//		float vf = outputs[i].getValue();
-			//		int vi;
-			//		int min = group[i].cast<int>().getMin();
-			//		int max = group[i].cast<int>().getMax();
-			//		vi = (int)ofMap(vf, 0, 1, min, max);
-			//		ImGui::SliderInt(str.c_str(), &vi, min, max);
-			//	}
+			//	string name =
+			//		ofxImGui::AddRange("range", parameterMin, parameterMax, speed);
 			//}
 
+			//-
+
+			guiManager.drawAdvancedSubPanel();
 		}
 		ofxImGui::EndWindow(mainSettings);
+
+		//-
 
 		name = "Randomizers";
 		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 		{
-			ofxImGui::AddGroup(params_RandomizersPowered_Groups, mainSettings);
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+			flags |= ImGuiTreeNodeFlags_DefaultOpen;
+			flags |= ImGuiTreeNodeFlags_Framed;
+			ofxImGui::AddGroup(params_RandomizersPowered_Groups, flags);
+			//ofxImGui::AddGroup(params_RandomizersPowered_Groups, mainSettings);
+
+			//bool ofxImGui::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
 		}
 		ofxImGui::EndWindow(mainSettings);
 	}
@@ -165,7 +166,7 @@ void ofxSurfingRandomizer::draw() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::drawWidgets() {
+void ofxSurfingRandomizer::drawParams() {
 
 	auto mainSettings = ofxImGui::Settings();
 
@@ -180,55 +181,14 @@ void ofxSurfingRandomizer::drawWidgets() {
 	//float _h;
 	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-	ofxImGui::AddGroup(params, mainSettings);
-	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+	flags |= ImGuiTreeNodeFlags_DefaultOpen;
 
-	////toggles
-	//ofxImGui::AddGroup(params_RandomizersPowered_Toggles, mainSettings);
-	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
-
-
-	////settings
-	//ofxImGui::AddGroup(params_RandomizersPowered_Groups, mainSettings);
-	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
-
-	//ofxImGui::AddRange();
+	ofxImGui::AddGroup(params, flags);
+	//ofxImGui::AddGroup(params, mainSettings, flags);
+	//ofxImGui::AddGroup(params, mainSettings);
 
 	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doReset() {
-	ofLogNotice(__FUNCTION__);
-
-	for (auto p : randomizersPowered_TogglesVector)
-	{
-		if (!p.get()) continue;//only reset this param if it's enabled
-
-		string name = p.getName();//name
-		auto g = params_RandomizersPowered_Groups.getGroup(name);//ofParameterGroup
-		auto &e = g.get(name);//ofAbstractParameter
-
-		auto type = e.type();
-		bool isFloat = type == typeid(ofParameter<float>).name();
-		bool isInt = type == typeid(ofParameter<int>).name();
-
-		if (isFloat)
-		{
-			auto pmin = g.getFloat("Min").get();
-			auto pmax = g.getFloat("Max").get();
-			ofParameter<float> p0 = e.cast<float>();
-			p0.set(pmin);//reset to min
-		}
-
-		else if (isInt)
-		{
-			auto pmin = g.getInt("Min").get();
-			auto pmax = g.getInt("Max").get();
-			ofParameter<int> p0 = e.cast<int>();
-			p0.set(pmin);//reset to min
-		}
-	}
 }
 
 //--------------------------------------------------------------
@@ -248,13 +208,51 @@ void ofxSurfingRandomizer::doSetAll(bool b) {
 		}
 	}
 }
+
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::doDisableAll() {
 	doSetAll(false);
 }
+
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::doEnableAll() {
 	doSetAll(true);
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doReset() {
+	ofLogNotice(__FUNCTION__);
+
+	for (auto p : randomizersPowered_TogglesVector)
+	{
+		if (!p.get()) continue;//only reset this param if it's enabled
+
+		//-
+
+		string name = p.getName();//name
+		auto &g = params_RandomizersPowered_Groups.getGroup(name);//ofParameterGroup
+		auto &e = g.get(name);//ofAbstractParameter
+
+		auto type = e.type();
+		bool isFloat = type == typeid(ofParameter<float>).name();
+		bool isInt = type == typeid(ofParameter<int>).name();
+
+		if (isFloat)
+		{
+			auto pmin = g.getFloat("Min").get();
+			auto pmax = g.getFloat("Max").get();
+			ofParameter<float> p0 = e.cast<float>();
+			p0.set(pmin);//reset to min
+		}
+
+		else if (isInt)
+		{
+			auto pmin = g.getInt("Min").get();
+			auto pmax = g.getInt("Max").get();
+			ofParameter<int> p0 = e.cast<int>();
+			p0.set(pmin);//reset to min
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -265,10 +263,12 @@ void ofxSurfingRandomizer::doRandomize() {
 	{
 		if (!p.get()) continue;//only reset this param if it's enabled
 
+		//-
+
 		string name = p.getName();//name
-		auto g = params_RandomizersPowered_Groups.getGroup(name);//ofParameterGroup
+		auto &g = params_RandomizersPowered_Groups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
-		
+
 		auto type = e.type();
 		bool isFloat = type == typeid(ofParameter<float>).name();
 		bool isInt = type == typeid(ofParameter<int>).name();
@@ -278,7 +278,7 @@ void ofxSurfingRandomizer::doRandomize() {
 			auto pmin = g.getFloat("Min").get();
 			auto pmax = g.getFloat("Max").get();
 			ofParameter<float> p0 = e.cast<float>();
-			p0.set(ofRandom(pmin, pmax));//random
+			p0.set((float)ofRandom(pmin, pmax));//random
 		}
 
 		else if (isInt)
@@ -286,7 +286,7 @@ void ofxSurfingRandomizer::doRandomize() {
 			auto pmin = g.getInt("Min").get();
 			auto pmax = g.getInt("Max").get();
 			ofParameter<int> p0 = e.cast<int>();
-			p0.set(ofRandom(pmin, pmax));//random
+			p0.set((int)ofRandom(pmin, pmax + 1));//random
 		}
 	}
 }
@@ -318,16 +318,16 @@ void ofxSurfingRandomizer::setup_RandomizerPowered(ofParameterGroup& group)
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group) {
 
-	for (auto parameter : group)//ofAbstractParameter
+	for (auto pa : group)//ofAbstractParameter
 	{
 		// exclude params not marked as serializable
-		if (!parameter->isSerializable()) continue;
+		if (!pa->isSerializable()) continue;
 		//if (!parameter->isSerializable()) return;
 
 		//--
 
 		// group
-		auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+		auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(pa);
 		if (parameterGroup)
 		{
 			if (!parameterGroup->isSerializable()) continue;
@@ -337,9 +337,13 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 			continue;
 		}
 
-
 		{
 			// parameter, try everything we know how to handle.
+
+			//auto type = pa->type();
+			//bool isFloat = type == typeid(ofParameter<float>).name();
+			//bool isInt = type == typeid(ofParameter<int>).name();
+			//bool isBool = type == typeid(ofParameter<bool>).name();
 
 //			// x,y,z vectors
 //#if OF_VERSION_MINOR >= 10
@@ -410,7 +414,7 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 			// normal types
 
 			// float
-			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(pa);
 			if (parameterFloat)
 			{
 				std::string _name = parameterFloat->getName();
@@ -422,13 +426,14 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 				ofParameterGroup _g{ _name };
 				ofParameter<bool> b{ "Enable " + _name, false };
 				ofParameter<float> p0 = group.getFloat(_name);
-				ofParameter<float> p1{ "Min", vmin, parameterFloat->getMin() , parameterFloat->getMax() };
-				ofParameter<float> p2{ "Max", vmax, parameterFloat->getMin() , parameterFloat->getMax() };
+				ofParameter<float> pmin{ "Min", vmin, parameterFloat->getMin() , parameterFloat->getMax() };
+				ofParameter<float> pmax{ "Max", vmax, parameterFloat->getMin() , parameterFloat->getMax() };
+
 
 				//_g.add(b);
 				_g.add(p0);
-				_g.add(p1);
-				_g.add(p2);
+				_g.add(pmin);
+				_g.add(pmax);
 
 				params_RandomizersPowered_Groups.add(_g);
 
@@ -436,12 +441,13 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 
 				ofParameter<bool> b0{ _name, false };
 				randomizersPowered_TogglesVector.push_back(b0);
+				//params_RandomizersPowered_Toggles.add(b0);
 
 				continue;
 			}
 
 			// int
-			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(pa);
 			if (parameterInt)
 			{
 				std::string _name = parameterInt->getName();
@@ -453,13 +459,13 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 				ofParameterGroup _g{ _name };
 				ofParameter<bool> b{ "Enable " + _name, false };
 				ofParameter<int> p0 = group.getInt(_name);
-				ofParameter<int> p1{ "Min", vmin, parameterInt->getMin() , parameterInt->getMax() };
-				ofParameter<int> p2{ "Max", vmax, parameterInt->getMin() , parameterInt->getMax() };
+				ofParameter<int> pmin{ "Min", vmin, parameterInt->getMin() , parameterInt->getMax() };
+				ofParameter<int> pmax{ "Max", vmax, parameterInt->getMin() , parameterInt->getMax() };
 
 				//_g.add(b);
 				_g.add(p0);
-				_g.add(p1);
-				_g.add(p2);
+				_g.add(pmin);
+				_g.add(pmin);
 
 				params_RandomizersPowered_Groups.add(_g);
 
@@ -467,46 +473,50 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 
 				ofParameter<bool> b0{ _name, false };
 				randomizersPowered_TogglesVector.push_back(b0);
+				//params_RandomizersPowered_Toggles.add(b0);
 
 				continue;
 			}
 
-			// bool
-			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+			////TODO:
+			//// bool
+			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(pa);
 			if (parameterBool)
 			{
-				std::string _name = parameterBool->getName();
+				//	//std::string _name = parameterBool->getName();
 
-				ofParameterGroup _g{ _name };
-				ofParameter<bool> b{ "Enable " + _name, false };
-				ofParameter<int> p0 = group.getBool(_name);
+				//	//ofParameterGroup _g{ _name };
+				//	//ofParameter<bool> b{ "Enable " + _name, false };
+				//	//ofParameter<int> p0 = group.getBool(_name);
 
-				//_g.add(b);
-				_g.add(p0);
+				//	////_g.add(b);
+				//	//_g.add(p0);
 
-				params_RandomizersPowered_Groups.add(_g);
+				//	//params_RandomizersPowered_Groups.add(_g);
 
-				//-
+				//	////-
 
-				ofParameter<bool> b0{ _name, false };
-				randomizersPowered_TogglesVector.push_back(b0);
+				//	//ofParameter<bool> b0{ _name, false };
+				//	//randomizersPowered_TogglesVector.push_back(b0);
+				//	//params_RandomizersPowered_Toggles.add(b0);
 
 				continue;
 			}
 
-			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << pa->getName();
 		}
+
+		//if (parameterGroup) return;//skip add group below
 	}
 
-	//--
+	//----
 
 	// create an enabler bool/toggle for each parameter
-	for (auto b : randomizersPowered_TogglesVector)
+	for (auto pb : randomizersPowered_TogglesVector)
 	{
-		params_RandomizersPowered_Toggles.add(b);
+		params_RandomizersPowered_Toggles.add(pb);
 	}
 }
-
 
 //params_RandomizersPowered_Groups.add(parameter);
 //f0.makeReferenceTo(parameterFloat.cast<float>());
@@ -515,5 +525,3 @@ void ofxSurfingRandomizer::addGroup_ToRandomizerPowered(ofParameterGroup& group)
 //ofParameter<float> prop = static_cast<ofParameter<float>&>(parameter);
 //ofParameter<float> prop = parameter.cast<float>();
 //params_RandomizersPowered_Groups.add(parameter);
-
-

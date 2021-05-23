@@ -1,6 +1,6 @@
 #pragma once
-
 #include "ofMain.h"
+
 #include "ofxSurfingRandomizer.h"
 #include "ofxWindowApp.h"
 
@@ -10,6 +10,7 @@ public:
     void setup();
     void update();
     void draw();
+	void keyPressed(int key);
 
 	// the parameters to randomize
 	ofParameterGroup params;

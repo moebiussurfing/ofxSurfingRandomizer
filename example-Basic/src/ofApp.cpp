@@ -3,20 +3,19 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//ofSetLogLevel(OF_LOG_VERBOSE);
-
 	// the parameters to randomize
 	params.setName("paramsGroup");// main container
 	params2.setName("paramsGroup2");// nested
 	params3.setName("paramsGroup3");// nested
-	//params.add(bPrevious.set("<", false));
-	//params.add(bNext.set(">", false));
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params.add(separation.set("separation", 50, 1, 100));
 	params.add(speed.set("speed", 0.5, 0, 1));
 	params.add(shapeType.set("shapeType", 0, -50, 50));
 	params.add(size.set("size", 100, 0, 100));
 	params.add(amount.set("amount", 10, 0, 25));
+	////nested
+	//params.add(bPrevious.set("prev", false));//bools
+	//params.add(bNext.set("next", false));
 	//params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	//params2.add(size2.set("size2", 100, 0, 100));
 	//params2.add(amount2.set("amount2", 10, 0, 25));
@@ -38,4 +37,17 @@ void ofApp::update() {
 void ofApp::draw() {
 
 	data.draw();
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
+
+	if (key == ' ')
+	{
+		data.doRandomize();
+	}
+	if (key == OF_KEY_RETURN)
+	{
+		data.doReset();
+	}
 }
