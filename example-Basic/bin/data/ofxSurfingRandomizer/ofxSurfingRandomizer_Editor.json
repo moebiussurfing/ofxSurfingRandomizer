@@ -1,0 +1,52 @@
+{
+    "Editor": {
+        "Params": {
+            "amount": "1",
+            "lineWidth": "1",
+            "next": "1",
+            "prev": "1",
+            "separation": "1",
+            "shapeType": "1",
+            "size": "1",
+            "speed": "1"
+        },
+        "paramsGroup": {
+            "amount": {
+                "Max": "25",
+                "Min": "0",
+                "amount": "21"
+            },
+            "lineWidth": {
+                "Max": "1",
+                "Min": "0",
+                "lineWidth": "0.911313"
+            },
+            "next": {
+                "next": "1"
+            },
+            "prev": {
+                "prev": "1"
+            },
+            "separation": {
+                "Max": "100",
+                "Min": "1",
+                "separation": "83.8298"
+            },
+            "shapeType": {
+                "Max": "50",
+                "Min": "-50",
+                "shapeType": "16"
+            },
+            "size": {
+                "Max": "100",
+                "Min": "0",
+                "size": "92"
+            },
+            "speed": {
+                "Max": "1",
+                "Min": "0",
+                "speed": "0.715812"
+            }
+        }
+    }
+}

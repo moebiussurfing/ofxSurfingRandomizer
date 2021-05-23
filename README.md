@@ -1,77 +1,89 @@
-ofxAddonTemplateCustomApp
-=============================
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Stage: beta](https://img.shields.io/badge/-alpha-red)
+# ofxSurfingSmooth
 
-# Overview
-**ofxAddonTemplateCustomApp** is an **openFrameworks** addon template for MYSELF.
+## Overview
+An **openFrameworks** add-on to do different styles of timed **smoothing** to grouped ```ofParameters```.
 
-## Screenshot
-![image](docs/readme_images/Capture1.PNG?raw=true "image")
+## ofxDataStream engine based  
+This add-on is extremely based on:  
+https://github.com/turowskipaul/ofxDataStream  
+Copyright (C) 2015, Paul Turowski. (http://paulturowski.com)  
+
+**ofxSurfingSmooth** is just a kind of helper with the **ofxDataStream** engine, ```ofParameters``` bridge, plottings, easy integration workflow, GUI, and settings management.  
+
+## Screencast 
+<img src="docs/readme_images/ofxSurfingSmooth.gif" width="80%" height="80%">
 
 ## Features
-- Customize GUI.
-- Basic parameters and app modes.
-- Store/Recall settings.
-- 
-
-The first step is to create texture just like every texture using threejs.
-
-    const texturePath =  'https://i.imgur.com/Oj6RJV9.png';
-    const spriteTexture = new  THREE.TextureLoader().load(texturePath)
-
-   
-Next step is about creating the animator object:
-
-     const animator =  new  PlainAnimator(spriteTexture, 4, 4, 10, 15);
-These magic numbers are the follows:
-|value| description |
-|--|--|
-| 4 | number of frames horizontally |
-| 4 | number of frames vertically |
-| 10 | total number of frames |
-| 15 | frames per second (fps) |
+- Just pass your ```ofParameterGroup``` parameters container.
+- Another smoothed ```ofParameterGroup``` will be created with the same parameters structure.
+- 2 Smoothing algorithms: **Accumulator** and **Slide**.
+- 3 Mean types: **Arithmetic**, **Geometric** and **Harmonic**.
+- Only ```float``` and ```int``` types yet.
+- Scalable and draggable plots.
+- Auto Store/Recall all the settings.
+- **ImGui** based GUI ready to integrate.
 
 ## Usage
  
-** ofApp.h **
+**ofApp.h**
 ```.cpp
-#include "ofxAddonTemplateCustomApp.h"
-ofxAddonTemplateCustomApp myAddon;
+#include "ofxSurfingSmooth.h"
+
+ofxSurfingSmooth data;
+
+ofParameterGroup params; // main container
+ofParameter<float> lineWidth;
+ofParameter<float> separation;
+ofParameter<float> speed;
+ofParameter<int> amount;
+ofParameter<int> shapeType;
 ```
 
-** ofApp.cpp **
+**ofApp.cpp**
 ```.cpp
-ofApp::setup(){
-	ofxAddonTemplateCustomApp.setup();
+void ofApp::setup() 
+{
+	params.setName("paramsGroup");
+	params.add(lineWidth.set("lineWidth", 0.5, 0.0, 1.0));
+	params.add(separation.set("separation", 50.0, 1.0, 100.0));
+	params.add(speed.set("speed", 0.5, 0.0, 1.0));
+	params.add(amount.set("amount", 1, 1, 10));
+	params.add(speed.set("shapeType", 0, 0, 3));
+
+	data.setup(params);
 }
 
-ofApp::update(){
-	ofxAddonTemplateCustomApp.update();
-}
+void ofApp::update() 
+{
+  // we can get the smoothed params using different approaches.
+  // this is the simpler approach:
 
-ofApp::draw(){
-	ofxAddonTemplateCustomApp.draw();
-	ofxAddonTemplateCustomApp.drawGui();
+  float _lineWidth = data.get(lineWidth);
+  int _shapeType = data.get(shapeType);
+  int _size = data.get(size);
+  int _amount = data.get(amount);
+
+  // Look on the example-Basic for more helping snippets 
+  // to access the smoothed parameters on the newly re-created smoothed group. 
 }
 ```
 
-details>
+ 
+
+
+<details>
   <summary>Dependencies</summary>
   <p>
 
-Clone these add-ons and include into the **OF Project Generator** to allow compile your projects or the examples:
-* [ofxColorClient](https://github.com/moebiussurfing/ofxColorClient)
+Clone these add-ons and include into the **OF PROJECT GENERATOR** to allow compile your projects or the examples:
+* [ofxHistoryPlot](https://github.com/moebiussurfing/ofxHistoryPlot)  [ FORK ]
+* [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect)  [ FORK ]
+* [ofxImGui](https://github.com/moebiussurfing/ofxImGui)  [ FORK ]  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect)
-* ofxGui  [ **OF** ]
-* ofxXmlSettings [ **OF** ]
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [ Only for the example ]
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [ Only for **example-Advanced** ]  
+* [ofxMidiParams](https://github.com/moebiussurfing/ofxMidiParams)  [ FORK | **Only for example-Advanced** ]  
 
-Above add-ons already packed into **OF_ADDON/libs**. No need to add them manually with the **OF Project Generator**:  
-* [ofxColorQuantizerHelper](https://github.com/moebiussurfing/ofxColorQuantizerHelper)
-
-*Thanks a lot to all these ofxAddons coders. Look into each folder for authoring credits, original forks, and license info.*  
+*Thanks a lot to all these ofxAddons coders.*  
   </p>
 </details>
 
@@ -80,26 +92,29 @@ Above add-ons already packed into **OF_ADDON/libs**. No need to add them manuall
   <p>
 
   - **Windows 10** / **VS 2017** / **OF ~0.11**
-  - **macOS**. **High Sierra** / **Xcode9** & **Xcode10** / **OF ~0.11**
   </p>
 </details>
 
-<br/>
-
 ### TODO
-* 
++ Simplify API getters.
++ Add more types: 2D/3D vectors and colors. Using templates [?] ...  
+  [ _**ANY HELP/PULL ON THIS IS REALLY APPRECIATED!**_ ]
++ Add "real" nested sub-groups with tree levels. Now the params are recreated on one depth level only. This could help when duplicated names or to indent sub-groups on a GUI too.
++ Add independent thresholds/onSet for each parameter/channel and make it functional. Add callbacks to trig other events...
++ Add a global param to calibrate max history/speed.
 
-### Notes
-*
+#### ALTERNATIVE
+There's another more powerful but complex filtering add-on that you can check too:  
+https://github.com/bensnell/ofxFilter
 
-## Author
-An addon by **@moebiusSurfing**  
-*( ManuMolina ) 2019-2021*  
+## Authors
+Original **ofxDataStream** engine author:  
+Paul Turowski. http://paulturowski.com  
+Thanks @**turowskipaul** !  
+
+An add-on by **@moebiusSurfing**  
+*( ManuMolina ) 2021*  
 
 [Twitter](https://twitter.com/moebiussurfing/)  
-[Instagram](https://www.instagram.com/moebiussurfing/)  
 [YouTube](https://www.youtube.com/channel/UCzUw96_wjmNxyIoFXf84hQg)  
-
-## License
-
-[**MIT License**](https://github.com/moebiussurfing/ofxColorManager/blob/b29c56f7b0e374b6a6fe2406e45fbfaaf2726112/LICENSE)
+[Instagram](https://www.instagram.com/moebiussurfing/)  

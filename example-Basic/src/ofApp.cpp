@@ -13,12 +13,13 @@ void ofApp::setup()
 	params.add(shapeType.set("shapeType", 0, -50, 50));
 	params.add(size.set("size", 100, 0, 100));
 	params.add(amount.set("amount", 10, 0, 25));
-	////nested
-	//params.add(bPrevious.set("prev", false));//bools
-	//params.add(bNext.set("next", false));
+	params.add(bPrevious.set("prev", false));//bools
+	params.add(bNext.set("next", false));
+	////nested 1
 	//params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	//params2.add(size2.set("size2", 100, 0, 100));
 	//params2.add(amount2.set("amount2", 10, 0, 25));
+	////nested 2
 	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	//params3.add(separation3.set("separation3", 50, 1, 100));
 	//params3.add(speed3.set("speed3", 0.5, 0, 1));
@@ -48,6 +49,6 @@ void ofApp::keyPressed(int key) {
 	}
 	if (key == OF_KEY_RETURN)
 	{
-		data.doReset();
+		data.doResetParams();
 	}
 }

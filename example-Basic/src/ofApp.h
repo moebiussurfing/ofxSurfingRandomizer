@@ -12,7 +12,7 @@ public:
     void draw();
 	void keyPressed(int key);
 
-	// the parameters to randomize
+	// parameters to randomize
 	ofParameterGroup params;
 	ofParameter<bool> bPrevious;
 	ofParameter<bool> bNext;
