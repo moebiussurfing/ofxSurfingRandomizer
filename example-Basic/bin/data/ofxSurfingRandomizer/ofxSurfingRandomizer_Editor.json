@@ -20,25 +20,25 @@
             "amount": {
                 "Max": "25",
                 "Min": "0",
-                "amount": "7"
+                "amount": "11"
             },
             "amount2": {
                 "Max": "22",
                 "Min": "2",
-                "amount2": "21"
+                "amount2": "19"
             },
             "lineWidth": {
                 "Max": "1",
                 "Min": "0",
-                "lineWidth": "0.815149"
+                "lineWidth": "0.0730918"
             },
             "lineWidth3": {
                 "Max": "1",
                 "Min": "0",
-                "lineWidth3": "0.841853"
+                "lineWidth3": "0.248115"
             },
             "next": {
-                "next": "1"
+                "next": "0"
             },
             "prev": {
                 "prev": "1"
@@ -46,42 +46,42 @@
             "separation": {
                 "Max": "100",
                 "Min": "1",
-                "separation": "67.1521"
+                "separation": "34.8027"
             },
             "separation3": {
                 "Max": "90.1",
                 "Min": "10.9",
-                "separation3": "83.1727"
+                "separation3": "25.1051"
             },
             "shapeType": {
                 "Max": "50",
                 "Min": "-50",
-                "shapeType": "-43"
+                "shapeType": "-20"
             },
             "shapeType2": {
                 "Max": "50",
                 "Min": "-50",
-                "shapeType2": "-26"
+                "shapeType2": "-46"
             },
             "size": {
                 "Max": "100",
                 "Min": "0",
-                "size": "65"
+                "size": "50"
             },
             "size2": {
                 "Max": "100",
                 "Min": "0",
-                "size2": "8"
+                "size2": "36"
             },
             "speed": {
                 "Max": "1",
                 "Min": "0",
-                "speed": "0.409925"
+                "speed": "0.923795"
             },
             "speed3": {
                 "Max": "0.9",
                 "Min": "0.1",
-                "speed3": "0.339875"
+                "speed3": "0.433775"
             }
         }
     }
