@@ -1,7 +1,7 @@
 # ofxSurfingRandomizer
 
 ## Overview
-An **openFrameworks** add-on to perform ranged randomization between a settable minimum and maximum value of all the selected ```ofParameters``` on a group.
+An **openFrameworks** add-on to perform ranged randomization between the settable minimum and maximum values of each selected ```ofParameters``` from a group.
 
 ## Screenshot 
 <!-- <img src="docs/readme_images/ofxSurfingRandomizer.gif" width="80%" height="80%"> -->
