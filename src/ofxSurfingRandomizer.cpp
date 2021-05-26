@@ -20,6 +20,8 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(bParams);
 	params_AppState.add(bEditor);
 	params_AppState.add(bControls);
+	params_AppState.add(bPlay.set("PLAY", false));
+	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
 	ofxSurfingHelpers::loadGroup(params_AppState, path_AppState);
 }
 
@@ -43,6 +45,7 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	setupEditor(group);//build the editor for all the params
 
 	// gui
+	//guiManager.setImGuiAutodraw(false);
 	guiManager.setup();//initiate ImGui
 	//guiManager.setUseAdvancedSubPanel(true);
 }
@@ -54,6 +57,20 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
+	// tester
+	// play timed randoms
+	static const int _secs = 2;
+	if (bPlay) {
+		//int max = 60 * _secs;
+		int max = ofMap(playSpeed, 0, 1, 60, 5) * _secs;
+		tf = ofGetFrameNum() % max;
+		tn = ofMap(tf, 0, max, 0, 1);
+		if (tf == 0)
+		{
+			doRandomize();
+		}
+	}
+	
 	if (!bGui) return;
 
 	guiManager.begin();
@@ -143,27 +160,77 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 						doRandomize();
 					}
 
-					if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
+					//-
+
+					// TESTER
+
+					bOpen = false;
+					ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+					_flagw |= ImGuiTreeNodeFlags_Framed;
+					if (ImGui::TreeNodeEx("TESTER", _flagw))
+					//if (ImGui::CollapsingHeader("TESTER"))
 					{
-						doResetParams();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("RESET RANGES", ImVec2(_w50, _h / 2)))
-					{
-						doResetRanges();
+						ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+					
+						//TODO:
+						//blink by timer
+						//tn
+						bool b = bPlay;
+						float a;
+						if (b) a = 1 - tn;
+						//if (b) a = ofxSurfingHelpers::getFadeBlink();
+						else a = 1.0f;
+						if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));
+						ofxSurfingHelpers::AddBigToggle(bPlay, _w100, _h, false);
+						if (b) ImGui::PopStyleColor();
+
+						//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h / 2))) {
+						//	doRandomize();
+						//}
+						if (bPlay) {
+							//ImGui::SliderFloat("Speed", &playSpeed, 0, 1);
+							ofxImGui::AddParameter(playSpeed);
+							//ImGui::ProgressBar(tn);
+						}
+						ImGui::Dummy(ImVec2(0.0f, 2.0f));
+						ImGui::TreePop();
 					}
 
-					//state memory
-					if (ImGui::Button("RECALL", ImVec2(_w50, _h / 2)))
-						//if (ImGui::Button("LOAD STATE", ImVec2(_w50, _h/2)))
+					//-
+
+					// TOOLS
+
+					bOpen = false;
+					_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+					_flagw |= ImGuiTreeNodeFlags_Framed;
+					if (ImGui::TreeNodeEx("TOOLS", _flagw)) 
+					//if (ImGui::CollapsingHeader("TOOLS"))
 					{
-						doLoadState();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("MEMORiZE", ImVec2(_w50, _h / 2)))
-						//if (ImGui::Button("SAVE STATE", ImVec2(_w50, _h/2)))
-					{
-						doSaveState();
+						ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+						
+						if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
+						{
+							doResetParams();
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("RESET RANGES", ImVec2(_w50, _h / 2)))
+						{
+							doResetRanges();
+						}
+
+						//state memory
+						if (ImGui::Button("RECALL", ImVec2(_w50, _h / 2)))
+							//if (ImGui::Button("LOAD STATE", ImVec2(_w50, _h/2)))
+						{
+							doLoadState();
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("MEMORiZE", ImVec2(_w50, _h / 2)))
+							//if (ImGui::Button("SAVE STATE", ImVec2(_w50, _h/2)))
+						{
+							doSaveState();
+						}
+						ImGui::TreePop();
 					}
 				}
 				ImGui::Dummy(ImVec2(0.0f, 5.0f));
@@ -250,7 +317,7 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 		//-
 
-		// 3. window editor
+		// 3. WINDOW EDITOR
 
 		if (bEditor)
 		{
@@ -890,4 +957,16 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 	//{
 	//	params_EditorEnablers.add(pb);
 	//}
+}
+
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::keyPressed(int key) {
+
+	//if (key == 'g') bGui = !bGui;
+
+	// randomizer
+	if (key == ' ') { doRandomize(); }
+	if (key == OF_KEY_BACKSPACE) { doResetParams(); }
+	if (key == OF_KEY_RETURN) bPlay = !bPlay;
 }

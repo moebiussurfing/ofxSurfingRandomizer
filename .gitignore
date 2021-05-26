@@ -556,3 +556,4 @@ MigrationBackup/
 example-Basic/bin/imgui.ini
 example-Basic/bin/data/ofxWindowApp/ofxWindowApp.json
 example-Basic/bin/data/ofxSurfingRandomizer/ofxSurfingRandomizer_Editor.json
+example-Basic/bin/data/ofxSurfingRandomizer/ofxSurfingRandomizer_State.json

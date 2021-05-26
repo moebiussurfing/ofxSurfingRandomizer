@@ -23,6 +23,14 @@ public:
 	void setup(ofParameterGroup& group);
 	void draw(ofEventArgs & args);
 	void exit();
+	void keyPressed(int key);
+
+private:
+	//tester timers
+	ofParameter<bool> bPlay;
+	ofParameter<float> playSpeed;
+	int tf;
+	float tn;
 
 private:
 	void drawParams();
@@ -67,6 +75,8 @@ private:
 
 public:
 	ofParameter<bool> bGui;
+
+	void setImGuiAutodraw(bool b){ guiManager.setImGuiAutodraw(b); }//required to set to false when only one ImGui instance is created
 
 private:
 	//settings
