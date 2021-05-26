@@ -715,7 +715,7 @@ void ofxSurfingRandomizer::doRandomize() {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
-	ofLogNotice(__FUNCTION__) << index;
+	ofLogVerbose(__FUNCTION__) << index;
 
 	int i = index;
 
