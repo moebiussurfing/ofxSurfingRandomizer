@@ -2,7 +2,9 @@
 #include "ofMain.h"
 
 #include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGui_LayoutManager.h"
+
+//#include "ofxSurfing_ImGui_LayoutManager.h"
+#include "ofxSurfing_ImGuiBundle.h"
 
 //TODO:
 //#include "range_slider.h"
@@ -29,7 +31,8 @@ private:
 
 	//commands
 public:
-	void doRandomize();//set random in min/max range
+	void doRandomize();//do and set random in min/max range for all params
+	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
 	void doResetParams();//set to minimals
 	void doResetRanges();//set ranges to abs min/max from each parameter
 

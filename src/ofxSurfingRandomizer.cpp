@@ -78,7 +78,10 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 		if (guiManager.auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (bParams) {
+		// 1. window parameters
+
+		if (bParams)
+		{
 			name = "PARAMETERS";
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 			{
@@ -104,7 +107,10 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 		//----
 
-		if (bGui) {
+		// 2. window panels
+
+		if (bGui)
+		{
 			name = "SURFING RANDOMIZER";
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 			{
@@ -196,8 +202,18 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 						if (isBool)//just in case... 
 						{
+							// 1. toggle enable
 							ofParameter<bool> pb = p.cast<bool>();
-							ofxSurfingHelpers::AddBigToggle(pb, _w100, _h / 2, false);
+							float _w75 = 3 * (_w100 / 4 - _spcx / 4);
+							ofxSurfingHelpers::AddBigToggle(pb, _w75, _h / 2, false);
+							ImGui::SameLine();
+							// 2. button random
+							ImGui::PushID(i);//required to allow same name in all buttons
+							if (ImGui::Button("RANDOM", ImVec2(_w25, _h / 2)))
+							{
+								doRandomize(i, true);
+							}
+							ImGui::PopID();
 
 							//TODO:
 							//auto tmpRef = pb.get();
@@ -234,7 +250,10 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 		//-
 
-		if (bEditor) {
+		// 3. window editor
+
+		if (bEditor)
+		{
 			name = "EDITOR";
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 			{
@@ -242,10 +261,202 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 				flags |= ImGuiTreeNodeFlags_DefaultOpen;
 				flags |= ImGuiTreeNodeFlags_Framed;
 
-				ofxImGui::AddGroup(params_EditorGroups, flags);
+				//ofxImGui::AddGroup(params_EditorGroups, flags);
 
-				//TODO:   
-				//bool ofxImGui::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
+				bool bOpen = true;
+				ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagw |= ImGuiTreeNodeFlags_Framed;
+
+				//sliders props
+				const int _ww1 = 80;
+				const int _ww2 = 200;
+				ImGuiSliderFlags sflag = ImGuiSliderFlags_None;
+				//sflag |= ImGuiSliderFlags_ReadOnly;
+				string spcl = "    ";//space between min-max range slider label
+
+				if (ImGui::TreeNodeEx("RANGES", _flagw))
+				{
+					ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+
+					//for (int i = 0; i < params_EditorGroups.size(); i++) 
+					for (int i = 0; i < enablersForParams.size(); i++)
+					{
+						//numerize
+						string tag;//to push ids
+						string n = "#" + ofToString(i < 10?"0":"") + ofToString(i);
+						//ImGui::Dummy(ImVec2(0,10));
+						ImGui::Text(n.c_str());
+						ImGui::SameLine();
+						//ImGui::Dummy(ImVec2(0,-20));
+
+						string _name = enablersForParams[i].getName();
+						auto g = params_EditorGroups.getGroup(_name);
+
+						auto &p0 = g.get(_name);
+
+						auto type = p0.type();
+						bool isFloat = type == typeid(ofParameter<float>).name();
+						bool isInt = type == typeid(ofParameter<int>).name();
+						bool isBool = type == typeid(ofParameter<bool>).name();
+
+						//-
+
+						if (isFloat)
+						{
+							auto &_p0 = g.getFloat(_name);
+							auto &pmin = g.getFloat("Min");
+							auto &pmax = g.getFloat("Max");
+							float speed = (pmax - pmin) / 100.f;
+
+							// 0. button random
+							tag = n + "random";
+							ImGui::PushID(tag.c_str());
+							//required to allow same name in all buttons
+							if (ImGui::Button("RANDOM"))
+							{
+								doRandomize(i, true);
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 1. value
+							tag = n + "value";
+							ImGui::PushID(tag.c_str());
+							ImGui::PushItemWidth(_ww1);
+							ImGui::DragFloat("", (float*)&_p0.get(), speed, pmin.get(), pmax.get(), "%.3f", sflag);
+							ImGui::PopItemWidth();
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 0. MIN-MAX
+							tag = n + "min";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("MIN"))
+							{
+								pmin = _p0;
+								//_p0 = pmin;
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							tag = n + "max";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("MAX"))
+							{
+								pmax = _p0;
+								//_p0 = pmax;
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 2. range
+							//vanilla
+							tag = n + "dragMin";
+							ImGui::PushID(tag.c_str());
+							ImGui::DragFloatRange2(""/*_name.c_str()*/, (float*)&pmin.get(), (float*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.3f", "%.3f");
+							ImGui::PopID();
+							ImGui::SameLine();
+							//widget
+							float power = 1;
+							tag = n + "dragMax";
+							ImGui::PushID(tag.c_str());
+							ImGui::PushItemWidth(_ww2);
+							string ss = "%.3f" + spcl + "%.3f";
+							ImGui::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
+							//ImGui::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
+							ImGui::PopItemWidth();
+							ImGui::PopID();
+						}
+
+						//-
+
+						else if (isInt)
+						{
+							auto &_p0 = g.getInt(_name);
+							auto &pmin = g.getInt("Min");
+							auto &pmax = g.getInt("Max");
+							float speed = 1;
+
+							// 0. button random
+							tag = n + "random";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("RANDOM"))
+							{
+								doRandomize(i, true);
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 1. value
+							tag = n + "value";
+							ImGui::PushID(tag.c_str());
+							ImGui::PushItemWidth(_ww1);
+							ImGui::DragInt("", (int*)&_p0.get(), speed, pmin.get(), pmax.get(), "%.0f", sflag);
+							ImGui::PopItemWidth();
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 0. MIN-MAX
+							tag = n + "min";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("MIN"))
+							{
+								pmin = _p0;
+								//_p0 = pmin;
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							tag = n + "max";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("MAX"))
+							{
+								pmax = _p0;
+								//_p0 = pmax;
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							// 2. range
+							// vanilla
+							tag = n + "dragMin";
+							ImGui::PushID(tag.c_str());
+							ImGui::DragIntRange2(""/*_name.c_str()*/, (int*)&pmin.get(), (int*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.0f", "%.0f");
+							ImGui::PopID();
+							ImGui::SameLine();
+							//widget
+							float power = 1;
+							tag = n + "dragMax";
+							ImGui::PushID(tag.c_str());
+							ImGui::PushItemWidth(_ww2);
+							string ss = "%.0f" + spcl + "%.0f";
+							ImGui::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
+							//ImGui::AddRangeParam("%.0f   %.0f", pmin, pmax, ss.c_str(), power);
+							ImGui::PopItemWidth();
+							ImGui::PopID();
+						}
+
+						//-
+
+						else if (isBool)
+						{
+							// 0. button random
+							tag = n + "random";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("RANDOM"))
+							{
+								doRandomize(i, true);
+							}
+							ImGui::PopID();
+							ImGui::SameLine();
+
+							auto &_p0 = g.getBool(_name);
+							ofxImGui::AddParameter(_p0);
+						}
+					}
+
+					ImGui::TreePop();
+				}
 			}
 			ofxImGui::EndWindow(mainSettings);
 		}
@@ -390,9 +601,64 @@ void ofxSurfingRandomizer::doResetRanges() {
 void ofxSurfingRandomizer::doRandomize() {
 	ofLogNotice(__FUNCTION__);
 
-	for (auto p : enablersForParams)
+	for (int i = 0; i < enablersForParams.size(); i++)
 	{
-		if (!p.get()) continue;//only reset this param if it's enabled
+		doRandomize(i, false);
+	}
+
+	//for (auto p : enablersForParams)
+	//{
+	//	if (!p.get()) continue;//only reset this param if it's enabled
+
+	//	//-
+
+	//	string name = p.getName();//name
+	//	auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
+	//	auto &e = g.get(name);//ofAbstractParameter
+
+	//	auto type = e.type();
+	//	bool isFloat = type == typeid(ofParameter<float>).name();
+	//	bool isInt = type == typeid(ofParameter<int>).name();
+	//	bool isBool = type == typeid(ofParameter<bool>).name();
+
+	//	if (isFloat)
+	//	{
+	//		auto pmin = g.getFloat("Min").get();
+	//		auto pmax = g.getFloat("Max").get();
+	//		ofParameter<float> p0 = e.cast<float>();
+	//		p0.set((float)ofRandom(pmin, pmax));//random
+	//	}
+
+	//	else if (isInt)
+	//	{
+	//		auto pmin = g.getInt("Min").get();
+	//		auto pmax = g.getInt("Max").get();
+	//		ofParameter<int> p0 = e.cast<int>();
+	//		p0.set((int)ofRandom(pmin, pmax + 1));//random
+	//	}
+
+	//	else if (isBool)
+	//	{
+	//		bool b = (ofRandom(0, 2) >= 1);
+	//		ofParameter<bool> p0 = e.cast<bool>();
+	//		p0.set(b);
+	//	}
+	//}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
+	ofLogNotice(__FUNCTION__) << index;
+
+	int i = index;
+
+	//for (auto p : enablersForParams)
+	//for (int i = 0; i<enablersForParams.size(); i++)
+	{
+		auto p = enablersForParams[i];
+
+		if (!bForce)
+			if (!p.get()) return;//only reset this param if it's enabled
 
 		//-
 

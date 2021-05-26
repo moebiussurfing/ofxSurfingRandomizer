@@ -18,11 +18,11 @@ void ofApp::setup()
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
-	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
-	params3.add(separation3.set("separation3", 50, 1, 100));
-	params3.add(speed3.set("speed3", 0.5, 0, 1));
-	params2.add(params3);
 	params.add(params2);
+	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
+	//params3.add(separation3.set("separation3", 50, 1, 100));
+	//params3.add(speed3.set("speed3", 0.5, 0, 1));
+	//params2.add(params3);
 
 	// randomizer
 	data.setup(params);
