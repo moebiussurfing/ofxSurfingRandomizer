@@ -47,6 +47,7 @@ public:
 private:
 	void doSaveState();//save the memory state
 	void doLoadState();//load the memory state
+
 	void doSetAll(bool b);
 	void doDisableAll();
 	void doEnableAll();
@@ -65,6 +66,7 @@ private:
 
 	ofParameterGroup params_Editor;
 	ofParameterGroup params_EditorGroups;//the range limits to randomize each param
+
 	ofParameterGroup params_EditorEnablers;//the enabled params to randomize
 	vector<ofParameter<bool>> enablersForParams;
 

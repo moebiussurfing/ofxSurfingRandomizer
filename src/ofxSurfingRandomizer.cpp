@@ -880,7 +880,6 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-
 			params_EditorEnablers.add(b0);
 
 			continue;
@@ -914,7 +913,6 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-
 			params_EditorEnablers.add(b0);
 
 			continue;
@@ -940,7 +938,6 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
-
 			params_EditorEnablers.add(b0);
 
 			continue;

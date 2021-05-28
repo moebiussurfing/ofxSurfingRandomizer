@@ -43,7 +43,6 @@ void ofApp::keyPressed(int key) {
 	{
 		data.bGui = !data.bGui;
 	}
-
 	if (key == ' ')
 	{
 		data.doRandomize();
