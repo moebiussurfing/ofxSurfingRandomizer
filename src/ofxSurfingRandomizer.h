@@ -1,10 +1,24 @@
 #pragma once
 #include "ofMain.h"
 
-#include "ofxSurfingHelpers.h"
+////TODO:
+//#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
+////#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // trying to disable ImGui instance...
+//// must be commented almost always
+//
+//#include "ofxSurfingHelpers.h"
+//
+//#include "ofxSurfing_ImGuiBundle.h"
+////#include "ofxSurfing_ImGui_LayoutManager.h"
 
-//#include "ofxSurfing_ImGui_LayoutManager.h"
+#include "ofxImGui.h"
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "ofxSurfingHelpers.h"
 #include "ofxSurfing_ImGuiBundle.h"
+#include "ofxSurfing_Timers.h"
+
+//-
 
 //TODO:
 //#include "range_slider.h"
@@ -35,6 +49,9 @@ private:
 private:
 	void drawParams();
 
+public:
+	void drawImGuiWidgets();
+
 	//-
 
 	//commands
@@ -54,7 +71,20 @@ private:
 
 	//-
 
-	ofxSurfing_ImGui_LayoutManager guiManager;
+//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+//	ofxSurfing_ImGui_LayoutManager guiManager;
+//#endif
+
+	// ImGui
+	void setup_ImGui();
+	bool bAutoDraw = true;
+	//void draw_ImGui();
+	ofxImGui::Gui gui;
+	ofxImGui::Settings mainSettings = ofxImGui::Settings();
+	ImFont* customFont = nullptr;
+	ofParameter<bool> auto_resize{ "Auto Resize", true };
+	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
+	ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
 
 	//-
 
@@ -71,14 +101,28 @@ private:
 	vector<ofParameter<bool>> enablersForParams;
 
 	ofParameterGroup params_AppState;
-	ofParameter<bool> bParams;
-	ofParameter<bool> bEditor;
+
 	ofParameter<bool> bControls;
 
+	//-
+
+	// exposed to external gui's
 public:
 	ofParameter<bool> bGui;
+	ofParameter<bool> bParams;
+	ofParameter<bool> bEditor;
 
-	void setImGuiAutodraw(bool b){ guiManager.setImGuiAutodraw(b); }//required to set to false when only one ImGui instance is created
+	//-
+
+//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+//	//--------------------------------------------------------------
+//	void setImGuiAutodraw(bool b){ guiManager.setImGuiAutodraw(b); }//required to set to false when only one ImGui instance is created
+//
+//	//--------------------------------------------------------------
+//	void setImGuiSharedMode(bool b) {
+//		guiManager.setSharedMode(b); // Force shared context
+//	}
+//#endif
 
 private:
 	//settings

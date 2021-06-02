@@ -25,7 +25,7 @@ void ofApp::setup()
 	//params2.add(params3);
 
 	// randomizer
-	data.setup(params);
+	randomizer.setup(params);
 }
 
 //--------------------------------------------------------------
@@ -41,14 +41,14 @@ void ofApp::keyPressed(int key) {
 
 	if (key == 'g')
 	{
-		data.bGui = !data.bGui;
+		randomizer.bGui = !randomizer.bGui;
 	}
 	if (key == ' ')
 	{
-		data.doRandomize();
+		randomizer.doRandomize();
 	}
 	if (key == OF_KEY_RETURN)
 	{
-		data.doResetParams();
+		randomizer.doResetParams();
 	}
 }
