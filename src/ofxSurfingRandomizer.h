@@ -15,7 +15,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGuiBundle.h"
+#include "ofxSurfingImGui.h"
 #include "ofxSurfing_Timers.h"
 
 //-
@@ -51,6 +51,7 @@ private:
 
 public:
 	void drawImGuiWidgets();
+	void drawImGuiWidgetsEditor();
 
 	//-
 
@@ -111,6 +112,7 @@ public:
 	ofParameter<bool> bGui;
 	ofParameter<bool> bParams;
 	ofParameter<bool> bEditor;
+	ofParameter<bool> bKeys;
 
 	//-
 
