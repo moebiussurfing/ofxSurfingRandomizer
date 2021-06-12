@@ -1,15 +1,22 @@
 #pragma once
 #include "ofMain.h"
 
+
+/*
+
+TODO:
+
++ add store/recall of enable states
++ hide some labels
++ make some spaces minmax, random..
+
+*/
+
+
 ////TODO:
 //#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
 ////#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // trying to disable ImGui instance...
 //// must be commented almost always
-//
-//#include "ofxSurfingHelpers.h"
-//
-//#include "ofxSurfing_ImGuiBundle.h"
-////#include "ofxSurfing_ImGui_LayoutManager.h"
 
 #include "ofxImGui.h"
 #include "imgui.h"
@@ -78,6 +85,13 @@ private:
 
 	// ImGui
 	void setup_ImGui();
+
+public:
+	void setAutodraw(bool autodraw) {
+		bAutoDraw = autodraw;
+	}
+
+private:
 	bool bAutoDraw = true;
 	//void draw_ImGui();
 	ofxImGui::Gui gui;

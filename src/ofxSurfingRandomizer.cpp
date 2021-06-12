@@ -90,7 +90,7 @@ void ofxSurfingRandomizer::setup_ImGui()
 	//-
 
 	// theme
-	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
 	//ofxSurfingHelpers::ImGui_ThemeModernDark();
 }
 
@@ -129,7 +129,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 		name = "RANDOMiZER EDITOR";
 		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 		{
-			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
@@ -158,7 +158,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			_flagw |= ImGuiTreeNodeFlags_Framed;
 			if (ImGui::TreeNodeEx("TOOLS", _flagw))
 			{
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 				if (ImGui::Button("RANDOMiZE!", ImVec2(_w50, _h/2)))
 				{
@@ -171,7 +171,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 				if (b) a = 1 - tn;
 				else a = 1.0f;
 				if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));
-				ofxSurfingHelpers::AddBigToggle(bPlay, _w50, _h / 2, false);
+				ofxImGuiSurfing::AddBigToggle(bPlay, _w50, _h / 2, false);
 				if (b) ImGui::PopStyleColor();
 
 				if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
@@ -195,7 +195,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			_flagw |= ImGuiTreeNodeFlags_Framed;
 			if (ImGui::TreeNodeEx("RANGES", _flagw))
 			{
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 				//for (int i = 0; i < params_EditorGroups.size(); i++) 
 				for (int i = 0; i < enablersForParams.size(); i++)
@@ -259,6 +259,8 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 
 						// get from min max
 
+						//ImGui::Dummy(ImVec2(10, 0));
+
 						ImGui::AlignTextToFramePadding();
 						ImGui::Text("GET");
 						ImGui::SameLine(0, 0);
@@ -283,6 +285,8 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						//-
 
 						// set to min max
+
+						//ImGui::Dummy(ImVec2(10, 0));
 
 						ImGui::AlignTextToFramePadding();
 						ImGui::Text("SET");
@@ -321,8 +325,8 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						ImGui::PushID(tag.c_str());
 						ImGui::PushItemWidth(_ww2);
 						string ss = "%.3f" + spcl + "%.3f";
-						ImGui::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
-						//ImGui::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
+						ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
+						//ofxImGuiSurfing::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
 						ImGui::PopItemWidth();
 						ImGui::PopID();
 
@@ -436,8 +440,8 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						ImGui::PushID(tag.c_str());
 						ImGui::PushItemWidth(_ww2);
 						string ss = "%.0f" + spcl + "%.0f";
-						ImGui::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
-						//ImGui::AddRangeParam("%.0f   %.0f", pmin, pmax, ss.c_str(), power);
+						ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
+						//ofxImGuiSurfing::AddRangeParam("%.0f   %.0f", pmin, pmax, ss.c_str(), power);
 						ImGui::PopItemWidth();
 						ImGui::PopID();
 
@@ -534,7 +538,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 			name = "SURFING RANDOMiZER";
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
 			{
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 				//-
 
@@ -562,9 +566,9 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 					{
 						//ImGui::Text("PANELS");
 
-						ofxSurfingHelpers::AddBigToggle(bEditor, _w100, _h / 2);
-						ofxSurfingHelpers::AddBigToggle(bParams, _w100, _h / 2);
-						////ofxSurfingHelpers::AddBigToggle(bControls, _w50, _h);
+						ofxImGuiSurfing::AddBigToggle(bEditor, _w100, _h / 2);
+						ofxImGuiSurfing::AddBigToggle(bParams, _w100, _h / 2);
+						////ofxImGuiSurfing::AddBigToggle(bControls, _w50, _h);
 						ImGui::Dummy(ImVec2(0.0f, 2.0f));
 					}
 
@@ -578,7 +582,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 					if (ImGui::TreeNodeEx("TESTER", _flagw))
 						//if (ImGui::CollapsingHeader("TESTER"))
 					{
-						ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 						//blink by timer progress
 						bool b = bPlay;
@@ -586,7 +590,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 						if (b) a = 1 - tn;
 						else a = 1.0f;
 						if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));
-						ofxSurfingHelpers::AddBigToggle(bPlay, _w100, _h, false);
+						ofxImGuiSurfing::AddBigToggle(bPlay, _w100, _h, false);
 						if (b) ImGui::PopStyleColor();
 
 						//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h / 2))) {
@@ -599,7 +603,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 							ofxImGui::AddParameter(playSpeed);
 							ImGui::PopItemWidth();
 							
-							ofxSurfingHelpers::AddBigToggle(bKeys, _w100, _h / 2);
+							ofxImGuiSurfing::AddBigToggle(bKeys, _w100, _h / 2);
 
 							//ImGui::ProgressBar(tn);
 						}
@@ -618,7 +622,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 					if (ImGui::TreeNodeEx("TOOLS", _flagw))
 						//if (ImGui::CollapsingHeader("TOOLS"))
 					{
-						ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 						if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
 						{
@@ -656,7 +660,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 				if (ImGui::CollapsingHeader("ENABLE PARAMETERS", _flagc))
 				{
-					ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 					//ImGui::Text("ENABLE PARAMETERS");
 
@@ -687,7 +691,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 							// 1. toggle enable
 							ofParameter<bool> pb = p.cast<bool>();
 							float _w75 = 3 * (_w100 / 4 - _spcx / 4);
-							ofxSurfingHelpers::AddBigToggle(pb, _w75, _h / 2, false);
+							ofxImGuiSurfing::AddBigToggle(pb, _w75, _h / 2, false);
 							ImGui::SameLine();
 							// 2. button random
 							ImGui::PushID(i);//required to allow same name in all buttons
@@ -765,6 +769,10 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 	}
 
 	//----
+	
+	gui.begin();
+	drawImGuiWidgets();
+	gui.end();
 
 	//if (!bGui) return;
 
@@ -772,7 +780,7 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 //	guiManager.begin();
 ////#endif
 //
-//	drawImGuiWidgets();
+	//drawImGuiWidgets();
 //	
 ////#ifndef USE_RANDOMIZE_IMGUI_EXTERNAL
 //	guiManager.end();
@@ -793,7 +801,7 @@ void ofxSurfingRandomizer::drawParams() {
 	//float _w33;
 	//float _w25;
 	//float _h;
-	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+	//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	flags |= ImGuiTreeNodeFlags_DefaultOpen;
