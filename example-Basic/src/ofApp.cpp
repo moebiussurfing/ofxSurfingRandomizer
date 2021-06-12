@@ -25,7 +25,6 @@ void ofApp::setup()
 	//params2.add(params3);
 
 	// randomizer
-	//randomizer.setAutodraw(true);
 	randomizer.setup(params);
 }
 
