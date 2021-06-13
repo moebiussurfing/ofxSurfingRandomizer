@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ofMain.h"
 
 
@@ -12,12 +13,11 @@ TODO:
 
 */
 
-
 // -> WARNING:
 // You must comment this line to run the example!
 // When using more ImGui instances, like combining many add-ons that uses ImGui, then you musts uncomment this line. 
-//#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
 #define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+//#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
 //#define USE_RANDOMIZE_IMGUI_LOCAL
 
 //-

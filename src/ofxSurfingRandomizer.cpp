@@ -23,6 +23,9 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(bControls);
 	params_AppState.add(bPlay.set("PLAY", false));
 	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
+
+	bPlay.setSerializable(false);
+
 	ofxSurfingHelpers::loadGroup(params_AppState, path_AppState);
 }
 
@@ -795,6 +798,9 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 	//----
 
+	//// instance - Plugin code that was made for sharing context
+	//ImGui::PushID("##ofxSurfingRandomizerHASH"); // <-- if you want to ensure a sandbox between both (fails with sharedMode off)
+
 #ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	gui.begin();
 	drawImGuiWidgets();
@@ -806,6 +812,8 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 	drawImGuiWidgets();
 	guiManager.end();
 #endif
+
+	//ImGui::PopID(); // <-- If you want to ensure a sandbox between both
 }
 
 //--------------------------------------------------------------
