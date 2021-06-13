@@ -22,11 +22,12 @@ TODO:
 
 //-
 
-#include "ofxImGui.h"
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "ofxSurfingHelpers.h"
 #include "ofxSurfingImGui.h"
+//#include "ofxImGui.h"
+//#include "imgui.h"
+//#include "imgui_internal.h"
+
+#include "ofxSurfingHelpers.h"
 #include "ofxSurfing_Timers.h"
 
 #define DEFAULT_MIN_PCT 0.1f

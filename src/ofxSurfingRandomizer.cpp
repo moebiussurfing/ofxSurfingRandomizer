@@ -109,20 +109,15 @@ void ofxSurfingRandomizer::setup_ImGui()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 
-	// 3. WINDOW EDITOR
-	auto mainSettings = ofxImGui::Settings();
+	// window editor
 	ImGuiWindowFlags _flagsw;
-	string name;
+	string n;
 
 	bool bOpen;
 	ImGuiColorEditFlags _flagc;
 
-	//widgets sizes
-	float _spcx;
-	float _spcy;
+	// widgets sizes
 	float _w100;
-	float _h100;
-	float _w99;
 	float _w50;
 	float _w33;
 	float _w25;
@@ -140,16 +135,16 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 
 	if (bEditor)
 	{
-		name = "RANDOMiZER EDITOR";
-		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
+		n = "RANDOMiZER EDITOR";
+		guiManager.beginWindow(n.c_str(), NULL, _flagsw);
 		{
-			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
 			flags |= ImGuiTreeNodeFlags_Framed;
 
-			//ofxImGui::AddGroup(params_EditorGroups, flags);
+			//ofxImGuiSurfing::AddGroup(params_EditorGroups, flags);
 
 			bool bOpen = true;
 			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
@@ -158,11 +153,11 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			// sliders props
 
 			const int _ww1 = 60;
-			//const int _ww1 = 80;
 			const int _ww2 = 200;
 
 			ImGuiSliderFlags sflag = ImGuiSliderFlags_None;
 			//sflag |= ImGuiSliderFlags_ReadOnly;
+
 			string spcl = "    ";//space between min-max range slider label
 
 			//--
@@ -172,7 +167,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			_flagw |= ImGuiTreeNodeFlags_Framed;
 			if (ImGui::TreeNodeEx("TOOLS", _flagw))
 			{
-				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 				if (ImGui::Button("RANDOMiZE!", ImVec2(_w50, _h / 2)))
 				{
@@ -209,7 +204,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			_flagw |= ImGuiTreeNodeFlags_Framed;
 			if (ImGui::TreeNodeEx("RANGES", _flagw))
 			{
-				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 				//for (int i = 0; i < params_EditorGroups.size(); i++) 
 				for (int i = 0; i < enablersForParams.size(); i++)
@@ -266,7 +261,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 
 						//ImGui::PushItemWidth(_ww2);
 						//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-						//ofxImGui::AddParameter(_p0);
+						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 
 						//-
@@ -347,7 +342,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						//-
 
 						//ImGui::PushItemWidth(_ww2);
-						//ofxImGui::AddParameter(_p0);
+						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 						//ImGui::Columns(1);
 					}
@@ -381,7 +376,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						ImGui::SameLine();
 
 						//ImGui::PushItemWidth(_ww2);
-						//ofxImGui::AddParameter(_p0);
+						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 						//ImGui::SameLine();
 
@@ -462,7 +457,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						//-
 
 						//ImGui::PushItemWidth(_ww2);
-						//ofxImGui::AddParameter(_p0);
+						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 						//ImGui::Columns(1);
 					}
@@ -483,7 +478,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 						ImGui::SameLine();
 
 						auto &_p0 = g.getBool(_name);
-						ofxImGui::AddParameter(_p0);
+						ofxImGuiSurfing::AddParameter(_p0);
 					}
 				}
 
@@ -501,7 +496,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 				ImGui::TreePop();
 			}
 		}
-		ofxImGui::EndWindow(mainSettings);
+		guiManager.endWindow();
 	}
 }
 
@@ -512,23 +507,19 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 	//-
 
 	{
-		auto mainSettings = ofxImGui::Settings();
 		ImGuiWindowFlags _flagsw = ImGuiWindowFlags_None;
-		string name;
+		string n;
 
 		bool bOpen;
 		ImGuiColorEditFlags _flagc;
 
-		//widgets sizes
-		float _spcx;
-		float _spcy;
+		// widgets sizes
 		float _w100;
-		float _h100;
-		float _w99;
 		float _w50;
 		float _w33;
 		float _w25;
 		float _h;
+		float _spcx = ImGui::GetStyle().ItemSpacing.x;
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 		if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -544,12 +535,12 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 
 		if (bParams)
 		{
-			name = "PARAMETERS";
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
+			n = "PARAMETERS";
+			guiManager.beginWindow(n.c_str(), NULL, _flagsw);
 			{
 				drawParams();
 			}
-			ofxImGui::EndWindow(mainSettings);
+			guiManager.endWindow();
 		}
 
 		//----
@@ -558,10 +549,10 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 
 		if (bGui)
 		{
-			name = "SURFING RANDOMiZER";
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagsw))
+			n = "SURFING RANDOMiZER";
+			guiManager.beginWindow(n.c_str(), NULL, _flagsw);
 			{
-				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 				//-
 
@@ -605,7 +596,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 					if (ImGui::TreeNodeEx("TESTER", _flagw))
 						//if (ImGui::CollapsingHeader("TESTER"))
 					{
-						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 						//blink by timer progress
 						bool b = bPlay;
@@ -623,7 +614,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 							//ImGui::SliderFloat("Speed", &playSpeed, 0, 1);
 
 							ImGui::PushItemWidth(_w50);
-							ofxImGui::AddParameter(playSpeed);
+							ofxImGuiSurfing::AddParameter(playSpeed);
 							ImGui::PopItemWidth();
 
 							ofxImGuiSurfing::AddBigToggle(bKeys, _w100, _h / 2);
@@ -645,7 +636,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 					if (ImGui::TreeNodeEx("TOOLS", _flagw))
 						//if (ImGui::CollapsingHeader("TOOLS"))
 					{
-						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 						if (ImGui::Button("RESET PARAMS", ImVec2(_w50, _h / 2)))
 						{
@@ -683,7 +674,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 				if (ImGui::CollapsingHeader("ENABLE PARAMETERS", _flagc))
 				{
-					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
 					//ImGui::Text("ENABLE PARAMETERS");
 
@@ -758,18 +749,18 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 #endif
 
 #ifdef USE_RANDOMIZE_IMGUI_LOCAL
-				ofxImGui::AddParameter(auto_resize);
+				ofxImGuiSurfing::AddParameter(auto_resize);
 #endif
-				//ofxImGui::AddParameter(bLockMouseByImGui);//TODO: not working externaly..
+				//ofxImGuiSurfing::AddParameter(bLockMouseByImGui);//TODO: not working externaly..
 			}
-			ofxImGui::EndWindow(mainSettings);
+			guiManager.endWindow();
 		}
 
 		//-----------------
 
 		drawImGuiWidgetsEditor();
+		}
 	}
-}
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
@@ -819,24 +810,11 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawParams() {
 
-	auto mainSettings = ofxImGui::Settings();
-
-	//float _spcx;
-	//float _spcy;
-	//float _w100;
-	//float _h100;
-	//float _w99;
-	//float _w50;
-	//float _w33;
-	//float _w25;
-	//float _h;
-	//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	flags |= ImGuiTreeNodeFlags_DefaultOpen;
 	flags |= ImGuiTreeNodeFlags_Framed;
 
-	ofxImGui::AddGroup(params, flags);
+	ofxImGuiSurfing::AddGroup(params, flags);
 
 	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
 }
