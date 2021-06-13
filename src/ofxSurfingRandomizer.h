@@ -13,10 +13,14 @@ TODO:
 */
 
 
-////TODO:
+// -> WARNING:
+// You must comment this line to run the example!
+// When using more ImGui instances, like combining many add-ons that uses ImGui, then you musts uncomment this line. 
 //#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
-////#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // trying to disable ImGui instance...
-//// must be commented almost always
+#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+//#define USE_RANDOMIZE_IMGUI_LOCAL
+
+//-
 
 #include "ofxImGui.h"
 #include "imgui.h"
@@ -24,12 +28,6 @@ TODO:
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfingImGui.h"
 #include "ofxSurfing_Timers.h"
-
-//-
-
-//TODO:
-//#include "range_slider.h"
-//#include "range_slider.inl"
 
 #define DEFAULT_MIN_PCT 0.1f
 #define DEFAULT_MAX_PCT 0.9f
@@ -46,8 +44,10 @@ public:
 	void exit();
 	void keyPressed(int key);
 
+	//-
+
+	// tester timers
 private:
-	//tester timers
 	ofParameter<bool> bPlay;
 	ofParameter<float> playSpeed;
 	int tf;
@@ -62,7 +62,7 @@ public:
 
 	//-
 
-	//commands
+	// commands
 public:
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
@@ -84,7 +84,10 @@ private:
 //#endif
 
 	// ImGui
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	void setup_ImGui();
+#endif
 
 public:
 	void setAutodraw(bool autodraw) {
@@ -93,6 +96,14 @@ public:
 
 private:
 	bool bAutoDraw = true;
+
+	//-
+
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+	ofxSurfing_ImGui_Manager guiManager;
+#endif
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	//void draw_ImGui();
 	ofxImGui::Gui gui;
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
@@ -100,6 +111,7 @@ private:
 	ofParameter<bool> auto_resize{ "Auto Resize", true };
 	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
 	ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
+#endif
 
 	//-
 

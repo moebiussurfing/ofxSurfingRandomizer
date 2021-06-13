@@ -47,23 +47,26 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
-//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-//	// gui
-//	//guiManager.setImGuiAutodraw(false);//? TODO: improve multicontext mode..
-//	guiManager.setup();//initiate ImGui
-//	//guiManager.setUseAdvancedSubPanel(true);
-//#endif
+	// gui
 
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+	//guiManager.setImGuiAutodraw(false);//? TODO: improve multicontext mode..
+	guiManager.setup();//initiate ImGui
+	//guiManager.setUseAdvancedSubPanel(true);
+#endif
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	setup_ImGui();
+#endif
 }
-
 
 //--
 
 // ImGui
 
 //TODO:
-//swap to layout ImGui
+// swap to layout ImGui
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setup_ImGui()
 {
@@ -93,6 +96,7 @@ void ofxSurfingRandomizer::setup_ImGui()
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
 	//ofxSurfingHelpers::ImGui_ThemeModernDark();
 }
+#endif
 
 //--------------------------------------------------------------
 //void ofxSurfingRandomizer::update(ofEventArgs & args)
@@ -122,7 +126,14 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 	float _h;
 
 	_flagsw = ImGuiWindowFlags_None;
+
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+	if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
 
 	if (bEditor)
 	{
@@ -160,7 +171,7 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 			{
 				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-				if (ImGui::Button("RANDOMiZE!", ImVec2(_w50, _h/2)))
+				if (ImGui::Button("RANDOMiZE!", ImVec2(_w50, _h / 2)))
 				{
 					doRandomize();
 				}
@@ -475,7 +486,14 @@ void ofxSurfingRandomizer::drawImGuiWidgetsEditor() {
 
 				//-
 
-				ofxImGui::AddParameter(auto_resize);
+
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+				if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
+				if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
 
 				ImGui::TreePop();
 			}
@@ -509,11 +527,13 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 		float _w25;
 		float _h;
 
-		//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-		//		if (guiManager.auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-		//#endif
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+		if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
 
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 		if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
 
 		//-
 
@@ -602,7 +622,7 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 							ImGui::PushItemWidth(_w50);
 							ofxImGui::AddParameter(playSpeed);
 							ImGui::PopItemWidth();
-							
+
 							ofxImGuiSurfing::AddBigToggle(bKeys, _w100, _h / 2);
 
 							//ImGui::ProgressBar(tn);
@@ -730,10 +750,13 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 
 				//-
 
-//#ifndef USE_RANDOMIZE_IMGUI_EXTERNAL
-//				guiManager.drawAdvancedSubPanel();
-//#endif
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+				guiManager.drawAdvancedSubPanel();
+#endif
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 				ofxImGui::AddParameter(auto_resize);
+#endif
 				//ofxImGui::AddParameter(bLockMouseByImGui);//TODO: not working externaly..
 			}
 			ofxImGui::EndWindow(mainSettings);
@@ -747,6 +770,8 @@ void ofxSurfingRandomizer::drawImGuiWidgets() {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
+
+	if (!bGui) return;
 
 	//#ifdef USE_RANDOMIZE_IMGUI_EXTERNAL
 	//	return;
@@ -769,22 +794,18 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 	}
 
 	//----
-	
+
+#ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	gui.begin();
 	drawImGuiWidgets();
 	gui.end();
+#endif
 
-	//if (!bGui) return;
-
-//#ifndef USE_RANDOMIZE_IMGUI_EXTERNAL
-//	guiManager.begin();
-////#endif
-//
-	//drawImGuiWidgets();
-//	
-////#ifndef USE_RANDOMIZE_IMGUI_EXTERNAL
-//	guiManager.end();
-//#endif
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+	guiManager.begin();
+	drawImGuiWidgets();
+	guiManager.end();
+#endif
 }
 
 //--------------------------------------------------------------
