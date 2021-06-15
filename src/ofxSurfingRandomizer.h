@@ -91,7 +91,7 @@ private:
 #endif
 
 public:
-	void setAutodraw(bool autodraw) {
+	void setAutodraw(bool autodraw) { // required to set to true when only one ofxImGUi instance will be used between all the ofApp project add-ons using ofxImGui
 		bAutoDraw = autodraw;
 	}
 

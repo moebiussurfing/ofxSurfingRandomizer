@@ -54,6 +54,7 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	//guiManager.setImGuiAutodraw(false);//? TODO: improve multicontext mode..
+	guiManager.setImGuiAutodraw(bAutoDraw);
 	guiManager.setup();//initiate ImGui
 	//guiManager.setUseAdvancedSubPanel(true);
 #endif
