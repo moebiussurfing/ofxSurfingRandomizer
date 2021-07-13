@@ -23,10 +23,6 @@ TODO:
 //-
 
 #include "ofxSurfingImGui.h"
-//#include "ofxImGui.h"
-//#include "imgui.h"
-//#include "imgui_internal.h"
-
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_Timers.h"
 
@@ -55,11 +51,13 @@ private:
 	float tn;
 
 private:
-	void drawParams();
+	void drawImGui_Main();
+	void drawImGui_Params();
+	void drawImGui_Editor();
+	void drawImGui_Index();
 
 public:
-	void drawImGuiWidgets();
-	void drawImGuiWidgetsEditor();
+	void drawImGui_Widgets();
 
 	//-
 
@@ -84,6 +82,10 @@ private:
 //	ofxSurfing_ImGui_LayoutManager guiManager;
 //#endif
 
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+	ofxSurfing_ImGui_Manager guiManager;
+#endif
+
 	// ImGui
 
 #ifdef USE_RANDOMIZE_IMGUI_LOCAL
@@ -100,10 +102,6 @@ private:
 
 	//-
 
-#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-	ofxSurfing_ImGui_Manager guiManager;
-#endif
-
 #ifdef USE_RANDOMIZE_IMGUI_LOCAL
 	//void draw_ImGui();
 	ofxImGui::Gui gui;
@@ -113,6 +111,8 @@ private:
 	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
 	ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
 #endif
+
+	ofParameter<bool> bMinimal{ "Minimal", false };
 
 	//-
 
@@ -130,15 +130,16 @@ private:
 
 	ofParameterGroup params_AppState;
 
-	ofParameter<bool> bControls;
 
 	//-
 
 	// exposed to external gui's
 public:
 	ofParameter<bool> bGui;
-	ofParameter<bool> bParams;
-	ofParameter<bool> bEditor;
+	ofParameter<bool> bGui_Params;
+	ofParameter<bool> bGui_Editor;
+	ofParameter<bool> bGui_Index;
+
 	ofParameter<bool> bKeys;
 
 	//-

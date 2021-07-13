@@ -1,10 +1,10 @@
 {
     "ofxSurfingRandomizer": {
-        "CONTROLS": "1",
-        "EDIT": "1",
         "Keys": "1",
-        "PLAY": "1",
-        "SHOW_PARAMETERS": "1",
+        "Minimal": "0",
+        "RANDOMiZER_EDITOR": "1",
+        "RANDOMiZER_INDEX": "0",
+        "RANDOMiZER_PARAMETERS": "1",
         "SURFING_RANDOMIZER": "1",
         "Speed": "0.74"
     }
