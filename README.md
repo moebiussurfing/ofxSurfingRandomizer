@@ -35,21 +35,24 @@ Each state/index / preset has a settable probability to make some states more or
 
 ## Usage
 - Just pass your ```ofParameterGroup``` parameters container.
-- Pass your ofParameter<int> target index.
 - Enable all the parameters that you want to perform the randomization to.
 - Set the minimum and maximum range sliders to fit the random inside them. 
 - Notice that limits will be also inside the Min/Max of the parameters but independent of them.
+- Pass your ofParameter<int> target index to receive the index randoms.
 
 **ofApp.h**
 ```.cpp
 #include "ofxSurfingRandomizer.h"
 
-ofxSurfingRandomizer data;
+ofxSurfingRandomizer randomizer;
 
-ofParameterGroup params; // main container
+ofParameter<int> index{ "index", 0, 0, 8 };
+ofEventListener listenerIndex;
+
+ofParameterGroup params; // group container
 ofParameter<float> lineWidth;
 ofParameter<float> separation;
-ofParameter<float> speed;[ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
+ofParameter<float> speed;
 ofParameter<int> amount;
 ofParameter<int> shapeType;
 ```
@@ -65,7 +68,15 @@ void ofApp::setup()
   params.add(amount.set("amount", 1, 1, 10));
   params.add(speed.set("shapeType", 0, 0, 3));
 
-  data.setup(params);
+  randomizer.setTarget(index);
+  randomizer.setup(params);
+
+  // Lambda callback:to receive the randomized index
+  //--------------------------------------------------------------
+  listenerIndex = index.newListener([this](int &i) {
+    ofLogNotice("ofApp") << "Index: " << i;
+    /* presets.load(i); */
+  });
 }
 ```
 
@@ -74,10 +85,10 @@ void ofApp::setup()
   <p>
 
 Clone these add-ons and include into the **OF PROJECT GENERATOR**:
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/) [ Fork from @**Daandelange** ]  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). Fork from @**Daandelange**.  
 * [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/) 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [ Only for some examples ]  
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). Only for some examples.  
 
 *Thanks a lot to all these ofxAddons coders.*  
   </p>
@@ -91,10 +102,15 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   </p>
 </details>
 
-## TODO
+<details>
+  <summary>TODO</summary>
+  <p>
+
 * Add more types: 2D/3D vectors and colors. Using templates [?] ...  
 [ ANY HELP/PULL ON THIS IS APPRECIATED! ]  
 * Add Undo Engine to improve exploration.
+  </p>
+</details>
 
 ## Author
 An add-on by **@moebiusSurfing**  
