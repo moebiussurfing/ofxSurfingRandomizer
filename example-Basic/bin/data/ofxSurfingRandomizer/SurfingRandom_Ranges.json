@@ -17,17 +17,17 @@
             "amount": {
                 "Max": "10",
                 "Min": "2",
-                "amount": "2"
+                "amount": "4"
             },
             "amount2": {
                 "Max": "10",
                 "Min": "0",
-                "amount2": "3"
+                "amount2": "4"
             },
             "lineWidth": {
                 "Max": "1",
                 "Min": "0.64",
-                "lineWidth": "0.96882"
+                "lineWidth": "0.744615"
             },
             "next": {
                 "next": "1"
@@ -38,7 +38,7 @@
             "separation": {
                 "Max": "90.1",
                 "Min": "47.719",
-                "separation": "61.5959"
+                "separation": "85.1851"
             },
             "shapeType": {
                 "Max": "40",
@@ -48,7 +48,7 @@
             "shapeType2": {
                 "Max": "40",
                 "Min": "7",
-                "shapeType2": "20"
+                "shapeType2": "25"
             },
             "size": {
                 "Max": "90",
@@ -63,7 +63,7 @@
             "speed": {
                 "Max": "0.287",
                 "Min": "0.1",
-                "speed": "0.198365"
+                "speed": "0.136513"
             }
         }
     }
