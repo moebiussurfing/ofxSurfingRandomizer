@@ -5,13 +5,13 @@ An **openFrameworks** add-on to perform two types of useful randomizers over the
 
 ## Why?
 
-    - Useful to **explore not expected combinations** of the parameters that modulate your scene.  
+  - Useful to **explore not expected combinations** of the parameters that modulate your scene.  
 
-    - Using the index randomizer you can add some organic behavior to your scene, switching your scene between different **index / presets / states**.  
+  - Using the index randomizer you can add some organic behavior to your scene, switching your scene between different **index / presets / states**.  
 
-    - A global **BPM timer** can be used to set the speed of the switching, with two different categories (**long/short**).  
+  - A global **BPM timer** can be used to set the speed of the switching, with two different categories (**long/short**).  
 
-    - Each **state / index / preset** has a settable probability to make some states more or less frequently switched. 
+  - Each **state / index / preset** has a settable probability to make some states more or less frequently switched. 
 
 --------------------------
 
