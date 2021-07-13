@@ -21,7 +21,6 @@ void ofApp::setup()
 	params.add(params2);
 
 	// randomizer
-
 	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 	randomizer.setTarget(index);
 	randomizer.setup(params);

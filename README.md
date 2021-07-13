@@ -79,7 +79,6 @@ void ofApp::setup()
   //--------------------------------------------------------------
   listenerIndex = index.newListener([this](int &i) {
     ofLogNotice("ofApp") << "Index: " << i;
-    /* presets.load(i); */
   });
 }
 ```
