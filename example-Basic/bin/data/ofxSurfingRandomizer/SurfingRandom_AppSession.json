@@ -8,8 +8,8 @@
         "Keys": "1",
         "Minimal": "0",
         "RANDOMiZER_INDEX": "1",
-        "RANDOMiZER_PARAMETERS": "0",
-        "RANDOMiZER_RANGE_EDITOR": "0",
+        "RANDOMiZER_PARAMETERS": "1",
+        "RANDOMiZER_RANGE_EDITOR": "1",
         "SURFING_RANDOMiZER": "1",
         "Speed": "0.5"
     }

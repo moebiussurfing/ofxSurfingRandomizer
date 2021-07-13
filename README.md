@@ -4,8 +4,11 @@
 An **openFrameworks** add-on to perform two types of useful randomizers over the ofParameters of an ofParameterGroup and over an int/index/preset/state selector.  
 
 Useful to explore not expected combinations of the parameters that modulate your scene.  
+
 Using the index randomizer you can add some organic behavior to your scene, switching your scene between different index / presets / states.  
+
 A global BPM timer can be used to set the speed of the switching, with two different categories (long/short).  
+
 Each state/index / preset has a settable probability to make some states more or less frequently switched. 
 
 #### RANGED RANDOMIZATION 
