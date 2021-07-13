@@ -1,0 +1,70 @@
+{
+    "Ranges_Editor": {
+        "Params": {
+            "amount": "1",
+            "amount2": "1",
+            "lineWidth": "1",
+            "next": "1",
+            "prev": "1",
+            "separation": "1",
+            "shapeType": "0",
+            "shapeType2": "1",
+            "size": "0",
+            "size2": "0",
+            "speed": "1"
+        },
+        "paramsGroup": {
+            "amount": {
+                "Max": "10",
+                "Min": "2",
+                "amount": "5"
+            },
+            "amount2": {
+                "Max": "10",
+                "Min": "0",
+                "amount2": "2"
+            },
+            "lineWidth": {
+                "Max": "1",
+                "Min": "0.64",
+                "lineWidth": "0.66661"
+            },
+            "next": {
+                "next": "1"
+            },
+            "prev": {
+                "prev": "1"
+            },
+            "separation": {
+                "Max": "90.1",
+                "Min": "47.719",
+                "separation": "80.2611"
+            },
+            "shapeType": {
+                "Max": "40",
+                "Min": "-6",
+                "shapeType": "-1"
+            },
+            "shapeType2": {
+                "Max": "40",
+                "Min": "7",
+                "shapeType2": "40"
+            },
+            "size": {
+                "Max": "90",
+                "Min": "72",
+                "size": "84"
+            },
+            "size2": {
+                "Max": "57",
+                "Min": "10",
+                "size2": "27"
+            },
+            "speed": {
+                "Max": "0.287",
+                "Min": "0.1",
+                "speed": "0.144748"
+            }
+        }
+    }
+}

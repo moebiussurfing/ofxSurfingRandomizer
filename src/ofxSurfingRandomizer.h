@@ -8,23 +8,19 @@
 TODO:
 
 + add store/recall of enable states
-+ hide some labels
-+ make some spaces minmax, random..
 
 */
 
-// -> WARNING:
-// You must comment this line to run the example!
-// When using more ImGui instances, like combining many add-ons that uses ImGui, then you musts uncomment this line. 
+
 #define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-//#define USE_RANDOMIZE_IMGUI_EXTERNAL // trying to disable ImGui instance...
-//#define USE_RANDOMIZE_IMGUI_LOCAL
 
 //-
 
 #include "ofxSurfingImGui.h"
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_Timers.h"
+
+#include "SurfingIndexRandomizer.h" // index randomizer
 
 #define DEFAULT_MIN_PCT 0.1f
 #define DEFAULT_MAX_PCT 0.9f
@@ -38,14 +34,29 @@ public:
 
 	void setup(ofParameterGroup& group);
 	void draw(ofEventArgs & args);
+	void update(ofEventArgs & args);
 	void exit();
-	void keyPressed(int key);
+	void keyPressed(ofKeyEventArgs &eventArgs);
+
+	//-
+
+private:
+	SurfingIndexRandomizer surfingGroupRandomizer;
+	ofParameter<int> indexTarget{ "index", 0, 0, 9 };
+	bool bCustomIndex = false;
+public:
+	void setTarget(ofParameter<int> index)
+	{
+	bCustomIndex = true;
+		indexTarget.makeReferenceTo(index);
+	}
 
 	//-
 
 	// tester timers
+
 private:
-	ofParameter<bool> bPlay;
+	ofParameter<bool> bPLAY;
 	ofParameter<float> playSpeed;
 	int tf;
 	float tn;
@@ -62,10 +73,11 @@ public:
 	//-
 
 	// commands
+
 public:
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
-	void doResetParams();//set to minimals
+	void doResetParams(bool bFull = false);//set to minimals from range or abs param itself
 	void doResetRanges();//set ranges to abs min/max from each parameter
 
 private:
@@ -78,18 +90,8 @@ private:
 
 	//-
 
-//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-//	ofxSurfing_ImGui_LayoutManager guiManager;
-//#endif
-
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	ofxSurfing_ImGui_Manager guiManager;
-#endif
-
-	// ImGui
-
-#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-	void setup_ImGui();
 #endif
 
 public:
@@ -100,23 +102,12 @@ public:
 private:
 	bool bAutoDraw = true;
 
-	//-
-
-#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-	//void draw_ImGui();
-	ofxImGui::Gui gui;
-	ofxImGui::Settings mainSettings = ofxImGui::Settings();
-	ImFont* customFont = nullptr;
-	ofParameter<bool> auto_resize{ "Auto Resize", true };
-	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
-	ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
-#endif
-
 	ofParameter<bool> bMinimal{ "Minimal", false };
 
 	//-
 
 private:
+
 	void setupEditor(ofParameterGroup& group);
 	void addGroup(ofParameterGroup& group);
 
@@ -129,7 +120,6 @@ private:
 	vector<ofParameter<bool>> enablersForParams;
 
 	ofParameterGroup params_AppState;
-
 
 	//-
 

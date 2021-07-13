@@ -1,0 +1,16 @@
+{
+    "ofxSurfingRandomizer": {
+        "Clicker": {
+            "Extra": "0",
+            "Max_Buttons": "3",
+            "Responsive": "1"
+        },
+        "Keys": "1",
+        "Minimal": "0",
+        "RANDOMiZER_INDEX": "1",
+        "RANDOMiZER_PARAMETERS": "0",
+        "RANDOMiZER_RANGE_EDITOR": "0",
+        "SURFING_RANDOMiZER": "1",
+        "Speed": "0.5"
+    }
+}

@@ -2,5 +2,4 @@ ofxImGui
 ofxSurfingHelpers
 ofxSurfingImGui
 ofxSurfingRandomizer
-ofxSurfingTween
 ofxWindowApp

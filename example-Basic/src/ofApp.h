@@ -3,15 +3,14 @@
 #include "ofMain.h"
 
 #include "ofxSurfingRandomizer.h"
+
 #include "ofxWindowApp.h"
 
 class ofApp : public ofBaseApp{
 
 public:
     void setup();
-    void update();
     void draw();
-	void keyPressed(int key);
 
 	// params to randomize
 	ofParameterGroup params;
@@ -34,6 +33,9 @@ public:
 	ofParameter<int> shapeType3;
 
 	ofxSurfingRandomizer randomizer;
+
+	ofParameter<int> index{ "index", 0, 0, 8 };
+	ofEventListener listenerIndex;
 
 	ofxWindowApp windowApp;
 };

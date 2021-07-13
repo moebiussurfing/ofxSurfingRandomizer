@@ -19,37 +19,30 @@ void ofApp::setup()
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
 	params.add(params2);
-	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
-	//params3.add(separation3.set("separation3", 50, 1, 100));
-	//params3.add(speed3.set("speed3", 0.5, 0, 1));
-	//params2.add(params3);
 
 	// randomizer
-	randomizer.setAutodraw(true);
+
+	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
+	randomizer.setTarget(index);
 	randomizer.setup(params);
+
+	// Lambda callback:
+	// to receive the randomized index
+	//--------------------------------------------------------------
+	listenerIndex = index.newListener([this](int &i) {
+		ofLogNotice("ofApp") << "Index: " << i;
+		//presets.load(i);
+	});
 }
 
 //--------------------------------------------------------------
-void ofApp::update() {
-}
-
-//--------------------------------------------------------------
-void ofApp::draw() {
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key) {
-
-	if (key == 'g')
-	{
-		randomizer.bGui = !randomizer.bGui;
-	}
-	if (key == ' ')
-	{
-		randomizer.doRandomize();
-	}
-	if (key == OF_KEY_RETURN)
-	{
-		randomizer.doResetParams();
-	}
+void ofApp::draw()
+{
+	//// Easy callback:
+	//// log when index changes by the randomizer
+	//static int indexPre = 0;
+	//if (index != indexPre) {
+	//	indexPre = index;
+	//	ofLogNotice(__FUNCTION__) << "Index: " << index << endl;
+	//}
 }
