@@ -1,15 +1,15 @@
 # ofxSurfingRandomizer
 
 ## Overview
-An **openFrameworks** add-on to perform two types of useful randomizers over your scene over:
-1. The **ofParameters** of an **ofParameterGroup**. 
-2. An **index** (_int/preset/state_) selector.  
+An **openFrameworks** add-on to perform two types of useful randomizers for your scene over:
+1. The **ofParameters** (int/float/bool) of an **ofParameterGroup**. 
+2. An **Index** (_int/preset/state..._) selector.  
 
 ## Why?
 
-  - Useful to **explore not expected combinations** of the _parameters/states_ that "modulate" your scene.  
+  - Useful to **explore not expected combinations** of the _parameters_ that "modulate" your scene.  
 
-  - Using the **index randomizer** you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
+  - Using the **Index Randomizer** you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
 
   - A global **BPM timer** can be used to set the speed of the switching, with two different categories for stay duration (**long/short**).  
 
@@ -81,7 +81,7 @@ void ofApp::setup()
   randomizer.setup(params);
   randomizer.setTarget(index);
 
-  // Lambda callback:to receive the randomized index
+  // Lambda callback: to receive the randomized index
   //--------------------------------------------------------------
   listenerIndex = index.newListener([this](int &i) {
     ofLogNotice("ofApp") << "Index: " << i;
@@ -116,7 +116,7 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <p>
 
 * Add more types: 2D/3D vectors and colors. Using templates [?] ...  
-* ANY HELP/PULL ON THIS IS APPRECIATED!.  
+* Any help/pull on this is appreciated!.  
 * Add Undo Engine to improve exploration.
   </p>
 </details>
