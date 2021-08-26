@@ -10,11 +10,14 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_Editor = path_Global + "SurfingRandom_Ranges.json";
 	path_AppState = path_Global + "SurfingRandom_AppSession.json";
 	path_MemoryState = path_Global + "SurfingRandom_MemoryState.json";
+#ifdef INCLUDE_ofxUndoSimple
+	path_UndoHistory = path_Global + "SurfingRandom_UndoHistory.xml";
+#endif
 
-	bGui.set("SURFING RANDOMiZER", true);
-	bGui_Editor.set("RANDOMiZER RANGE EDITOR", true);
-	bGui_Params.set("RANDOMiZER PARAMETERS", true);
-	bGui_Index.set("RANDOMiZER INDEX", true);
+	bGui.set("SURFING RND", true);
+	bGui_Editor.set("RND RANGE EDITOR", true);
+	bGui_Params.set("RND PARAMS", true);
+	bGui_Index.set("RND INDEX", true);
 
 	params_AppState.setName("ofxSurfingRandomizer");
 	params_AppState.add(bGui);
@@ -25,7 +28,12 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(bMinimal);
 	params_AppState.add(bPLAY.set("PLAY", false));
 	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
-	params_AppState.add(surfingGroupRandomizer.params_Clicker);
+	params_AppState.add(surfingIndexGroupRandomizer.params_Clicker);
+
+#ifdef INCLUDE_ofxUndoSimple
+	params_AppState.add(bGui_UndoEngine);
+	params_AppState.add(bUndoAuto);
+#endif
 
 	bPLAY.setSerializable(false);
 }
@@ -38,6 +46,20 @@ ofxSurfingRandomizer::~ofxSurfingRandomizer() {
 
 	exit();
 }
+
+#ifdef INCLUDE_ofxUndoSimple
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::setupUndo() {
+	// TODO: main group only
+	//undoStringParams = groups[0].toString();
+
+	undoStringsParams.clear();
+
+	undoXmlsParams.clear();
+
+	undoStringsParams = params.toString();
+}
+#endif
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
@@ -52,7 +74,14 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
-	// gui
+#ifdef INCLUDE_ofxUndoSimple
+	setupUndo();
+	loadUndoHist();
+#endif
+
+	//--
+
+// gui
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	guiManager.setImGuiAutodraw(bAutoDraw);
@@ -68,13 +97,13 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 		indexTarget.set("Index", 0, 0, NUM_INDEX_ITEMS - 1);
 	}
 
-	//surfingGroupRandomizer.indexSelected.makeReferenceTo(indexTarget);// TODO: link
-	//surfingGroupRandomizer.setup(indexTarget.getMax());
-	//surfingGroupRandomizer.setBoolGui(bGui_Index);
-	////surfingGroupRandomizer.setBoolGuiPtr(bGui_Index);
+	//surfingIndexGroupRandomizer.indexSelected.makeReferenceTo(indexTarget);// TODO: link
+	//surfingIndexGroupRandomizer.setup(indexTarget.getMax());
+	//surfingIndexGroupRandomizer.setBoolGui(bGui_Index);
+	////surfingIndexGroupRandomizer.setBoolGuiPtr(bGui_Index);
 
-	surfingGroupRandomizer.setPath(path_Global);
-	surfingGroupRandomizer.setup(indexTarget, bGui_Index);
+	surfingIndexGroupRandomizer.setPath(path_Global);
+	surfingIndexGroupRandomizer.setup(indexTarget, bGui_Index);
 
 	//-
 
@@ -181,6 +210,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						doResetRanges();
 					}
 
+
 					ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 					ImGui::TreePop();
@@ -234,7 +264,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						tag = n + "random";
 						ImGui::PushID(tag.c_str());
 						//required to allow same name in all buttons
-						if (ImGui::Button("RANDOM"))
+						if (ImGui::Button("RND"))
 						{
 							doRandomize(i, true);
 						}
@@ -355,7 +385,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						// 0. button random
 						tag = n + "random";
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("RANDOM"))
+						if (ImGui::Button("RND"))
 						{
 							doRandomize(i, true);
 						}
@@ -471,7 +501,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						tag = n + "random";
 						ImGui::NextColumn();
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("RANDOM"))
+						if (ImGui::Button("RND"))
 						{
 							doRandomize(i, true);
 						}
@@ -510,6 +540,9 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 		drawImGui_Editor();
 		drawImGui_Params();
 		drawImGui_Index();
+#ifdef INCLUDE_ofxUndoSimple
+		drawImGui_Undo();
+#endif
 	}
 }
 
@@ -562,7 +595,9 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					{
 						doRandomize();
 					}
-					ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+					ImGui::Spacing();
+					//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 					//-
 
@@ -576,7 +611,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					{
 						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
-						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP RANDOMiZER", "PLAY RANDOMiZER", true, 1 - tn);
+						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP RND", "PLAY RND", true, 1 - tn);
 
 						//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h))) {
 						//	doRandomize();
@@ -588,7 +623,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 							ofxImGuiSurfing::AddParameter(playSpeed);
 							//ImGui::SliderFloat("Speed", &playSpeed, 0, 1);
 							ImGui::PopItemWidth();
-
 						}
 
 						//ImGui::Dummy(ImVec2(0.0f, 2.0f));
@@ -612,7 +646,11 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				{
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+#ifdef INCLUDE_ofxUndoSimple
+					ofxImGuiSurfing::AddToggleRoundedButton(bGui_UndoEngine);
+#endif
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
+
 					if (bGui_Index) ofxImGuiSurfing::AddParameter(indexTarget);
 				}
 			}
@@ -624,7 +662,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				bOpen = true;
 				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
-				if (ImGui::CollapsingHeader("ENABLE PARAMETERS", _flagc))
+				if (ImGui::CollapsingHeader("ENABLE PARAMS", _flagc))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
@@ -661,7 +699,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 							ImGui::SameLine();
 							// 2. button random
 							ImGui::PushID(i);//required to allow same name in all buttons
-							if (ImGui::Button("RANDOM", ImVec2(_w25, _h)))
+							if (ImGui::Button("RND", ImVec2(_w25, _h)))
 							{
 								doRandomize(i, true);
 							}
@@ -699,17 +737,17 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 					ImGui::Dummy(ImVec2(0, 2));
 					ImGui::Text("RESET:");
-					if (ImGui::Button("TO PARAM MIN", ImVec2(_w33, _h)))
+					if (ImGui::Button("TO PARAM MIN", ImVec2(_w100, _h)))
 					{
 						doResetParams(true);
 					}
-					ImGui::SameLine();
-					if (ImGui::Button("TO RANGES MIN", ImVec2(_w33, _h)))
+					//ImGui::SameLine();
+					if (ImGui::Button("TO RANGES MIN", ImVec2(_w100, _h)))
 					{
 						doResetParams(false);
 					}
-					ImGui::SameLine();
-					if (ImGui::Button("RANGES", ImVec2(_w33, _h)))
+					//ImGui::SameLine();
+					if (ImGui::Button("RANGES", ImVec2(_w100, _h)))
 					{
 						doResetRanges();
 					}
@@ -778,7 +816,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 	//-
 
 	// randomizers group
-	surfingGroupRandomizer.update();
+	surfingIndexGroupRandomizer.update();
 
 	//-
 }
@@ -821,7 +859,7 @@ void ofxSurfingRandomizer::drawImGui_Index() {
 
 	if (bGui_Index)
 	{
-		surfingGroupRandomizer.drawImGui();
+		surfingIndexGroupRandomizer.drawImGui();
 
 		//guiManager.beginWindow(bGui_Index, _flagsw);
 		//{
@@ -830,7 +868,7 @@ void ofxSurfingRandomizer::drawImGui_Index() {
 		//	flags |= ImGuiTreeNodeFlags_Framed;
 		//	//ofxImGuiSurfing::AddGroup(params, flags);
 		//	{
-		//		surfingGroupRandomizer.drawImGui();
+		//		surfingIndexGroupRandomizer.drawImGui();
 		//	}
 		//}
 		//guiManager.endWindow();
@@ -842,6 +880,9 @@ void ofxSurfingRandomizer::drawImGui_Params() {
 	ImGuiWindowFlags _flagsw;
 	_flagsw = ImGuiWindowFlags_None;
 
+	static ofParameter<bool> _bAutoResize{ "Auto Resize",true };
+	if (_bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	if (bGui_Params)
 	{
 		guiManager.beginWindow(bGui_Params, _flagsw);
@@ -850,11 +891,12 @@ void ofxSurfingRandomizer::drawImGui_Params() {
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
 			flags |= ImGuiTreeNodeFlags_Framed;
 			ofxImGuiSurfing::AddGroup(params, flags);
+
+			ImGui::Dummy(ImVec2(0.0f, 2.0f));
+			ofxImGuiSurfing::AddToggleRoundedButton(_bAutoResize);
 		}
 		guiManager.endWindow();
 	}
-
-	//ImGui::Dummy(ImVec2(0.0f, 5.0f));
 }
 
 //--------------------------------------------------------------
@@ -978,44 +1020,14 @@ void ofxSurfingRandomizer::doRandomize() {
 		doRandomize(i, false);
 	}
 
-	//for (auto p : enablersForParams)
-	//{
-	//	if (!p.get()) continue;//only reset this param if it's enabled
+	//--
 
-	//	//-
+#ifdef INCLUDE_ofxUndoSimple
+	// worfklow
+	// store current point to undo history
+	if (bUndoAuto) doStoreUndo();
+#endif
 
-	//	string name = p.getName();//name
-	//	auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
-	//	auto &e = g.get(name);//ofAbstractParameter
-
-	//	auto type = e.type();
-	//	bool isFloat = type == typeid(ofParameter<float>).name();
-	//	bool isInt = type == typeid(ofParameter<int>).name();
-	//	bool isBool = type == typeid(ofParameter<bool>).name();
-
-	//	if (isFloat)
-	//	{
-	//		auto pmin = g.getFloat("Min").get();
-	//		auto pmax = g.getFloat("Max").get();
-	//		ofParameter<float> p0 = e.cast<float>();
-	//		p0.set((float)ofRandom(pmin, pmax));//random
-	//	}
-
-	//	else if (isInt)
-	//	{
-	//		auto pmin = g.getInt("Min").get();
-	//		auto pmax = g.getInt("Max").get();
-	//		ofParameter<int> p0 = e.cast<int>();
-	//		p0.set((int)ofRandom(pmin, pmax + 1));//random
-	//	}
-
-	//	else if (isBool)
-	//	{
-	//		bool b = (ofRandom(0, 2) >= 1);
-	//		ofParameter<bool> p0 = e.cast<bool>();
-	//		p0.set(b);
-	//	}
-	//}
 }
 
 //--------------------------------------------------------------
@@ -1086,6 +1098,12 @@ void ofxSurfingRandomizer::exit() {
 	// settings
 	ofxSurfingHelpers::saveGroup(params_AppState, path_AppState);
 	ofxSurfingHelpers::saveGroup(params_Editor, path_Editor);
+
+	//--
+
+#ifdef INCLUDE_ofxUndoSimple
+	saveUndoHist();
+#endif
 }
 
 //--
@@ -1286,5 +1304,195 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 
 	//--
 
-	surfingGroupRandomizer.keyPressed(key);
+	// index randomizer
+	surfingIndexGroupRandomizer.keyPressed(key);
+
+	//----
+
+	// TODO: not working on windows.. We need to add int code
+#ifdef INCLUDE_ofxUndoSimple
+	if (bGui_UndoEngine.get())
+	{
+		if (!mod_SHIFT && mod_CONTROL && (key == 'z' || key == 26))// previous
+		{
+			doUndo();
+		}
+		else if (mod_SHIFT && mod_CONTROL && (key == 'Z' || key == 26))// next
+		{
+			doRedo();
+		}
+		else if (mod_SHIFT && mod_CONTROL && key == 'C' || key == 3)// clear
+		{
+			doClearUndoHistory();
+		}
+		else if (!mod_SHIFT && mod_CONTROL && key == 's' || key == 19)// store
+		{
+			doStoreUndo();
+		}
+	}
+#endif
+
+	//----
 }
+
+
+//----
+
+#ifdef INCLUDE_ofxUndoSimple
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doStoreUndo() {
+	{
+		undoXmlsParams.clear();
+
+		ofParameterGroup _group = params;
+		ofSerialize(undoXmlsParams, _group);// fill the xml with the ofParameterGroup
+
+		undoStringsParams = (undoXmlsParams.toString());// fill the ofxUndoSimple with the xml as string
+		undoStringsParams.store();
+
+		std::string str = "";
+		str += "UNDO HISTORY: " + ofToString(undoStringsParams.getUndoLength()) + "/";
+		str += ofToString(undoStringsParams.getRedoLength());
+		//str += "\n";
+		//str += "DESCRIPTOR\n";
+		//str += undoStringParams.getUndoStateDescriptor() + "\n";
+
+		ofLogNotice(__FUNCTION__) << str;
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doClearUndoHistory() {
+	ofLogNotice(__FUNCTION__) << "UNDO CLEAR";
+	undoStringsParams.clear();
+	//undoStringParams.clear();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doUndo() {
+	ofLogNotice(__FUNCTION__) << "UNDO < Group " << params.getName();
+	undoStringsParams.undo();
+	//undoStringParams.undo();
+	doRefreshUndoParams();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doRedo() {
+	ofLogNotice(__FUNCTION__) << "REDO < Group " << params.getName();
+	undoStringsParams.redo();
+	//undoStringParams.redo();
+	doRefreshUndoParams();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doRefreshUndoParams() {
+	{
+		undoXmlsParams.clear();
+		undoXmlsParams.parse(undoStringsParams);// fill the xml with the string 
+
+		ofParameterGroup _group = params;
+		ofDeserialize(undoXmlsParams, _group);// load the ofParameterGroup
+
+		std::string str = "";
+		str += "UNDO HISTORY: " + ofToString(undoStringsParams.getUndoLength()) + "/";
+		str += ofToString(undoStringsParams.getRedoLength());
+		//str += "\n";
+		//str += "DESCRIPTOR\n";
+		//str += undoStringParams.getUndoStateDescriptor() + "\n";
+
+		ofLogNotice(__FUNCTION__) << str;
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGui_Undo() {
+
+	if (!bGui_UndoEngine.get()) return;
+
+	{
+		// window editor
+		ImGuiWindowFlags _flagsw;
+		string n;
+
+		bool bOpen;
+		ImGuiColorEditFlags _flagc;
+
+		// widgets sizes
+		float _w100;
+		float _w50;
+		float _w33;
+		float _w25;
+		float _h;
+
+		_flagsw = ImGuiWindowFlags_None;
+
+#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+		if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+#endif
+
+		guiManager.beginWindow(bGui_UndoEngine, _flagsw);
+		{
+			//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+			//if (ImGui::CollapsingHeader("UNDO ENGINE"))
+			{
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+				_h *= 2;
+
+				ofxImGuiSurfing::AddBigToggle(bUndoAuto);
+
+				if (ImGui::Button("Store", ImVec2(_w50, _h)))
+				{
+					doStoreUndo();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Clear", ImVec2(_w50, _h)))
+				{
+					doClearUndoHistory();
+				}
+				//ImGui::SameLine();
+
+				if (ImGui::Button("< Undo", ImVec2(_w50, _h)))
+				{
+					doUndo();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Redo >", ImVec2(_w50, _h)))
+				{
+					doRedo();
+				}
+
+				string str;
+				str = "History: " + ofToString(undoStringsParams.getUndoLength()) + "/";
+				str += ofToString(undoStringsParams.getRedoLength());
+				ImGui::Text(str.c_str());
+			}
+		}
+		guiManager.endWindow();
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::loadUndoHist() {
+	//undoStringsParams.clear();
+	//undoXmlsParams.clear();
+	//undoStringsParams = params.toString();
+
+	//undoStringsParams
+	//doRefreshUndoParams();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::saveUndoHist() {
+	ofLogNotice(__FUNCTION__) << path_UndoHistory;
+	//ofxSurfingHelpers::saveGroup();
+
+	//TODO:
+	string s = undoStringsParams;
+	//auto s = undoStringsParams.toString();
+	//auto s = undoXmlsParams.toString();
+	ofLogNotice(__FUNCTION__) << s;
+
+	ofxSurfingHelpers::TextToFile(path_UndoHistory, s, false);
+}
+#endif

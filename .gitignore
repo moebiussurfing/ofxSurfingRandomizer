@@ -557,3 +557,7 @@ example-Basic/bin/imgui.ini
 example-Basic/bin/data/ofxWindowApp/ofxWindowApp.json
 example-Basic/bin/data/ofxSurfingRandomizer/ofxSurfingRandomizer_Editor.json
 example-Basic/bin/data/ofxSurfingRandomizer/ofxSurfingRandomizer_State.json
+example-Basic/bin/data/imgui_SurfingLayout.xml
+example-Basic/bin/data/ofxSurfingRandomizer/SurfingRandom_AppSession.json
+example-Basic/bin/data/ofxSurfingRandomizer/SurfingRandom_Index.json
+example-Basic/bin/data/ofxSurfingRandomizer/SurfingRandom_Ranges.json

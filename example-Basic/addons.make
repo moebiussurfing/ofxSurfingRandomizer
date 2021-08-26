@@ -2,4 +2,5 @@ ofxImGui
 ofxSurfingHelpers
 ofxSurfingImGui
 ofxSurfingRandomizer
+ofxUndo
 ofxWindowApp

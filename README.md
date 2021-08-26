@@ -43,6 +43,7 @@ An **openFrameworks** add-on to perform two types of useful randomizers for your
 - Store/Recall a memory state to improve exploring / Undo / Redo.
 - Auto Store/Recall all the settings.
 - **ImGui** based GUI ready to integrate.
+- Added **Undo Engine** to improve exploration.
 
 <details>
   <summary>CODE</summary>
@@ -99,6 +100,7 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). Fork from @**Daandelange**.  
 * [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/) 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+* [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [Optional. Can be disabled]  
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). Only for some examples.  
   </p>
 </details>
@@ -115,9 +117,9 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <summary>TODO</summary>
   <p>
 
+* Add persistent store/recall undo history between app sessions.
 * Add more types: 2D/3D vectors and colors. Using templates [?] ...  
 * Any help/pull on this is appreciated!.  
-* Add Undo Engine to improve exploration.
   </p>
 </details>
 

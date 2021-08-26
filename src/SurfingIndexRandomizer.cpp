@@ -22,7 +22,7 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	indexSelected.set("Index", 0, 0, amountPresets - 1);
 
-	bGui_Editor.set("RANDOMiZER INDEX EDITOR", true);
+	bGui_Editor.set("RND INDEX EDITOR", true);
 
 	//-
 
@@ -414,10 +414,10 @@ void SurfingIndexRandomizer::update()
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::setup_RandomizerIndexes()
 {
-	bRandomizeIndex.set("RANDOMiZE INDEX", false);
-	bPLAY.set("PLAY RANDOMIZER", false);
+	bPLAY.set("PLAY INDEX RND", false);
 	bPLAY.setSerializable(false);
-	bEnableRandomizerIndex.set("ENABLE MODE RANDOMIZER", true);
+	bRandomizeIndex.set("RND INDEX", false);
+	bEnableRandomizerIndex.set("ENABLE MODE RND", true);
 	//MODE_LatchTrig.set("MODE LATCH-N-BACK", false);
 	MODE_AvoidRandomRepeat.set("MODE AVOID REPEAT", true);
 	randomizeDuration.set("t DURATION", 1000, 10, randomize_MAX_DURATION);
@@ -541,7 +541,7 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 
 					// blink by timer progress
 					float tn = getPlayerPct();
-					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "STOP RANDOMiZER", "PLAY RANDOMiZER", true, 1 - tn);
+					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "STOP INDEX RND", "PLAY INDEX RND", true, 1 - tn);
 
 					ofxImGuiSurfing::AddBigToggle(bRandomizeIndex);
 					ImGui::Dummy(ImVec2(0, 2));
@@ -626,7 +626,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			// blink by timer
 			float tn = getPlayerPct();
-			ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP RANDOMiZER", "PLAY RANDOMiZER", true, 1 - tn);
+			ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP INDEX RND", "PLAY INDEX RND", true, 1 - tn);
 
 			//--
 

@@ -7,12 +7,13 @@
 
 TODO:
 
-+ add store/recall of enable states
 
 */
 
 
 #define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+
+#define INCLUDE_ofxUndoSimple
 
 //-
 
@@ -25,8 +26,16 @@ TODO:
 #define DEFAULT_MIN_PCT 0.1f
 #define DEFAULT_MAX_PCT 0.9f
 
+// undo engine
+#ifdef INCLUDE_ofxUndoSimple
+#include "ofxUndoSimple.h"
+#include "ofxSurfing_Files.h"
+#endif
+
 class ofxSurfingRandomizer
 {
+
+	//----
 
 public:
 	ofxSurfingRandomizer();
@@ -41,13 +50,13 @@ public:
 	//-
 
 private:
-	SurfingIndexRandomizer surfingGroupRandomizer;
+	SurfingIndexRandomizer surfingIndexGroupRandomizer;
 	ofParameter<int> indexTarget{ "index", 0, 0, 9 };
 	bool bCustomIndex = false;
 public:
 	void setTarget(ofParameter<int> index)
 	{
-	bCustomIndex = true;
+		bCustomIndex = true;
 		indexTarget.makeReferenceTo(index);
 	}
 
@@ -171,5 +180,34 @@ private:
 	//	ofxImGui::AddParameter(*parameterBool);
 	//	continue;
 	//}
+
+	//--
+
+public:
+	// undo engine
+#ifdef INCLUDE_ofxUndoSimple
+	// you can manually store all the parameters states to store points
+	// only works on edit mode
+	// then you can browse doing undo/redo to decide what states you like more.
+	// when doing a random, the engine auto stores the states.
+	// currently working automatic only when called by key command (ctrl+R) not when clicking gui "randomize parameters"
+	// when called using gui button, you must store states manually (ctrl+s)
+private:
+	string path_UndoHistory;
+	ofxUndoSimple <std::string> undoStringsParams;
+	ofXml undoXmlsParams;
+	void doRefreshUndoParams();
+	void doStoreUndo();// store current point to undo history
+	void doUndo();
+	void doRedo();
+	void doClearUndoHistory();
+	void setupUndo();
+	ofParameter<bool> bGui_UndoEngine{ "Undo Engine", false };
+	ofParameter<bool> bUndoAuto{ "Undo Auto", false };
+	void drawImGui_Undo();
+	//TODO: sqave/load history
+	void loadUndoHist();
+	void saveUndoHist();
+#endif
 };
 
