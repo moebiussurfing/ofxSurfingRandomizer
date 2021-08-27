@@ -22,7 +22,7 @@ void ofApp::setup()
 
 	// randomizer
 	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
-	randomizer.setTarget(index);
+	randomizer.setIndexPtr(index);
 	randomizer.setup(params);
 
 	// Lambda callback:
@@ -30,7 +30,8 @@ void ofApp::setup()
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i) {
 		ofLogNotice("ofApp") << "Index: " << i;
-		//presets.load(i);
+
+		//presets.load(i); // -> typical use for an int
 	});
 }
 

@@ -11,7 +11,7 @@ TODO:
 */
 
 
-#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
+#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // -> can't be disabled out of the box, but should be simple to use another gui like ofxGui..
 
 #define INCLUDE_ofxUndoSimple
 
