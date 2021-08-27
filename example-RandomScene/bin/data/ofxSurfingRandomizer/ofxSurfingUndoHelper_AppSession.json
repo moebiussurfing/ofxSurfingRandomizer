@@ -1,5 +1,6 @@
 {
     "ofxSurfingUndoHelper_AppState": {
+        "Files_Mode": "0",
         "Keys": "1",
         "Undo_Auto": "1",
         "Undo_Engine": "1"

@@ -10,22 +10,22 @@
             "rotation": {
                 "Max": "1.8",
                 "Min": "0.2",
-                "rotation": "0.278713"
+                "rotation": "0.986547"
             },
             "rotationOffset": {
                 "Max": "324",
                 "Min": "36",
-                "rotationOffset": "215.091"
+                "rotationOffset": "124.218"
             },
             "size1": {
                 "Max": "1.8",
                 "Min": "0.2",
-                "size1": "1.05232"
+                "size1": "0.214258"
             },
             "size2": {
                 "Max": "236",
                 "Min": "26",
-                "size2": "63"
+                "size2": "36"
             }
         }
     }

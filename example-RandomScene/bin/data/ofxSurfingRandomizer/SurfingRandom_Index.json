@@ -15,8 +15,8 @@
                 "PROB_3": "5"
             },
             "MODE_AVOID_REPEAT": "1",
-            "t_BPM": "252.632",
-            "t_DURATION": "475",
+            "t_BPM": "120",
+            "t_DURATION": "1000",
             "t_RATIO": "0.25"
         },
         "RND_INDEX_EDITOR": "1"

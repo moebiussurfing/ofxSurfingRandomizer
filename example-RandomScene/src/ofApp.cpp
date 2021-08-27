@@ -13,6 +13,12 @@ void ofApp::setup()
 	// randomizer
 	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 	randomizer.setIndexPtr(index);
+
+	//TODO: crashes..
+	//feed index inside the params
+	//params.add(index);
+
+	// setup
 	randomizer.setup(params);
 
 	// Lambda callback:
@@ -101,7 +107,7 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawShape(int type, int x, int y, int size)
 {
-	float offset = size1 *  5;
+	float offset = size1 *  15;
 	//float offset = 10;
 
 	switch (type)
@@ -120,7 +126,7 @@ void ofApp::drawShape(int type, int x, int y, int size)
 
 	case 2://triangle
 		ofPushMatrix();
-		//ofTranslate(size / offset, size / offset);
+		ofTranslate(size / offset, size / offset);
 		ofSetPolyMode(OF_POLY_WINDING_NONZERO);
 		ofBeginShape();
 		ofVertex(0, 0);

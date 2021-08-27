@@ -6,10 +6,10 @@
             "Responsive": "1"
         },
         "Keys": "1",
-        "Minimal": "0",
-        "RND_INDEX": "1",
+        "Minimal": "1",
+        "RND_INDEX": "0",
         "RND_PARAMS": "1",
-        "RND_RANGE_EDITOR": "1",
+        "RND_RANGE_EDITOR": "0",
         "SURFING_RND": "1",
         "Speed": "0.5"
     }

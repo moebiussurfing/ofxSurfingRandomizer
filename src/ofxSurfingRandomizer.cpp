@@ -120,10 +120,10 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 	if (bGui_Editor)
 	{
-		guiManager.beginWindow();
-		//guiManager.beginWindow(bGui_Editor, _flagsw);
 		//if (guiManager.beginWindow())
 		//if (guiManager.beginWindow(bGui_Editor, _flagsw))
+		//guiManager.beginWindow();
+		guiManager.beginWindow(bGui_Editor, _flagsw);
 		{
 			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
@@ -631,11 +631,11 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				{
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
 
 #ifdef INCLUDE_ofxUndoSimple
 					ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
 #endif
-					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
 
 					if (bGui_Index) ofxImGuiSurfing::AddParameter(indexTarget);
 				}
