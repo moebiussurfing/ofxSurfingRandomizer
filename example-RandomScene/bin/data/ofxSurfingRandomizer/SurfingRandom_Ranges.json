@@ -3,29 +3,29 @@
         "Params": {
             "rotation": "1",
             "rotationOffset": "1",
-            "size1": "0",
-            "size2": "0"
+            "size1": "1",
+            "size2": "1"
         },
         "paramsGroup": {
             "rotation": {
                 "Max": "1.8",
                 "Min": "0.2",
-                "rotation": "1.30135"
+                "rotation": "0.278713"
             },
             "rotationOffset": {
                 "Max": "324",
                 "Min": "36",
-                "rotationOffset": "262.835"
+                "rotationOffset": "215.091"
             },
             "size1": {
                 "Max": "1.8",
                 "Min": "0.2",
-                "size1": "1.299"
+                "size1": "1.05232"
             },
             "size2": {
                 "Max": "236",
                 "Min": "26",
-                "size2": "106"
+                "size2": "63"
             }
         }
     }

@@ -120,7 +120,10 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 	if (bGui_Editor)
 	{
-		guiManager.beginWindow(bGui_Editor, _flagsw);
+		guiManager.beginWindow();
+		//guiManager.beginWindow(bGui_Editor, _flagsw);
+		//if (guiManager.beginWindow())
+		//if (guiManager.beginWindow(bGui_Editor, _flagsw))
 		{
 			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
@@ -504,6 +507,8 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 				ImGui::TreePop();
 			}
+
+			//guiManager.endWindow();
 		}
 		guiManager.endWindow();
 	}
@@ -1006,7 +1011,8 @@ void ofxSurfingRandomizer::doRandomize() {
 #ifdef INCLUDE_ofxUndoSimple
 	// worfklow
 	// store current point to undo history
-	if (undoManger.bUndoAuto) undoManger.doStoreUndo();
+	undoManger.doStoreUndoWhenAuto();
+	//if (undoManger.bUndoAuto) undoManger.doStoreUndo();
 #endif
 
 }
@@ -1082,9 +1088,9 @@ void ofxSurfingRandomizer::exit() {
 
 	//--
 
-#ifdef INCLUDE_ofxUndoSimple
-	undoManger.exit();
-#endif
+//#ifdef INCLUDE_ofxUndoSimple
+//	undoManger.exit();
+//#endif
 }
 
 //--
