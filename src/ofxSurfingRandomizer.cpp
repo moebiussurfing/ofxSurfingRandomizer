@@ -1012,7 +1012,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	// worfklow
 	// store current point to undo history
 	undoManger.doStoreUndoWhenAuto();
-	//if (undoManger.bUndoAuto) undoManger.doStoreUndo();
+	//if (undoManger.bAutoStore) undoManger.doStoreUndo();
 #endif
 
 }
