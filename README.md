@@ -118,9 +118,8 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <summary>TODO</summary>
   <p>
 
-* Add persistent store/recall undo history between app sessions.
 * Add more types: 2D/3D vectors and colors. Using templates [?] ...  
-* Any help/pull on this is appreciated!.  
+  * Any help/pull on this is appreciated!.  
   </p>
 </details>
 
