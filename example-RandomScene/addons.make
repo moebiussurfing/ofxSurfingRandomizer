@@ -1,0 +1,7 @@
+ofxImGui
+ofxSurfingHelpers
+ofxSurfingImGui
+ofxSurfingRandomizer
+ofxSurfingUndoHelper
+ofxUndo
+ofxWindowApp

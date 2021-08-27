@@ -1,0 +1,32 @@
+{
+    "Ranges_Editor": {
+        "Params": {
+            "rotation": "1",
+            "rotationOffset": "1",
+            "size1": "0",
+            "size2": "0"
+        },
+        "paramsGroup": {
+            "rotation": {
+                "Max": "1.8",
+                "Min": "0.2",
+                "rotation": "1.30135"
+            },
+            "rotationOffset": {
+                "Max": "324",
+                "Min": "36",
+                "rotationOffset": "262.835"
+            },
+            "size1": {
+                "Max": "1.8",
+                "Min": "0.2",
+                "size1": "1.299"
+            },
+            "size2": {
+                "Max": "236",
+                "Min": "26",
+                "size2": "106"
+            }
+        }
+    }
+}

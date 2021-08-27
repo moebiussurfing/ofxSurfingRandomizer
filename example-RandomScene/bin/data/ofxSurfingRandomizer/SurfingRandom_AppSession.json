@@ -2,15 +2,15 @@
     "ofxSurfingRandomizer": {
         "Clicker": {
             "Extra": "0",
-            "Max_Buttons": "3",
+            "Max_Buttons": "4",
             "Responsive": "1"
         },
         "Keys": "1",
         "Minimal": "0",
-        "RANDOMiZER_INDEX": "0",
-        "RANDOMiZER_PARAMETERS": "1",
-        "RANDOMiZER_RANGE_EDITOR": "1",
-        "SURFING_RANDOMiZER": "1",
+        "RND_INDEX": "1",
+        "RND_PARAMS": "1",
+        "RND_RANGE_EDITOR": "1",
+        "SURFING_RND": "1",
         "Speed": "0.5"
     }
 }

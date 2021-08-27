@@ -10,9 +10,6 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_Editor = path_Global + "SurfingRandom_Ranges.json";
 	path_AppState = path_Global + "SurfingRandom_AppSession.json";
 	path_MemoryState = path_Global + "SurfingRandom_MemoryState.json";
-#ifdef INCLUDE_ofxUndoSimple
-	path_UndoHistory = path_Global + "SurfingRandom_UndoHistory.xml";
-#endif
 
 	bGui.set("SURFING RND", true);
 	bGui_Editor.set("RND RANGE EDITOR", true);
@@ -30,11 +27,6 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
 	params_AppState.add(surfingIndexGroupRandomizer.params_Clicker);
 
-#ifdef INCLUDE_ofxUndoSimple
-	params_AppState.add(bGui_UndoEngine);
-	params_AppState.add(bUndoAuto);
-#endif
-
 	bPLAY.setSerializable(false);
 }
 
@@ -46,20 +38,6 @@ ofxSurfingRandomizer::~ofxSurfingRandomizer() {
 
 	exit();
 }
-
-#ifdef INCLUDE_ofxUndoSimple
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::setupUndo() {
-	// TODO: main group only
-	//undoStringParams = groups[0].toString();
-
-	undoStringsParams.clear();
-
-	undoXmlsParams.clear();
-
-	undoStringsParams = params.toString();
-}
-#endif
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
@@ -75,13 +53,14 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	//--
 
 #ifdef INCLUDE_ofxUndoSimple
-	setupUndo();
-	loadUndoHist();
+	undoManger.setPathGlobal(path_Global);
+	undoManger.setup(params);
+	//params_AppState.add(undoManger.getParamsAppState());
 #endif
 
 	//--
 
-// gui
+	// gui
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	guiManager.setImGuiAutodraw(bAutoDraw);
@@ -540,8 +519,9 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 		drawImGui_Editor();
 		drawImGui_Params();
 		drawImGui_Index();
+
 #ifdef INCLUDE_ofxUndoSimple
-		drawImGui_Undo();
+		undoManger.drawImGui();
 #endif
 	}
 }
@@ -646,8 +626,9 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				{
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+
 #ifdef INCLUDE_ofxUndoSimple
-					ofxImGuiSurfing::AddToggleRoundedButton(bGui_UndoEngine);
+					ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
 #endif
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
 
@@ -1025,7 +1006,7 @@ void ofxSurfingRandomizer::doRandomize() {
 #ifdef INCLUDE_ofxUndoSimple
 	// worfklow
 	// store current point to undo history
-	if (bUndoAuto) doStoreUndo();
+	if (undoManger.bUndoAuto) undoManger.doStoreUndo();
 #endif
 
 }
@@ -1102,7 +1083,7 @@ void ofxSurfingRandomizer::exit() {
 	//--
 
 #ifdef INCLUDE_ofxUndoSimple
-	saveUndoHist();
+	undoManger.exit();
 #endif
 }
 
@@ -1297,10 +1278,20 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	ofLogNotice(__FUNCTION__) << " : " << key;
 
 	if (key == 'g') bGui = !bGui;
+
 	// randomizer
 	if (key == ' ') { doRandomize(); }
 	if (key == OF_KEY_BACKSPACE) { doResetParams(); }
 	if (key == OF_KEY_RETURN) bPLAY = !bPLAY;
+
+	if (key == OF_KEY_LEFT) {
+		if (indexTarget > 0) indexTarget.set(indexTarget.get() - 1);
+		else if (indexTarget <= 0) indexTarget.set(indexTarget.getMax());
+	}
+	if (key == OF_KEY_RIGHT) {
+		indexTarget.setWithoutEventNotifications(indexTarget.get() + 1);
+		indexTarget = indexTarget % (indexTarget.getMax() + 1);
+	}
 
 	//--
 
@@ -1311,188 +1302,8 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 
 	// TODO: not working on windows.. We need to add int code
 #ifdef INCLUDE_ofxUndoSimple
-	if (bGui_UndoEngine.get())
-	{
-		if (!mod_SHIFT && mod_CONTROL && (key == 'z' || key == 26))// previous
-		{
-			doUndo();
-		}
-		else if (mod_SHIFT && mod_CONTROL && (key == 'Z' || key == 26))// next
-		{
-			doRedo();
-		}
-		else if (mod_SHIFT && mod_CONTROL && key == 'C' || key == 3)// clear
-		{
-			doClearUndoHistory();
-		}
-		else if (!mod_SHIFT && mod_CONTROL && key == 's' || key == 19)// store
-		{
-			doStoreUndo();
-		}
-	}
+	undoManger.keyPressed(eventArgs);
 #endif
 
 	//----
 }
-
-
-//----
-
-#ifdef INCLUDE_ofxUndoSimple
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doStoreUndo() {
-	{
-		undoXmlsParams.clear();
-
-		ofParameterGroup _group = params;
-		ofSerialize(undoXmlsParams, _group);// fill the xml with the ofParameterGroup
-
-		undoStringsParams = (undoXmlsParams.toString());// fill the ofxUndoSimple with the xml as string
-		undoStringsParams.store();
-
-		std::string str = "";
-		str += "UNDO HISTORY: " + ofToString(undoStringsParams.getUndoLength()) + "/";
-		str += ofToString(undoStringsParams.getRedoLength());
-		//str += "\n";
-		//str += "DESCRIPTOR\n";
-		//str += undoStringParams.getUndoStateDescriptor() + "\n";
-
-		ofLogNotice(__FUNCTION__) << str;
-	}
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doClearUndoHistory() {
-	ofLogNotice(__FUNCTION__) << "UNDO CLEAR";
-	undoStringsParams.clear();
-	//undoStringParams.clear();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doUndo() {
-	ofLogNotice(__FUNCTION__) << "UNDO < Group " << params.getName();
-	undoStringsParams.undo();
-	//undoStringParams.undo();
-	doRefreshUndoParams();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doRedo() {
-	ofLogNotice(__FUNCTION__) << "REDO < Group " << params.getName();
-	undoStringsParams.redo();
-	//undoStringParams.redo();
-	doRefreshUndoParams();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::doRefreshUndoParams() {
-	{
-		undoXmlsParams.clear();
-		undoXmlsParams.parse(undoStringsParams);// fill the xml with the string 
-
-		ofParameterGroup _group = params;
-		ofDeserialize(undoXmlsParams, _group);// load the ofParameterGroup
-
-		std::string str = "";
-		str += "UNDO HISTORY: " + ofToString(undoStringsParams.getUndoLength()) + "/";
-		str += ofToString(undoStringsParams.getRedoLength());
-		//str += "\n";
-		//str += "DESCRIPTOR\n";
-		//str += undoStringParams.getUndoStateDescriptor() + "\n";
-
-		ofLogNotice(__FUNCTION__) << str;
-	}
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::drawImGui_Undo() {
-
-	if (!bGui_UndoEngine.get()) return;
-
-	{
-		// window editor
-		ImGuiWindowFlags _flagsw;
-		string n;
-
-		bool bOpen;
-		ImGuiColorEditFlags _flagc;
-
-		// widgets sizes
-		float _w100;
-		float _w50;
-		float _w33;
-		float _w25;
-		float _h;
-
-		_flagsw = ImGuiWindowFlags_None;
-
-#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-		if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-#endif
-
-		guiManager.beginWindow(bGui_UndoEngine, _flagsw);
-		{
-			//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-			//if (ImGui::CollapsingHeader("UNDO ENGINE"))
-			{
-				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-				_h *= 2;
-
-				ofxImGuiSurfing::AddBigToggle(bUndoAuto);
-
-				if (ImGui::Button("Store", ImVec2(_w50, _h)))
-				{
-					doStoreUndo();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Clear", ImVec2(_w50, _h)))
-				{
-					doClearUndoHistory();
-				}
-				//ImGui::SameLine();
-
-				if (ImGui::Button("< Undo", ImVec2(_w50, _h)))
-				{
-					doUndo();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Redo >", ImVec2(_w50, _h)))
-				{
-					doRedo();
-				}
-
-				string str;
-				str = "History: " + ofToString(undoStringsParams.getUndoLength()) + "/";
-				str += ofToString(undoStringsParams.getRedoLength());
-				ImGui::Text(str.c_str());
-			}
-		}
-		guiManager.endWindow();
-	}
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::loadUndoHist() {
-	//undoStringsParams.clear();
-	//undoXmlsParams.clear();
-	//undoStringsParams = params.toString();
-
-	//undoStringsParams
-	//doRefreshUndoParams();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::saveUndoHist() {
-	ofLogNotice(__FUNCTION__) << path_UndoHistory;
-	//ofxSurfingHelpers::saveGroup();
-
-	//TODO:
-	string s = undoStringsParams;
-	//auto s = undoStringsParams.toString();
-	//auto s = undoXmlsParams.toString();
-	ofLogNotice(__FUNCTION__) << s;
-
-	ofxSurfingHelpers::TextToFile(path_UndoHistory, s, false);
-}
-#endif

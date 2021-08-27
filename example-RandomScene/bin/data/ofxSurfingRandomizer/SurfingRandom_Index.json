@@ -1,0 +1,24 @@
+{
+    "Index_Editor": {
+        "RANDOM_INDEX_CONTROLS": {
+            "ENABLE_MODE_RND": "1",
+            "INDEX_DURATION": {
+                "SHORT_0": "0",
+                "SHORT_1": "0",
+                "SHORT_2": "0",
+                "SHORT_3": "0"
+            },
+            "INDEX_PROBS": {
+                "PROB_0": "5",
+                "PROB_1": "5",
+                "PROB_2": "5",
+                "PROB_3": "5"
+            },
+            "MODE_AVOID_REPEAT": "1",
+            "t_BPM": "252.632",
+            "t_DURATION": "475",
+            "t_RATIO": "0.25"
+        },
+        "RND_INDEX_EDITOR": "1"
+    }
+}
