@@ -10,13 +10,12 @@ void ofApp::setup()
 	params.add(rotation.set("rotation", 1, 0, 2));
 	params.add(rotationOffset.set("rotationOffset", 180, 0, 360));
 
-	// randomizer
-	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
-	randomizer.setIndexPtr(index);
+	//--
 
-	//TODO: crashes..
-	//feed index inside the params
-	//params.add(index);
+	// Randomizer
+
+	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
+	randomizer.setIndexPtr(index);
 
 	// setup
 	randomizer.setup(params);
@@ -24,14 +23,25 @@ void ofApp::setup()
 	// Lambda callback:
 	// to receive the randomized index
 	//--------------------------------------------------------------
-	listenerIndex = index.newListener([this](int &i) {
+	listenerIndex = index.newListener([this](int &i) 
+	{
 		ofLogNotice("ofApp") << "Index: " << i;
+		//example:
 		//presets.load(i);
+
+		switch (i)
+		{
+		case 0: color = ofColor::yellow; break;
+		case 1: color = ofColor::orange; break;
+		case 2: color = ofColor::red; break;
+		case 3: color = ofColor::green; break;
+		default: break;
+		}
 	});
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
+void ofApp::update()
 {
 	//// Easy callback:
 	//// log when index changes by the randomizer
@@ -40,74 +50,89 @@ void ofApp::draw()
 	//	indexPre = index;
 	//	ofLogNotice(__FUNCTION__) << "Index: " << index << endl;
 	//}
+}
 
-	{
-		static ofColor colorBg = 32;
-		ofClear(colorBg);
+//--------------------------------------------------------------
+void ofApp::draw()
+{
+	drawScene();
 
-		ofPushStyle();
-		ofPushMatrix();
+	randomizer.draw_ImGui();
+}
 
-		// some code from @Daandelange > https://github.com/Daandelange/ofxImGui/tree/master/example-sharedcontext
+//--------------------------------------------------------------
+void ofApp::drawScene()
+{
+	static ofColor colorBg = 32;
+	ofClear(colorBg);
 
-		ofParameter<ofFloatColor> background{ "Background", ofFloatColor::black };
-		ofParameter<ofFloatColor> foreground{ "Foreground", ofFloatColor::black };
-		ImVec4 color = { 0,0,0,1.0 };
+	ofPushStyle();
+	ofPushMatrix();
 
-		int a = ofMap(size1, 0, 2, 255, 170);
+	// some code from @Daandelange 
+	// -> https://github.com/Daandelange/ofxImGui/tree/master/example-sharedcontext
 
-		//ofSetColor(color.x * 255, color.y * 255, color.z * 255, color.w * a);
-		////ofSetColor(color.x * 255, color.y * 255, color.z * 255, color.w * 255);
-		//float _scale = 0.13f;
-		//float r = ofGetHeight()*_scale*size1*(1);
-		////ofDrawCircle(ofGetWidth()*0.5f, ofGetHeight()*0.5f, r);
-		//drawShape(index, ofGetWidth()*0.5f, ofGetHeight()*0.5f, r);
+	//ofParameter<ofFloatColor> background{ "Background", ofFloatColor::black };
+	//ofParameter<ofFloatColor> foreground{ "Foreground", ofFloatColor::black };
 
-		float _scale2 = 0.2f;
-		float staticAnimationPos = 1;
-		int rectSize = size2 + abs((((ofGetHeight() * _scale2 - size2)*size1))*(staticAnimationPos));
+	ofParameter<ofFloatColor> background{ "Background", color };
+	ofParameter<ofFloatColor> foreground{ "Foreground", color};
 
-		ofTranslate(ofGetWidth()*.5f, ofGetHeight()*.5f);
-		ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
+	//ImVec4 color = { 0,0,0,1.0 };
 
-		float rot = rotationOffset / 3.0;
-		ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
-		ofRotateZDeg(rotation * 45);
-		ofScale(1.3);
-		ofRotateDeg(rot);
+	int a = ofMap(size1, 0, 2, 255, 170);
 
-		int a2 = ofMap(size2, 0, size2.getMax(), 255, 225);
+	//ofSetColor(color.x * 255, color.y * 255, color.z * 255, color.w * a);
+	////ofSetColor(color.x * 255, color.y * 255, color.z * 255, color.w * 255);
+	//float _scale = 0.13f;
+	//float r = ofGetHeight()*_scale*size1*(1);
+	////ofDrawCircle(ofGetWidth()*0.5f, ofGetHeight()*0.5f, r);
+	//drawShape(index, ofGetWidth()*0.5f, ofGetHeight()*0.5f, r);
 
-		ofSetColor(background->r * 255, background->g * 255, background->b * 255, background->a * a2);
-		drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+	float _scale2 = 0.2f;
+	float staticAnimationPos = 1;
+	int rectSize = size2 + abs((((ofGetHeight() * _scale2 - size2)*size1))*(staticAnimationPos));
 
-		ofRotateDeg(rot);
-		ofSetColor(background->r * 255, background->g * 255, background->b * 255, background->a * a2);
-		drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+	ofTranslate(ofGetWidth()*.5f, ofGetHeight()*.5f);
+	ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
 
-		ofRotateDeg(rot);
-		ofSetColor(foreground->r * 255, foreground->g * 255, foreground->b * 255, foreground->a * a2);
-		drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+	float rot = rotationOffset / 3.0;
+	ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
+	ofRotateZDeg(rotation * 45);
+	ofScale(1.3);
+	ofRotateDeg(rot);
 
-		ofRotateDeg(rot);
-		ofSetColor(foreground->r * 255, foreground->g * 255, foreground->b * 255, foreground->a * a2);
-		drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+	int a2 = ofMap(size2, 0, size2.getMax(), 255, 225);
 
-		//// inner circle
-		//ofFill();
-		//ofSetColor(colorBg);
-		//int r2 = ofMap(_size1, 0, size1.getMax(), 3, 20, true);
-		//ofDrawCircle(0,0, r2);
+	ofSetColor(background->r * 255, background->g * 255, background->b * 255, background->a * a2);
+	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
 
-		ofPopMatrix();
-		ofPopStyle();
-	}
+	ofRotateDeg(rot);
+	ofSetColor(background->r * 255, background->g * 255, background->b * 255, background->a * a2);
+	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+
+	ofRotateDeg(rot);
+	ofSetColor(foreground->r * 255, foreground->g * 255, foreground->b * 255, foreground->a * a2);
+	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+
+	ofRotateDeg(rot);
+	ofSetColor(foreground->r * 255, foreground->g * 255, foreground->b * 255, foreground->a * a2);
+	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
+
+	//// inner circle
+	//ofFill();
+	//ofSetColor(colorBg);
+	//int r2 = ofMap(_size1, 0, size1.getMax(), 3, 20, true);
+	//ofDrawCircle(0,0, r2);
+
+	ofPopMatrix();
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawShape(int type, int x, int y, int size)
 {
-	float offset = size1 *  15;
+	float offset = size1 * 15;
 	//float offset = 10;
 
 	switch (type)
@@ -174,5 +199,4 @@ void ofApp::drawShape(int type, int x, int y, int size)
 		break;
 	}
 	//ofDrawRectangle(-rectSize * .5f, -rectSize * .5f, rectSize, rectSize);
-
 }

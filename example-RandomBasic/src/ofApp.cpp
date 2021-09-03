@@ -20,26 +20,37 @@ void ofApp::setup()
 	params2.add(amount2.set("amount2", 10, 0, 25));
 	params.add(params2);
 
-	// randomizer
-	randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
+	setupRandomizer();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupRandomizer()
+{
+	// All the added parameters will auto-receive the randomizations
+
+	// Randomizer
+	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 	randomizer.setIndexPtr(index);
 	randomizer.setup(params);
 
-	// Lambda callback:
-	// to receive the randomized index
+	// A. Lambda callback:
+	// To receive the randomized index target
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i) {
 		ofLogNotice("ofApp") << "Index: " << i;
 
-		//presets.load(i); // -> typical use for an int
+		//presets.load(i); // -> Typical use for an int index...
 	});
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	//// Easy callback:
-	//// log when index changes by the randomizer
+	randomizer.draw_ImGui();
+
+	//// B. Easy callback:
+	//// Log when index target changes by the randomizer:
+	//
 	//static int indexPre = 0;
 	//if (index != indexPre) {
 	//	indexPre = index;

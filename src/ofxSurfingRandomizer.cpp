@@ -52,7 +52,7 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 	undoManger.setPathGlobal(path_Global);
 	undoManger.setup(params);
 	//params_AppState.add(undoManger.getParamsAppState());
@@ -63,8 +63,13 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	// gui
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-	guiManager.setImGuiAutodraw(bAutoDraw);
-	guiManager.setup();
+	//guiManager.setImGuiAutodraw(bAutoDraw);
+	//guiManager.setup();
+
+	// The main user control
+	guiManager.setSettingsPathLabel("ofxSurfingRandomizer");
+	guiManager.setAutoSaveSettings(true);
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 #endif
 
 	//--
@@ -525,7 +530,7 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 		drawImGui_Params();
 		drawImGui_Index();
 
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 		undoManger.drawImGui();
 #endif
 	}
@@ -560,6 +565,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 	// main panel
 
+	//bGui= 0;
 	if (bGui)
 	{
 		guiManager.beginWindow(bGui, _flagsw);
@@ -633,7 +639,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
 
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 					ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
 #endif
 
@@ -806,14 +812,8 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 
 	//-
 }
-
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::draw(ofEventArgs & args) {
-
-	//#ifdef USE_RANDOMIZE_IMGUI_EXTERNAL
-	//	return;
-	//#endif
-
+void ofxSurfingRandomizer::draw_ImGui() {
 	if (!bGui) return;
 
 	//----
@@ -836,6 +836,18 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 #endif
 
 	//ImGui::PopID(); // <-- If you want to ensure a sandbox between both
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::draw(ofEventArgs & args) {
+
+	//#ifdef USE_RANDOMIZE_IMGUI_EXTERNAL
+	//	return;
+	//#endif
+
+	if (!bGui) return;
+
+	//drawImGui();
 }
 
 //--------------------------------------------------------------
@@ -1008,7 +1020,7 @@ void ofxSurfingRandomizer::doRandomize() {
 
 	//--
 
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 	// worfklow
 	// store current point to undo history
 	undoManger.doStoreUndoWhenAuto();
@@ -1088,7 +1100,7 @@ void ofxSurfingRandomizer::exit() {
 
 	//--
 
-//#ifdef INCLUDE_ofxUndoSimple
+//#ifdef INCLUDE__OFX_UNDO_ENGINE
 //	undoManger.exit();
 //#endif
 }
@@ -1307,7 +1319,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	//----
 
 	// TODO: not working on windows.. We need to add int code
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 	undoManger.keyPressed(eventArgs);
 #endif
 

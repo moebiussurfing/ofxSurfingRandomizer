@@ -11,11 +11,13 @@ TODO:
 */
 
 
-#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // -> can't be disabled out of the box, but should be simple to use another gui like ofxGui..
+//----
 
-#define INCLUDE_ofxUndoSimple
+// OPTIONAL
+//#define INCLUDE__OFX_UNDO_ENGINE
 
-//-
+//----
+
 
 #include "ofxSurfingImGui.h"
 #include "ofxSurfingHelpers.h"
@@ -26,14 +28,20 @@ TODO:
 #define DEFAULT_MIN_PCT 0.1f
 #define DEFAULT_MAX_PCT 0.9f
 
-#ifdef INCLUDE_ofxUndoSimple
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 #include "ofxSurfingUndoHelper.h"
 #endif
 
+#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // -> can't be disabled out of the box, but should be simple to use another gui like ofxGui..
+
 class ofxSurfingRandomizer
 {
-public:
+
+#ifdef INCLUDE__OFX_UNDO_ENGINE
+//public:
+private:
 	ofxSurfingUndoHelper undoManger;
+#endif
 
 	//----
 
@@ -71,13 +79,16 @@ private:
 	int tf;
 	float tn;
 
+public:
+	void draw_ImGui(); // -> exposed public to avoid bug that interferes between ImGui instances..
+
 private:
 	void drawImGui_Main();
 	void drawImGui_Params();
 	void drawImGui_Editor();
 	void drawImGui_Index();
 
-public:
+//public:
 	void drawImGui_Widgets();
 
 	//-

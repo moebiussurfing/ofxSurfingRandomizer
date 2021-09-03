@@ -4,13 +4,15 @@
 
 #include "ofxSurfingRandomizer.h"
 
-#include "ofxWindowApp.h"
+#include "ofxWindowApp.h" // -> Not required
 
 class ofApp : public ofBaseApp{
 
 public:
     void setup();
     void draw();
+
+	ofxWindowApp windowApp;
 
 	// params to randomize
 	ofParameterGroup params;
@@ -32,10 +34,10 @@ public:
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
 
-	ofxSurfingRandomizer randomizer;
+	//-
 
+    void setupRandomizer();
+	ofxSurfingRandomizer randomizer;
 	ofParameter<int> index{ "index", 0, 0, 8 };
 	ofEventListener listenerIndex;
-
-	ofxWindowApp windowApp;
 };
