@@ -22,7 +22,7 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	indexSelected.set("Index", 0, 0, amountPresets - 1);
 
-	bGui_Editor.set("RND INDEX EDITOR", true);
+	bGui_Editor.set("INDEX EDITOR", true);
 
 	//-
 
@@ -414,7 +414,7 @@ void SurfingIndexRandomizer::update()
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::setup_RandomizerIndexes()
 {
-	bPLAY.set("PLAY INDEX RND", false);
+	bPLAY.set("PLAY INDEX", false);
 	bPLAY.setSerializable(false);
 	bRandomizeIndex.set("RND INDEX", false);
 	bEnableRandomizerIndex.set("ENABLE MODE RND", true);
@@ -510,10 +510,11 @@ void SurfingIndexRandomizer::drawImGui()
 void SurfingIndexRandomizer::drawImGui_IndexEditor()
 {
 	if (bGui_Editor) {
-		static bool auto_resize = false;
-		//static bool auto_resize = true;
+		//static bool auto_resize = false;
+		static bool auto_resize = true;
 
 		ImGuiWindowFlags flagsw;
+		//flagsw = guiManager.auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 		flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 
 		float ww = PANEL_WIDGETS_WIDTH;
@@ -589,8 +590,8 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 void SurfingIndexRandomizer::drawImGui_IndexMain()
 {
 	if (bGui) {
-		static bool auto_resize = false;
-		//static bool auto_resize = true;
+		//static bool auto_resize = false;
+		static bool auto_resize = true;
 
 		string str;
 
@@ -663,7 +664,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 				_w50 = getWidgetsWidth(2);
 				float __h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-				ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h / 2);
+				ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h );
 				ImGui::Dummy(ImVec2(0, 2));
 			}
 
@@ -683,7 +684,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			//ImGui::PushItemWidth(_w50);
 			ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
-			ofxImGuiSurfing::AddDragFloatSlider(randomizeDurationBpm);
+			//ofxImGuiSurfing::AddDragFloatSlider(randomizeDurationBpm);
 			//ImGui::PopItemWidth();
 
 			//--

@@ -156,10 +156,17 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 			//--
 
+			bOpen = true;
+			_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+			_flagw |= ImGuiTreeNodeFlags_Framed;
+
+			//--
+
 			if (!bMinimal) {
 				bOpen = false;
 				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 				_flagw |= ImGuiTreeNodeFlags_Framed;
+
 				if (ImGui::TreeNodeEx("TOOLS", _flagw))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
@@ -204,11 +211,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 				}
 			}
 
-			//--
-
-			bOpen = true;
-			_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-			_flagw |= ImGuiTreeNodeFlags_Framed;
+			//-
 
 			if (ImGui::TreeNodeEx("RANGES", _flagw))
 			{
@@ -280,12 +283,12 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 						if (!bMinimal) {
 							ImGui::AlignTextToFramePadding();
-							ImGui::Text("GET");
-							ImGui::SameLine(0, 0);
+							//ImGui::Text("GET");
+							//ImGui::SameLine(0, 0);
 							// 0. MIN-MAX
 							tag = n + "getMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("MIN"))
+							if (ImGui::Button("GET MIN"))
 							{
 								_p0 = pmin;
 							}
@@ -293,7 +296,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::SameLine(0, 0);
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("MAX"))
+							if (ImGui::Button("GET MAX"))
 							{
 								_p0 = pmax;
 							}
@@ -309,12 +312,12 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						//ImGui::Dummy(ImVec2(10, 0));
 
 						ImGui::AlignTextToFramePadding();
-						ImGui::Text("SET");
-						ImGui::SameLine(0, 0);
+						//ImGui::Text("SET");
+						//ImGui::SameLine(0, 0);
 						// 0. MIN-MAX
 						tag = n + "setMIN";
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("MIN"))
+						if (ImGui::Button("SET MIN"))
 						{
 							pmin = _p0;
 						}
@@ -322,7 +325,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						ImGui::SameLine(0, 0);
 						tag = n + "setMAX";
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("MAX"))
+						if (ImGui::Button("SET MAX"))
 						{
 							pmax = _p0;
 						}
@@ -503,7 +506,8 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 				//-
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-				if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+				if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+				//if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 #endif
 
 				//#ifdef USE_RANDOMIZE_IMGUI_LOCAL
