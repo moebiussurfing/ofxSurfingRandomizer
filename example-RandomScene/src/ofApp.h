@@ -14,6 +14,13 @@ B. An int index
 The index target randoms determines wich of the colors and shapes to draw.
 Notice that some colorsand shapes are more common to appears, and some appears with a short duration when the index happens.
 
+KEYS:
+SPACE      : Randomize Parameters
+Ctrl+SPACE : Randomize Index
+RETURN     : Play timed randomizer
+BACKSPACE  : Reset parameters
+LEFT-RIGHT : Browse Index
+
 */
 
 
@@ -25,8 +32,8 @@ Notice that some colorsand shapes are more common to appears, and some appears w
 
 class ofApp : public ofBaseApp
 {
-
 public:
+
     void setup();
     void update();
     void draw();
@@ -35,8 +42,8 @@ public:
 	// scene params
 	ofParameterGroup params;
 	ofParameter<float> size1;
-	ofParameter<float> rotation;
-	ofParameter<float> rotationOffset;
+	ofParameter<float> rotation1;
+	ofParameter<float> rotation2;
 	ofParameter<int> size2;
 
 	ofxSurfingRandomizer randomizer;

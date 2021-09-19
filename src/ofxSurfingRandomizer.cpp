@@ -12,18 +12,20 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_MemoryState = path_Global + "SurfingRandom_MemoryState.json";
 
 	bGui.set("SURFING RND", true);
-	bGui_Editor.set("RND RANGE EDITOR", true);
+	bGui_Editor.set("RND RANGE", true);
 	bGui_Params.set("RND PARAMS", true);
 	bGui_Index.set("RND INDEX", true);
 
 	params_AppState.setName("ofxSurfingRandomizer");
 	params_AppState.add(bGui);
 	params_AppState.add(bKeys.set("Keys", true));
+	params_AppState.add(bHelp.set("Help", false));
 	params_AppState.add(bGui_Params);
 	params_AppState.add(bGui_Editor);
 	params_AppState.add(bGui_Index);
 	params_AppState.add(bMinimal);
 	params_AppState.add(bPLAY.set("PLAY", false));
+	params_AppState.add(bTarget.set("Target", false));
 	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
 	params_AppState.add(surfingIndexGroupRandomizer.params_Clicker);
 
@@ -121,7 +123,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 	//	if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 	//#endif
 
-		//--
+	//--
 
 	if (bGui_Editor)
 	{
@@ -172,7 +174,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 					_h *= 2;
 
-					if (ImGui::Button("RANDOMiZE!", ImVec2(_w50, _h)))
+					if (ImGui::Button("RND PARAMS", ImVec2(_w50, _h)))
 					{
 						doRandomize();
 					}
@@ -402,12 +404,13 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 						if (!bMinimal) {
 							ImGui::AlignTextToFramePadding();
-							ImGui::Text("GET");
-							ImGui::SameLine(0, 0);
+							//ImGui::Text("GET");
+							//ImGui::SameLine(0, 0);
+
 							// 0. MIN-MAX
 							tag = n + "getMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("MIN"))
+							if (ImGui::Button("GET MIN"))
 							{
 								_p0 = pmin;
 							}
@@ -415,7 +418,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::SameLine(0, 0);
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("MAX"))
+							if (ImGui::Button("GET MAX"))
 							{
 								_p0 = pmax;
 							}
@@ -429,13 +432,13 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						// set to min max
 
 						ImGui::AlignTextToFramePadding();
-						ImGui::Text("SET");
-						ImGui::SameLine(0, 0);
+						//ImGui::Text("SET");
+						//ImGui::SameLine(0, 0);
 
 						// 0. MIN-MAX
 						tag = n + "setMIN";
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("MIN"))
+						if (ImGui::Button("GET MIN"))
 						{
 							pmin = _p0;
 						}
@@ -444,7 +447,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 						tag = n + "setMAX";
 						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("MAX"))
+						if (ImGui::Button("GET MAX"))
 						{
 							pmax = _p0;
 						}
@@ -586,9 +589,13 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 					//ImGui::Text("COMMANDS");
 
-					if (ImGui::Button("RANDOMiZE!", ImVec2(_w100, 3 * _h)))
+					if (ImGui::Button("RND PARAMS", ImVec2(_w100, 3 * _h)))
 					{
 						doRandomize();
+					}
+					if (ImGui::Button("RND INDEX", ImVec2(_w100, 3 * _h)))
+					{
+						surfingIndexGroupRandomizer.doRandom();
 					}
 
 					ImGui::Spacing();
@@ -606,13 +613,15 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					{
 						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
-						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP RND", "PLAY RND", true, 1 - tn);
+						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "TESTING RND", "TEST RND", true, 1 - tn);
+						ofxImGuiSurfing::AddBigToggleNamed(bTarget, _w100, _h, "Params", "Index");
 
 						//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h))) {
 						//	doRandomize();
 						//}
 
-						if (bPLAY) {
+						if (bPLAY)
+						{
 							ofxImGuiSurfing::ProgressBar2(tn);
 							ImGui::PushItemWidth(_w50);
 							ofxImGuiSurfing::AddParameter(playSpeed);
@@ -782,6 +791,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 			//-
 
 			ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+			ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
@@ -795,17 +805,20 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::update(ofEventArgs & args) {
 
-	// tester
-	// play timed randoms
+	// Tester
+	// Play timed randoms
 	static const int _secs = 2;
-	if (bPLAY) {
+	if (bPLAY)
+	{
 		//int max = 60 * _secs;
 		int max = ofMap(playSpeed, 0, 1, 60, 5) * _secs;
 		tf = ofGetFrameNum() % max;
 		tn = ofMap(tf, 0, max, 0, 1);
 		if (tf == 0)
 		{
-			doRandomize();
+			// Target Selector
+			if (!bTarget) surfingIndexGroupRandomizer.doRandom();
+			else doRandomize();
 		}
 	}
 
@@ -851,7 +864,17 @@ void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
 	if (!bGui) return;
 
+	if (bHelp) drawHelp();
+
 	//drawImGui();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawHelp() {
+
+	//ofxSurfingHelpers::drawTextBoxed();
+	//ofDrawBitmapStringHighlight(helpInfo, 0, 0);
+	textBoxWidget.draw();
 }
 
 //--------------------------------------------------------------
@@ -1114,8 +1137,7 @@ void ofxSurfingRandomizer::exit() {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 {
-	// clear
-
+	// Clear
 	params_EditorGroups.clear();// a group for each param
 	params_EditorGroups.setName(params.getName());
 
@@ -1123,18 +1145,35 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 	params_EditorEnablers.clear();// an enabler toggler for each param
 	params_EditorEnablers.setName("Params");
 
-	// initiate
+	// Initiate
 	addGroup(group);
 
 	//-
 
-	// settings
+	// Settings
 	params_Editor.setName("Ranges Editor");
 	params_Editor.add(params_EditorEnablers);
 	params_Editor.add(params_EditorGroups);
 	ofxSurfingHelpers::loadGroup(params_Editor, path_Editor);
 
 	ofxSurfingHelpers::loadGroup(params_AppState, path_AppState);
+
+	//-
+
+	// Help
+	string helpInfo = "";
+	helpInfo += "HELP\n";
+	helpInfo += "KEY COMMANDS\n";
+	helpInfo += "\n";
+	helpInfo += "SPACE      : Randomize Parameters\n";
+	helpInfo += "Ctrl+SPACE : Randomize Index\n";
+	helpInfo += "RETURN     : Play timed randomizer\n";
+	helpInfo += "BACKSPACE  : Reset parameters\n";
+	helpInfo += "LEFT-RIGHT : Browse Index\n";
+	helpInfo = ofToUpper(helpInfo);//make uppercase
+
+	textBoxWidget.setText(helpInfo);
+	textBoxWidget.setup();
 }
 
 //--------------------------------------------------------------
@@ -1302,7 +1341,8 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	if (key == 'g') bGui = !bGui;
 
 	// randomizer
-	if (key == ' ') { doRandomize(); }
+	if (!mod_CONTROL && key == ' ') { doRandomize(); }
+	if (mod_CONTROL && key == ' ') { (surfingIndexGroupRandomizer.doRandom()); }
 	if (key == OF_KEY_BACKSPACE) { doResetParams(); }
 	if (key == OF_KEY_RETURN) bPLAY = !bPLAY;
 
@@ -1317,7 +1357,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 
 	//--
 
-	// index randomizer
+	// Index randomizer
 	surfingIndexGroupRandomizer.keyPressed(key);
 
 	//----

@@ -172,12 +172,14 @@ private:
 
 	void buildRandomizers();
 	void setup_RandomizerIndexes();// engine to get a random between all posible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
-	void doRandomIndex();// randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
 	int doRandomIndexChanged();
 	void doResetDices();// reset all probs to 0
 	int dicesTotalAmount;// total dices summing the prob of any preset probability (PROB1 + PROB2 + ...)
 
 	int timerRandomizer;
+
+public:
+	void doRandom();// randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
 
 	//--
 
@@ -204,7 +206,7 @@ public:
 	void setPlayRandomizerTimer(bool b)// play randomizer timer
 	{
 		bPLAY = b;
-		if (b) doRandomIndex();
+		if (b) doRandom();
 	}
 	//--------------------------------------------------------------
 	void setTogglePlayRandomizerPreset()// toggle randomizer timer
@@ -231,11 +233,13 @@ public:
 		randomizeDurationShort = randomizeDuration * randomizeDurationShortRatio;
 		//randomizeDurationShort = randomizeDuration / 2.f;
 	}
+	private:
 	//--------------------------------------------------------------
 	void doRandomizePresetFromFavs()// trig randomize and select one of the favs presets
 	{
 		bRandomizeIndex = true;
 	}
+	public:
 	////--------------------------------------------------------------
 	//void doRandomizePresetSelected() {// randomize params of current selected preset
 	//	ofLogNotice(__FUNCTION__);

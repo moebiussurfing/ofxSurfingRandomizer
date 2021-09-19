@@ -21,6 +21,7 @@ TODO:
 
 #include "ofxSurfingImGui.h"
 #include "ofxSurfingHelpers.h"
+#include "TextBoxWidget.h"
 #include "ofxSurfing_Timers.h"
 
 #include "SurfingIndexRandomizer.h" // index randomizer
@@ -75,6 +76,7 @@ public:
 
 private:
 	ofParameter<bool> bPLAY;
+	ofParameter<bool> bTarget;
 	ofParameter<float> playSpeed;
 	int tf;
 	float tn;
@@ -90,7 +92,9 @@ private:
 
 //public:
 	void drawImGui_Widgets();
-
+	void drawHelp();
+	TextBoxWidget textBoxWidget;
+	
 	//-
 
 	// commands
@@ -152,6 +156,7 @@ public:
 	ofParameter<bool> bGui_Index;
 
 	ofParameter<bool> bKeys;
+	ofParameter<bool> bHelp;
 
 	//-
 

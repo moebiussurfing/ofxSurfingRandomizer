@@ -198,7 +198,7 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 }
 
 //--------------------------------------------------------------
-void SurfingIndexRandomizer::doRandomIndex()
+void SurfingIndexRandomizer::doRandom()
 {
 #ifdef DEBUG_randomTest
 	ofLogNotice(__FUNCTION__) << "---------------------------------------------------";
@@ -495,7 +495,7 @@ void SurfingIndexRandomizer::keyPressed(int key)
 	//	}
 	//	else if (key == 'r')
 	//	{
-	//		doRandomIndex();
+	//		doRandom();
 	//	}
 }
 
@@ -542,7 +542,7 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 
 					// blink by timer progress
 					float tn = getPlayerPct();
-					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "STOP INDEX RND", "PLAY INDEX RND", true, 1 - tn);
+					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
 
 					ofxImGuiSurfing::AddBigToggle(bRandomizeIndex);
 					ImGui::Dummy(ImVec2(0, 2));
@@ -627,7 +627,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			// blink by timer
 			float tn = getPlayerPct();
-			ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "STOP INDEX RND", "PLAY INDEX RND", true, 1 - tn);
+			ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
 
 			//--
 
@@ -795,7 +795,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 			//ofLogNotice(__FUNCTION__) << group.getName() << "RANDOMIZE !";
 
 			bRandomizeIndex = false;
-			doRandomIndex();
+			doRandom();
 		}
 		// play randomizer
 		else if (name == bPLAY.getName())
@@ -849,7 +849,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 		else if (name == "DICE")// when debug enabled: set dice by user to test
 		{
 			ofLogNotice(__FUNCTION__) << "DICE: " << e;
-			doRandomIndex();
+			doRandom();
 		}
 #endif
 		else if (name == bResetProbs.getName() && bResetProbs)
