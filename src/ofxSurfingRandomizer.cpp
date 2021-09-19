@@ -116,20 +116,13 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 	_flagsw = ImGuiWindowFlags_None;
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
-	if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 #endif
-
-	//#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-	//	if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-	//#endif
 
 	//--
 
 	if (bGui_Editor)
 	{
-		//if (guiManager.beginWindow())
-		//if (guiManager.beginWindow(bGui_Editor, _flagsw))
-		//guiManager.beginWindow();
 		guiManager.beginWindow(bGui_Editor, _flagsw);
 		{
 			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
@@ -161,59 +154,6 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 			bOpen = true;
 			_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 			_flagw |= ImGuiTreeNodeFlags_Framed;
-
-			//--
-
-			if (!bMinimal) {
-				bOpen = false;
-				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-				_flagw |= ImGuiTreeNodeFlags_Framed;
-
-				if (ImGui::TreeNodeEx("TOOLS", _flagw))
-				{
-					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-					_h *= 2;
-
-					if (ImGui::Button("RND PARAMS", ImVec2(_w50, _h)))
-					{
-						doRandomize();
-					}
-					ImGui::SameLine();
-
-					// blink by timer progress
-					bool b = bPLAY;
-					float a;
-					if (b) a = 1 - tn;
-					else a = 1.0f;
-					if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));
-					ofxImGuiSurfing::AddBigToggle(bPLAY, _w50, _h, false);
-					if (b) ImGui::PopStyleColor();
-
-					ImGui::Dummy(ImVec2(0, 2));
-					ImGui::Text("RESET:");
-					if (ImGui::Button("TO PARAM MIN", ImVec2(_w33, _h)))
-					{
-						doResetParams(true);
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("TO RANGES MIN", ImVec2(_w33, _h)))
-					{
-						doResetParams(false);
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("RANGES", ImVec2(_w33, _h)))
-					{
-						doResetRanges();
-					}
-
-
-					ImGui::Dummy(ImVec2(0.0f, 2.0f));
-
-					ImGui::TreePop();
-				}
-			}
-
-			//-
 
 			if (ImGui::TreeNodeEx("RANGES", _flagw))
 			{
@@ -520,7 +460,45 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 				ImGui::TreePop();
 			}
 
-			//guiManager.endWindow();
+			//--
+
+			if (!bMinimal) {
+				bOpen = false;
+				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagw |= ImGuiTreeNodeFlags_Framed;
+
+				if (ImGui::TreeNodeEx("RESET", _flagw))
+				{
+					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+
+					if (ImGui::Button("PARAMS TO PARAM MIN", ImVec2(_w50, _h)))
+					{
+						doResetParams(RESET_PARAM_MIN);
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("PARAMS TO PARAM MAX", ImVec2(_w50, _h)))
+					{
+						doResetParams(RESET_PARAM_MAX);
+					}
+
+					if (ImGui::Button("PARAMS TO RANGE MIN", ImVec2(_w50, _h)))
+					{
+						doResetParams(RESET_RANGE_MIN);
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("PARAMS TO RANGE MAX", ImVec2(_w50, _h)))
+					{
+						doResetParams(RESET_RANGE_MAX);
+					}
+
+					if (ImGui::Button("RANGES TO PARAMS LIMITS", ImVec2(_w100, _h)))
+					{
+						doResetRanges();
+					}
+
+					ImGui::TreePop();
+				}
+			}
 		}
 		guiManager.endWindow();
 	}
@@ -736,30 +714,11 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 				_flagw |= ImGuiTreeNodeFlags_Framed;
 
-				if (ImGui::TreeNodeEx("TOOLS", _flagw))
+				// state memory
+				if (ImGui::TreeNodeEx("MEMORY", _flagw))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
-					ImGui::Dummy(ImVec2(0, 2));
-					ImGui::Text("RESET:");
-					if (ImGui::Button("TO PARAM MIN", ImVec2(_w100, _h)))
-					{
-						doResetParams(true);
-					}
-					//ImGui::SameLine();
-					if (ImGui::Button("TO RANGES MIN", ImVec2(_w100, _h)))
-					{
-						doResetParams(false);
-					}
-					//ImGui::SameLine();
-					if (ImGui::Button("RANGES", ImVec2(_w100, _h)))
-					{
-						doResetRanges();
-					}
-
-					//state memory
-					ImGui::Dummy(ImVec2(0, 2));
-					ImGui::Text("MEMORY:");
 					if (ImGui::Button("STORE", ImVec2(_w50, _h)))
 					{
 						doSaveState();
@@ -770,7 +729,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 						doLoadState();
 					}
 
-					ImGui::Dummy(ImVec2(0.0f, 2.0f));
 					ImGui::TreePop();
 				}
 			}
@@ -953,7 +911,7 @@ void ofxSurfingRandomizer::doEnableAll() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::doResetParams(bool bFull) {
+void ofxSurfingRandomizer::doResetParams(ResetPramsType type) {
 	ofLogNotice(__FUNCTION__);
 
 	for (auto p : enablersForParams)
@@ -966,9 +924,9 @@ void ofxSurfingRandomizer::doResetParams(bool bFull) {
 		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
 
-		auto type = e.type();
-		bool isFloat = type == typeid(ofParameter<float>).name();
-		bool isInt = type == typeid(ofParameter<int>).name();
+		auto ptype = e.type();
+		bool isFloat = ptype == typeid(ofParameter<float>).name();
+		bool isInt = ptype == typeid(ofParameter<int>).name();
 
 		if (isFloat)
 		{
@@ -976,8 +934,11 @@ void ofxSurfingRandomizer::doResetParams(bool bFull) {
 			auto pmax = g.getFloat("Max").get();
 			ofParameter<float> p0 = e.cast<float>();
 
-			if (bFull) p0.set(p0.getMin());//reset to param min
-			else p0.set(pmin);//reset to range min
+			if (0) {}
+			else if (type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 		}
 
 		else if (isInt)
@@ -986,8 +947,11 @@ void ofxSurfingRandomizer::doResetParams(bool bFull) {
 			auto pmax = g.getInt("Max").get();
 			ofParameter<int> p0 = e.cast<int>();
 
-			if (bFull) p0.set(p0.getMin());//reset to param min
-			else p0.set(pmin);//reset to range min
+			if (0) {}
+			else if (type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 		}
 	}
 }

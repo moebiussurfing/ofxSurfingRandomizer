@@ -3,7 +3,7 @@
 
 /*
 
-This example shows how we apply the randomizations to the both targets types:
+This example shows how we apply the randomizations to the both targets types with a scene:
 
 A. Group Parameters
 The scene parameters determines the shapes and sizes.

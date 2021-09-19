@@ -37,6 +37,13 @@ TODO:
 
 class ofxSurfingRandomizer
 {
+	enum ResetPramsType
+	{
+	RESET_PARAM_MIN = 0,
+	RESET_PARAM_MAX,
+	RESET_RANGE_MIN,
+	RESET_RANGE_MAX,
+	};
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
 //public:
@@ -102,7 +109,7 @@ private:
 public:
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
-	void doResetParams(bool bFull = false);//set to minimals from range or abs param itself
+	void doResetParams(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
 	void doResetRanges();//set ranges to abs min/max from each parameter
 
 private:

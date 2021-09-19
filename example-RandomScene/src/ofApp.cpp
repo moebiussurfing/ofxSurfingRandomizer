@@ -6,7 +6,7 @@ void ofApp::setup()
 	// Params to randomize
 	params.setName("paramsGroup");
 	params.add(size1.set("size1", 1, 0, 2));
-	params.add(size2.set("size2", ofGetHeight() * 0.5, 0, ofGetHeight() * 0.25));
+	params.add(size2.set("size2", (int)ofGetHeight() / 2, 5, (int)ofGetHeight() / 4));
 	params.add(rotation1.set("rotation1", 1, 0, 2));
 	params.add(rotation2.set("rotation2", 180, 0, 360));
 
