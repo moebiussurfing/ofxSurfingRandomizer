@@ -123,7 +123,7 @@ void ofApp::drawShape(int type, int x, int y, int size)
 
 	case 0: // rectangle
 	{
-		float r = ofMap(rotation1, 0, 2, 0, 20);
+		float r = ofMap(rotation1, 0, 2, 0, 50);
 		ofDrawRectRounded(x, y, size, size, r);
 	}
 	break;

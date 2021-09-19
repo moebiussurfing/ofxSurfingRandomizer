@@ -252,27 +252,35 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						// set to min max
 
 						//ImGui::Dummy(ImVec2(10, 0));
+						if (!bMinimal) {
 
-						ImGui::AlignTextToFramePadding();
-						//ImGui::Text("SET");
-						//ImGui::SameLine(0, 0);
-						// 0. MIN-MAX
-						tag = n + "setMIN";
-						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("SET MIN"))
-						{
-							pmin = _p0;
+							ImGui::AlignTextToFramePadding();
+							//ImGui::Text("SET");
+							//ImGui::SameLine(0, 0);
+							// 0. MIN-MAX
+							tag = n + "setMIN";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("SET MIN"))
+							{
+								pmin = _p0;
+							}
+							ImGui::PopID();
+							ImGui::SameLine(0, 0);
+							tag = n + "setMAX";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("SET MAX"))
+							{
+								pmax = _p0;
+							}
+							ImGui::PopID();
 						}
-						ImGui::PopID();
-						ImGui::SameLine(0, 0);
-						tag = n + "setMAX";
-						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("SET MAX"))
-						{
-							pmax = _p0;
-						}
-						ImGui::PopID();
+
 						ImGui::SameLine();
+						
+						if (bMinimal) {
+							ImGui::Text("RANGE");
+							ImGui::SameLine();
+						}
 
 						// 2. range
 						//vanilla
@@ -370,28 +378,35 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						//-
 
 						// set to min max
+						if (!bMinimal) {
+							ImGui::AlignTextToFramePadding();
+							//ImGui::Text("SET");
+							//ImGui::SameLine(0, 0);
 
-						ImGui::AlignTextToFramePadding();
-						//ImGui::Text("SET");
-						//ImGui::SameLine(0, 0);
+							// 0. MIN-MAX
+							tag = n + "setMIN";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("GET MIN"))
+							{
+								pmin = _p0;
+							}
+							ImGui::PopID();
+							ImGui::SameLine(0, 0);
 
-						// 0. MIN-MAX
-						tag = n + "setMIN";
-						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("GET MIN"))
-						{
-							pmin = _p0;
+							tag = n + "setMAX";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("GET MAX"))
+							{
+								pmax = _p0;
+							}
+							ImGui::PopID();
 						}
-						ImGui::PopID();
-						ImGui::SameLine(0, 0);
-
-						tag = n + "setMAX";
-						ImGui::PushID(tag.c_str());
-						if (ImGui::Button("GET MAX"))
-						{
-							pmax = _p0;
+						
+						if (bMinimal) {
+							ImGui::Text("RANGE");
+							ImGui::SameLine();
 						}
-						ImGui::PopID();
+
 
 						// 2. range
 						// vanilla
@@ -591,8 +606,8 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					{
 						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
-						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "TESTING RND", "TEST RND", true, 1 - tn);
 						ofxImGuiSurfing::AddBigToggleNamed(bTarget, _w100, _h, "Params", "Index");
+						ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "TESTING RND", "TEST RND", true, 1 - tn);
 
 						//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h))) {
 						//	doRandomize();
