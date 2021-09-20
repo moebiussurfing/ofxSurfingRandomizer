@@ -4,6 +4,4 @@ ofxScaleDragRect
 ofxSurfingHelpers
 ofxSurfingImGui
 ofxSurfingRandomizer
-ofxSurfingUndoHelper
-ofxUndo
 ofxWindowApp

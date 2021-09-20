@@ -1,12 +1,13 @@
 # ofxSurfingRandomizer
 
 ## Overview
-An **openFrameworks** add-on to perform Two types of useful Randomizers for your scenes.  
-Randomizer result targets over:  
+An **openFrameworks** add-on to perform **Two** types of useful **Randomizers** for your scenes.  
+
+The Randomizer results targets over:  
 
 A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**.  
 
-B. An **Index** (_int/preset/state..._) selector.  
+B. An **Index** selector. (_int/preset/state..._)   
 
 ## Why?
 
@@ -20,8 +21,8 @@ B. An **Index** (_int/preset/state..._) selector.
 
 --------------------------
 
-### 1. RANGED RANDOMIZATION 
-#### Usage:  
+### A. RANGED RANDOMIZATION 
+#### USAGE  
 1. Just pass your ```ofParameterGroup``` parameters container.
 2. Enable the desired parameters from the group.
 3. Set the range limits for each parameter to fit the random inside them.
@@ -31,8 +32,9 @@ B. An **Index** (_int/preset/state..._) selector.
 
 ![image](/readme_images/Capture1.PNG?raw=true "image")  
 
-### 2. INDEX RANDOMIZER 
-#### Usage:  
+
+### B. INDEX RANDOMIZER 
+#### USAGE  
 1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
 2. Set the probability for each index.
 3. Set if the index should stay long or short staying duration when her random happens.
@@ -57,7 +59,7 @@ B. An **Index** (_int/preset/state..._) selector.
 </details>
 
 <details>
-  <summary>Usage</summary>
+  <summary>Example Code</summary>
   <p>
 
 **ofApp.h**
@@ -111,13 +113,13 @@ void ofApp::setup()
   <p>
 
 Clone these add-ons and include into the **OF PROJECT GENERATOR**:
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). [_FORK_ from @**Daandelange**]  
 * [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/)  
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) [_FORK_]  
 * [ofxMSAInteractiveObject](https://github.com/moebiussurfing/ofxMSAInteractiveObject) [_FORK_]  
-* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Can be disabled_]  
-* [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [_Optional. Can be disabled_]  
+* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Disabled by default._]  
+* [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [_Optional. Disabled by default._]  
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). [_Only for some examples_]  
   </p>
 </details>
@@ -134,7 +136,7 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <summary>TODO</summary>
   <p>
 
-* Add more types: 2D/3D vectors and colors. Using templates [?] ...  
+* Add more types: 2D/3D vectors and colors. Using templates [?] 
   </p>
 </details>
 
