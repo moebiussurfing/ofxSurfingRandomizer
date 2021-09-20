@@ -102,9 +102,11 @@ void ofApp::setup()
   <p>
 
 Clone these add-ons and include into the **OF PROJECT GENERATOR**:
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/). [_FORK from @**Daandelange**_]  
-* [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/) 
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). [_FORK_ from @**Daandelange**]  
+* [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/)  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+* [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) [_FORK_]  
+* [ofxMSAInteractiveObject](https://github.com/moebiussurfing/ofxMSAInteractiveObject) [_FORK_]  
 * [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Can be disabled_]  
 * [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [_Optional. Can be disabled_]  
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). [_Only for some examples_]  

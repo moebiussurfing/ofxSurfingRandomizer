@@ -34,13 +34,15 @@ void ofApp::setupRandomizer()
 
 	randomizer.setup(params);
 
-	// A. Lambda callback:
+	// B. Lambda callback:
 	// To receive the randomized index target
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i) {
 		ofLogNotice("ofApp") << "Index: " << i;
 
-		//presets.load(i); // -> Typical use for an int index...
+		// Example:
+		// -> Typical use for an int index...
+		//presets.load(i); 
 	});
 }
 

@@ -36,7 +36,7 @@ public:
 
 	ofxWindowApp windowApp;
 
-	// params to randomize
+	// A. Params to randomize
 	ofParameterGroup params;
 	ofParameter<bool> bPrevious;
 	ofParameter<bool> bNext;
@@ -60,6 +60,8 @@ public:
 
     void setupRandomizer();
 	ofxSurfingRandomizer randomizer;
+
+	// B. Index to randomize
 	ofParameter<int> index{ "index", 0, 0, 8 };
 	ofEventListener listenerIndex;
 };

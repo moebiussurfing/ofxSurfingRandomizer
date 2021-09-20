@@ -1,4 +1,6 @@
 ofxImGui
+ofxMSAInteractiveObject
+ofxScaleDragRect
 ofxSurfingHelpers
 ofxSurfingImGui
 ofxSurfingRandomizer
