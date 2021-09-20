@@ -30,7 +30,8 @@ void ofApp::setupRandomizer()
 
 	// Randomizer
 	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
-	randomizer.setIndexPtr(index);
+
+	randomizer.setIndexPtr(index); // -> Must be setted before call setup.
 
 	randomizer.setup(params);
 

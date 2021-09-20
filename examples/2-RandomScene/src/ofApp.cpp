@@ -16,11 +16,11 @@ void ofApp::setup()
 
 	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 
+	// B. Index
+	randomizer.setIndexPtr(index); // -> Must be setted before call setup.
+
 	// A. Setup with Params
 	randomizer.setup(params);
-
-	// B. Index
-	randomizer.setIndexPtr(index);
 
 	// Lambda callback:
 	// To receive the randomized index target

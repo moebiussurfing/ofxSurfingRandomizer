@@ -3,7 +3,9 @@
 ## Overview
 An **openFrameworks** add-on to perform **Two** types of useful **Randomizers** for your scenes.  
 
-The Randomizer targets over:  
+![image](/readme_images/ofxSurfingRandomizer.gif?raw=true "GIF")  
+
+The Randomizers will target over:  
 
 A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**.  
 
@@ -11,7 +13,7 @@ B. An **Index** selector. (_int/preset/state..._)
 
 ## Why?
 
-  - Useful to **explore not expected combinations** of the **ofParameters Randomizer** (A) that "modulate" your scene.  
+  - Useful to **Explore not expected Combinations** of the **ofParameters Randomizer** (A) that "modulate" your scene.  
 
   - Using the **Index Randomizer** (B) you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
 
@@ -30,7 +32,6 @@ B. An **Index** selector. (_int/preset/state..._)
 6. Use the Tester player to repeat randomizations during tweaking.
 
 ![image](/readme_images/Capture1.PNG?raw=true "image")  
-
 
 ## B. INDEX RANDOMIZER 
 ### USAGE  
@@ -85,6 +86,7 @@ ofEventListener listenerIndex;
 ```.cpp
 void ofApp::setup() 
 {
+  // A. Params
   params.setName("paramsGroup");
   params.add(lineWidth.set("lineWidth", 0.5, 0.0, 1.0));
   params.add(separation.set("separation", 50.0, 1.0, 100.0));
@@ -93,8 +95,8 @@ void ofApp::setup()
   params.add(speed.set("shapeType", 0, 0, 3));
 
   // Setup
+  randomizer.setTarget(index); // B -> Must be setted before call setup.
   randomizer.setup(params); // A
-  randomizer.setTarget(index); // B
 
   // B. Index
   // Lambda callback:
