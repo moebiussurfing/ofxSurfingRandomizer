@@ -10,7 +10,7 @@ B. An **Index** (_int/preset/state..._) selector.
 
 ## Why?
 
-  - Useful to **explore not expected combinations** of the _parameters_ (A) that "modulate" your scene.  
+  - Useful to **explore not expected combinations** of the **Randomizer ofParameters** (A) that "modulate" your scene.  
 
   - Using the **Index Randomizer** (B) you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
 
@@ -21,25 +21,31 @@ B. An **Index** (_int/preset/state..._) selector.
 --------------------------
 
 ### 1. RANGED RANDOMIZATION 
-* Just pass your ```ofParameterGroup``` parameters container.
-* Enable the desired parameters from the group.
-* Set the range limits for each parameter to fit the random inside them.
-* Notice that limits will be also inside the Min/Max of the parameters but independent of them.
-* Trig the randomization.
-* Use the Tester player to repeat randomizations.
+#### Usage:  
+* 1. Just pass your ```ofParameterGroup``` parameters container.
+* 2. Enable the desired parameters from the group.
+* 3. Set the range limits for each parameter to fit the random inside them.
+* 4. Notice that limits will be also inside the Min/Max of the parameters but independent of them.
+* 5. Trig the randomization.
+* 6. Use the Tester player to repeat randomizations during tweaking.
 
 ![image](/readme_images/Capture.PNG?raw=true "image")  
 
 ### 2. INDEX RANDOMIZER 
-* Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
-* Set the probability for each index.
-* Set if the index should stay long or short staying duration when her random happens.
-* Set the global BPM clock speed.
-* Pass your *ofParameter<int>* target index to receive the index randoms (in ofApp).
+#### Usage:  
+* 1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
+* 2. Set the probability for each index.
+* 3. Set if the index should stay long or short staying duration when her random happens.
+* 4. Set the global BPM clock speed.
+* 5. Pass your *ofParameter<int>* target index to receive the index randoms (in ofApp).
+* 6. Use the Tester player to repeat randomizations during tweaking.
 
 ![image](/readme_images/Capture2.PNG?raw=true "image")  
 
-## Other Features
+<details>
+  <summary>Other Features</summary>
+  <p>
+
 - Only ```float```, ```int``` and ```bool``` types yet.
 - Reset all parameters to the parameter or the range minimum.
 - Reset Min/Max ranges to parameter limits.
@@ -47,6 +53,8 @@ B. An **Index** (_int/preset/state..._) selector.
 - Auto Store/Recall all the settings.
 - **ImGui** based GUI ready to integrate.
 - Added **Undo Engine** to improve exploration.
+  </p>
+</details>
 
 <details>
   <summary>Usage</summary>
