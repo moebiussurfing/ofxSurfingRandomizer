@@ -10,7 +10,7 @@ B. An **Index** (_int/preset/state..._) selector.
 
 ## Why?
 
-  - Useful to **explore not expected combinations** of the **Randomizer ofParameters** (A) that "modulate" your scene.  
+  - Useful to **explore not expected combinations** of the **ofParameters Randomizer** (A) that "modulate" your scene.  
 
   - Using the **Index Randomizer** (B) you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
 
@@ -22,23 +22,23 @@ B. An **Index** (_int/preset/state..._) selector.
 
 ### 1. RANGED RANDOMIZATION 
 #### Usage:  
-* 1. Just pass your ```ofParameterGroup``` parameters container.
-* 2. Enable the desired parameters from the group.
-* 3. Set the range limits for each parameter to fit the random inside them.
-* 4. Notice that limits will be also inside the Min/Max of the parameters but independent of them.
-* 5. Trig the randomization.
-* 6. Use the Tester player to repeat randomizations during tweaking.
+1. Just pass your ```ofParameterGroup``` parameters container.
+2. Enable the desired parameters from the group.
+3. Set the range limits for each parameter to fit the random inside them.
+4. Notice that limits will be also inside the Min/Max of the parameters but independent of them.
+5. Trig the randomization.
+6. Use the Tester player to repeat randomizations during tweaking.
 
-![image](/readme_images/Capture.PNG?raw=true "image")  
+![image](/readme_images/Capture1.PNG?raw=true "image")  
 
 ### 2. INDEX RANDOMIZER 
 #### Usage:  
-* 1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
-* 2. Set the probability for each index.
-* 3. Set if the index should stay long or short staying duration when her random happens.
-* 4. Set the global BPM clock speed.
-* 5. Pass your *ofParameter<int>* target index to receive the index randoms (in ofApp).
-* 6. Use the Tester player to repeat randomizations during tweaking.
+1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
+2. Set the probability for each index.
+3. Set if the index should stay long or short staying duration when her random happens.
+4. Set the global BPM clock speed.
+5. Pass your *ofParameter<int>* target index to receive the index randoms (in ofApp).
+6. Use the Tester player to repeat randomizations during tweaking.
 
 ![image](/readme_images/Capture2.PNG?raw=true "image")  
 
@@ -94,8 +94,9 @@ void ofApp::setup()
   randomizer.setup(params); // A
   randomizer.setTarget(index); // B
 
-  // Lambda callback: 
-  // To be notified when the randomized index changed.
+  // B. Index
+  // Lambda callback:
+  // To receive the randomized index target
   //--------------------------------------------------------------
   listenerIndex = index.newListener([this](int &i) {
     ofLogNotice("ofApp") << "Index: " << i;

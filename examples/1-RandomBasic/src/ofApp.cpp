@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// Params to randomize
+	// A. Params to randomize
 	params.setName("paramsGroup");
 	params2.setName("paramsGroup2");
 	params3.setName("paramsGroup3");

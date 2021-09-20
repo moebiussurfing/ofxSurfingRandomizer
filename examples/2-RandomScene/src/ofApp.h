@@ -49,10 +49,10 @@ public:
 
 	ofxSurfingRandomizer randomizer;
 
-	ofParameter<int> index{ "index", 0, 0, 3 };
+	ofParameter<int> index{ "index", 0, 0, 3 }; //-> Index will set the color.
 	ofEventListener listenerIndex;
 	void refreshColorByIndex();
-	ofColor colorByIndex;//-> Index will set the color.
+	ofColor colorByIndex;
 
 	void drawShape(int type, int x, int y, int size);
 

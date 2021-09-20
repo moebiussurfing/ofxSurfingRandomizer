@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// Params to randomize
+	// A. Params to randomize
 	params.setName("paramsGroup");
 	params.add(size1.set("size1", 1, 0, 2));
 	params.add(size2.set("size2", (int)ofGetHeight() / 2, 5, (int)ofGetHeight() / 4));
@@ -15,13 +15,15 @@ void ofApp::setup()
 	// Randomizer
 
 	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
-	randomizer.setIndexPtr(index);
 
-	// Setup
+	// A. Setup with Params
 	randomizer.setup(params);
 
-	// Lambda Index callback:
-	// To receive the randomized index
+	// B. Index
+	randomizer.setIndexPtr(index);
+
+	// Lambda callback:
+	// To receive the randomized index target
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i)
 	{
@@ -64,7 +66,7 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	drawScene();
+	//drawScene();
 
 	randomizer.draw_ImGui();
 }
