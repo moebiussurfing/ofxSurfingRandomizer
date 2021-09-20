@@ -1,15 +1,16 @@
 # ofxSurfingRandomizer
 
 ## Overview
-An **openFrameworks** add-on to perform two types of useful randomizers for your scene over:
-1. The **ofParameters** (int/float/bool) of an **ofParameterGroup**. 
-2. An **Index** (_int/preset/state..._) selector.  
+An **openFrameworks** add-on to perform Two types of useful Randomizers for your scenes.  
+Randomizer result targets over:
+A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**. 
+B. An **Index** (_int/preset/state..._) selector.  
 
 ## Why?
 
-  - Useful to **explore not expected combinations** of the _parameters_ that "modulate" your scene.  
+  - Useful to **explore not expected combinations** of the _parameters_ (A) that "modulate" your scene.  
 
-  - Using the **Index Randomizer** you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
+  - Using the **Index Randomizer** (B) you can add some "_organic behavior_" to your scene, switching your scene between different _modes/presets/states_.  
 
   - A global **BPM timer** can be used to set the speed of the switching, with two different categories for stay duration (**long/short**).  
 
@@ -28,7 +29,7 @@ An **openFrameworks** add-on to perform two types of useful randomizers for your
 ![image](/readme_images/Capture.PNG?raw=true "image")  
 
 ### 2. INDEX RANDOMIZER 
-* Initialize the Min Max of your index/int parameter. (ie: how many presets/states are available)
+* Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
 * Set the probability for each index.
 * Set if the index should stay long or short staying duration when her random happens.
 * Set the global BPM clock speed.
@@ -46,7 +47,7 @@ An **openFrameworks** add-on to perform two types of useful randomizers for your
 - Added **Undo Engine** to improve exploration.
 
 <details>
-  <summary>CODE</summary>
+  <summary>Usage</summary>
   <p>
 
 **ofApp.h**
@@ -55,7 +56,7 @@ An **openFrameworks** add-on to perform two types of useful randomizers for your
 
 ofxSurfingRandomizer randomizer;
 
-// 1. params
+// A. Params
 ofParameterGroup params; // group container
 ofParameter<float> lineWidth;
 ofParameter<float> separation;
@@ -63,7 +64,7 @@ ofParameter<float> speed;
 ofParameter<int> amount;
 ofParameter<int> shapeType;
 
-// 2. index
+// B. Index
 ofParameter<int> index{ "index", 0, 0, 8 };
 ofEventListener listenerIndex;
 ```
@@ -79,10 +80,12 @@ void ofApp::setup()
   params.add(amount.set("amount", 1, 1, 10));
   params.add(speed.set("shapeType", 0, 0, 3));
 
-  randomizer.setup(params);
-  randomizer.setTarget(index);
+  // Setup
+  randomizer.setup(params); // A
+  randomizer.setTarget(index); // B
 
-  // Lambda callback: to receive the randomized index
+  // Lambda callback: 
+  // To be notified when the randomized index changed.
   //--------------------------------------------------------------
   listenerIndex = index.newListener([this](int &i) {
     ofLogNotice("ofApp") << "Index: " << i;
@@ -119,7 +122,6 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <p>
 
 * Add more types: 2D/3D vectors and colors. Using templates [?] ...  
-  * Any help/pull on this is appreciated!.  
   </p>
 </details>
 
