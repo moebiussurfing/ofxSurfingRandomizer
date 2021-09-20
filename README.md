@@ -3,7 +3,7 @@
 ## Overview
 An **openFrameworks** add-on to perform **Two** types of useful **Randomizers** for your scenes.  
 
-The Randomizer results targets over:  
+The Randomizer targets over:  
 
 A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**.  
 
@@ -47,10 +47,11 @@ B. An **Index** selector. (_int/preset/state..._)
   <summary>Other Features</summary>
   <p>
 
+- **ImGui** based.
 - Only ```float```, ```int``` and ```bool``` types yet.
-- Reset all parameters to the parameter or the range minimum.
-- Reset Min/Max ranges to parameter limits.
-- Store/Recall a memory state to improve exploring / Undo / Redo.
+- Reset all parameters to the parameter or the range min/max.
+- Reset Min/Max ranges to a parameter limits.
+- Store/Recall a temp memory state. To improve exploring Undo/Redo.
 - Auto Store/Recall all the settings.
 - **ImGui** based GUI ready to integrate.
 - Added **Undo Engine** to improve exploration.
