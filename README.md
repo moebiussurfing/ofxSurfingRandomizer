@@ -4,6 +4,7 @@
 An **openFrameworks** add-on to perform **Two** types of useful **Randomizers** for your scenes.  
 
 ![image](/readme_images/ofxSurfingRandomizer.gif?raw=true "GIF")  
+![image](/readme_images/ofxSurfingRandomizer.mp4?raw=true "MP4") 
 
 The Randomizers will target over:  
 
