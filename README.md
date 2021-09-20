@@ -19,7 +19,6 @@ B. An **Index** selector. (_int/preset/state..._)
 
   - Each allowed index (ie: from 0 to 8) has a settable probability to make some states more or less frequently switched to. 
 
---------------------------
 
 ### A. RANGED RANDOMIZATION 
 #### USAGE  
