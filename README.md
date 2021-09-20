@@ -143,7 +143,3 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
 ## Author
 An add-on by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
-
-[Twitter](https://twitter.com/moebiussurfing/)  
-[YouTube](https://www.youtube.com/channel/UCzUw96_wjmNxyIoFXf84hQg)  
-[Instagram](https://www.instagram.com/moebiussurfing/)  
