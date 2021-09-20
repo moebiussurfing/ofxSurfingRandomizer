@@ -20,8 +20,8 @@ B. An **Index** selector. (_int/preset/state..._)
   - Each allowed index (ie: from 0 to 8) has a settable probability to make some states more or less frequently switched to. 
 
 
-### A. RANGED RANDOMIZATION 
-#### USAGE  
+## A. RANGED RANDOMIZATION 
+### USAGE  
 1. Just pass your ```ofParameterGroup``` parameters container.
 2. Enable the desired parameters from the group.
 3. Set the range limits for each parameter to fit the random inside them.
@@ -32,8 +32,8 @@ B. An **Index** selector. (_int/preset/state..._)
 ![image](/readme_images/Capture1.PNG?raw=true "image")  
 
 
-### B. INDEX RANDOMIZER 
-#### USAGE  
+## B. INDEX RANDOMIZER 
+### USAGE  
 1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
 2. Set the probability for each index.
 3. Set if the index should stay long or short staying duration when her random happens.
