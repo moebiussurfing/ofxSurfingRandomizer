@@ -23,6 +23,7 @@ LEFT-RIGHT : Browse Index
 
 */
 
+#define USE_ONLY_RECTANGLES // -> This is to (maybe) simplify the understanding of the addon. Index controls only the color.
 
 #include "ofMain.h"
 
@@ -39,7 +40,7 @@ public:
     void draw();
     void drawScene();
 
-	// scene params
+	// Scene params
 	ofParameterGroup params;
 	ofParameter<float> size1;
 	ofParameter<float> rotation1;
@@ -50,9 +51,10 @@ public:
 
 	ofParameter<int> index{ "index", 0, 0, 3 };
 	ofEventListener listenerIndex;
+	void refreshColorByIndex();
+	ofColor colorByIndex;//-> Index will set the color.
 
 	void drawShape(int type, int x, int y, int size);
-	ofColor color;
 
 	ofxWindowApp windowApp;
 };

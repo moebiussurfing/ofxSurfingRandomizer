@@ -3,10 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// params to randomize
-	params.setName("paramsGroup");// main container
-	params2.setName("paramsGroup2");// nested
-	params3.setName("paramsGroup3");// nested
+	// Params to randomize
+	params.setName("paramsGroup");
+	params2.setName("paramsGroup2");
+	params3.setName("paramsGroup3");
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params.add(separation.set("separation", 50, 1, 100));
 	params.add(speed.set("speed", 0.5, 0, 1));
@@ -31,6 +31,7 @@ void ofApp::setupRandomizer()
 	// Randomizer
 	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 	randomizer.setIndexPtr(index);
+
 	randomizer.setup(params);
 
 	// A. Lambda callback:

@@ -20,25 +20,33 @@ void ofApp::setup()
 	// Setup
 	randomizer.setup(params);
 
-	// Lambda callback:
-	// to receive the randomized index
+	// Lambda Index callback:
+	// To receive the randomized index
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i)
 	{
 		ofLogNotice("ofApp") << "Index: " << i;
 
-		//example:
+		// Example:
 		//presets.load(i);
 
-		switch (i)
-		{
-		case 0: color = ofColor::yellow; break;
-		case 1: color = ofColor::orange; break;
-		case 2: color = ofColor::red; break;
-		case 3: color = ofColor::green; break;
-		default: break;
-		}
+		refreshColorByIndex();
 	});
+
+	refreshColorByIndex();
+}
+
+//--------------------------------------------------------------
+void ofApp::refreshColorByIndex()
+{
+	switch (index)
+	{
+	case 0: colorByIndex = ofColor::green; break;
+	case 1: colorByIndex = ofColor::yellow; break;
+	case 2: colorByIndex = ofColor::orange; break;
+	case 3: colorByIndex = ofColor::red; break;
+	default: break;
+	}
 }
 
 //--------------------------------------------------------------
@@ -68,14 +76,13 @@ void ofApp::drawScene()
 	// -> https://github.com/Daandelange/ofxImGui/tree/master/example-sharedcontext
 
 	static ofColor colorBg = 32;
-
 	ofClear(colorBg);
 
 	ofPushStyle();
 	ofPushMatrix();
 
-	ofParameter<ofFloatColor> color1{ "Color1", color };
-	ofParameter<ofFloatColor> color2{ "Color2", color };
+	ofParameter<ofFloatColor> color1{ "Color1", colorByIndex };
+	ofParameter<ofFloatColor> color2{ "Color2", colorByIndex };
 
 	int a = ofMap(size1, 0, 2, 255, 170);
 
@@ -116,6 +123,13 @@ void ofApp::drawScene()
 //--------------------------------------------------------------
 void ofApp::drawShape(int type, int x, int y, int size)
 {
+
+#ifdef USE_ONLY_RECTANGLES
+	float r = ofMap(rotation1, 0, 2, 0, 50);
+	ofDrawRectRounded(x, y, size, size, r);
+#endif
+
+#ifndef USE_ONLY_RECTANGLES
 	float offset = size1 * 15;
 
 	switch (type)
@@ -188,4 +202,5 @@ void ofApp::drawShape(int type, int x, int y, int size)
 	default:
 		break;
 	}
+#endif
 }
