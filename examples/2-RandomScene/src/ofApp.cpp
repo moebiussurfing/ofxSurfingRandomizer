@@ -66,7 +66,7 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	//drawScene();
+	drawScene();
 
 	randomizer.draw_ImGui();
 }
