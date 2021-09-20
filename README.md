@@ -2,8 +2,10 @@
 
 ## Overview
 An **openFrameworks** add-on to perform Two types of useful Randomizers for your scenes.  
-Randomizer result targets over:
-A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**. 
+Randomizer result targets over:  
+
+A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**.  
+
 B. An **Index** (_int/preset/state..._) selector.  
 
 ## Why?
