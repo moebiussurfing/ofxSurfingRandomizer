@@ -230,7 +230,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							// 0. MIN-MAX
 							tag = n + "getMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MIN"))
+							if (ImGui::Button("GETMIN"))
 							{
 								_p0 = pmin;
 							}
@@ -238,7 +238,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::SameLine(0, 0);
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MAX"))
+							if (ImGui::Button("GETMAX"))
 							{
 								_p0 = pmax;
 							}
@@ -260,7 +260,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							// 0. MIN-MAX
 							tag = n + "setMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("SET MIN"))
+							if (ImGui::Button("SETMIN"))
 							{
 								pmin = _p0;
 							}
@@ -268,7 +268,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::SameLine(0, 0);
 							tag = n + "setMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("SET MAX"))
+							if (ImGui::Button("SETMAX"))
 							{
 								pmax = _p0;
 							}
@@ -358,7 +358,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							// 0. MIN-MAX
 							tag = n + "getMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MIN"))
+							if (ImGui::Button("GETMIN"))
 							{
 								_p0 = pmin;
 							}
@@ -366,7 +366,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::SameLine(0, 0);
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MAX"))
+							if (ImGui::Button("GETMAX"))
 							{
 								_p0 = pmax;
 							}
@@ -386,7 +386,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							// 0. MIN-MAX
 							tag = n + "setMIN";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MIN"))
+							if (ImGui::Button("SETMIN"))
 							{
 								pmin = _p0;
 							}
@@ -395,7 +395,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 							tag = n + "setMAX";
 							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GET MAX"))
+							if (ImGui::Button("SETMAX"))
 							{
 								pmax = _p0;
 							}
@@ -465,12 +465,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 				if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-				//if (guiManager.bGui) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 #endif
-
-				//#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-				//				if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-				//#endif
 
 				ImGui::TreePop();
 			}
@@ -557,15 +552,10 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 	if (guiManager.bAutoResize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 #endif
 
-	//#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-	//	if (auto_resize) _flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-	//#endif
-
 	//----
 
 	// main panel
 
-	//bGui= 0;
 	if (bGui)
 	{
 		guiManager.beginWindow(bGui, _flagsw);
@@ -580,8 +570,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
-					//ImGui::Text("COMMANDS");
-
 					if (ImGui::Button("RND PARAMS", ImVec2(_w100, 3 * _h)))
 					{
 						doRandomize();
@@ -592,7 +580,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					}
 
 					ImGui::Spacing();
-					//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 					//-
 
@@ -622,8 +609,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 							ImGui::PopItemWidth();
 						}
 
-						//ImGui::Dummy(ImVec2(0.0f, 2.0f));
-
 						ImGui::TreePop();
 					}
 				}
@@ -634,8 +619,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 			// panels
 			{
 				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-
-				//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 				bOpen = true;
 				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
@@ -663,8 +646,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				if (ImGui::CollapsingHeader("ENABLE PARAMS", _flagc))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-
-					//ImGui::Text("ENABLE PARAMETERS");
 
 					static bool bNone, bAll;
 					if (ImGui::Button("NONE", ImVec2(_w50, _h)))
@@ -713,8 +694,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 							//}
 						}
 					}
-
-					//ImGui::Dummy(ImVec2(0.0f, 5.0f));
 				}
 			}
 
@@ -729,7 +708,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 				_flagw |= ImGuiTreeNodeFlags_Framed;
 
-				// state memory
+				// State memory
 				if (ImGui::TreeNodeEx("MEMORY", _flagw))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
@@ -797,25 +776,15 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 
 	//-
 
-	// randomizers group
+	// Randomizers group
 	surfingIndexGroupRandomizer.update();
-
-	//-
 }
+
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw_ImGui() {
 	if (!bGui) return;
 
 	//----
-
-	//// instance - Plugin code that was made for sharing context
-	//ImGui::PushID("##ofxSurfingRandomizerHASH"); // <-- if you want to ensure a sandbox between both (fails with sharedMode off)
-
-//#ifdef USE_RANDOMIZE_IMGUI_LOCAL
-//	gui.begin();
-//	drawImGui_Widgets();
-//	gui.end();
-//#endif
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	guiManager.begin();
@@ -824,16 +793,10 @@ void ofxSurfingRandomizer::draw_ImGui() {
 	}
 	guiManager.end();
 #endif
-
-	//ImGui::PopID(); // <-- If you want to ensure a sandbox between both
 }
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
-
-	//#ifdef USE_RANDOMIZE_IMGUI_EXTERNAL
-	//	return;
-	//#endif
 
 	if (!bGui) return;
 

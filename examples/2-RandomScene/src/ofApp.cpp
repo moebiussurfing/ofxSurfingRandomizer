@@ -30,7 +30,7 @@ void ofApp::setup()
 		ofLogNotice("ofApp") << "Index: " << i;
 
 		// Example:
-		//presets.load(i);
+		// presets.load(i);
 
 		refreshColorByIndex();
 	});
