@@ -3,12 +3,18 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetCircleResolution(120);
+
 	// A. Params to randomize
 	params.setName("paramsGroup");
-	params.add(size1.set("size1", 1, 0, 2));
-	params.add(size2.set("size2", (int)ofGetHeight() / 2, 5, (int)ofGetHeight() / 4));
-	params.add(rotation1.set("rotation1", 1, 0, 2));
-	params.add(rotation2.set("rotation2", 180, 0, 360));
+	params.add(alpha.set("alpha", 0.5f, 0, 1.0f));
+	params.add(size.set("size", (int)ofGetHeight() / 2, 10, (int)ofGetHeight() / 4));
+	params.add(round.set("round", 0.5, 0, 1));
+	params.add(rotation.set("rotation", 180, 0, 360));
+	params.add(position.set("position", 
+		glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2), 
+		glm::vec2(0.2*ofGetWidth(), 0.2*ofGetHeight()),
+		glm::vec2(0.8*ofGetWidth(), 0.8*ofGetHeight())));
 
 	//--
 
@@ -22,17 +28,16 @@ void ofApp::setup()
 	// A. Setup with Params
 	randomizer.setup(params);
 
-	// Lambda callback:
-	// To receive the randomized index target
+	// Lambda callback to receive the randomized index target
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i)
 	{
-		ofLogNotice("ofApp") << "Index: " << i;
+		ofLogNotice("ofApp") << "Index: " << index.get();
 
-		// Example:
-		// presets.load(i);
+		refreshColorByIndex(); //-> will set the color getting index.
 
-		refreshColorByIndex();
+		// Another common usage Example:
+		// presets.load(index);
 	});
 
 	refreshColorByIndex();
@@ -74,50 +79,39 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawScene()
 {
-	// some code from @Daandelange 
-	// -> https://github.com/Daandelange/ofxImGui/tree/master/example-sharedcontext
-
 	static ofColor colorBg = 32;
 	ofClear(colorBg);
 
 	ofPushStyle();
 	ofPushMatrix();
+	{
+		ofTranslate(position.get());
 
-	ofParameter<ofFloatColor> color1{ "Color1", colorByIndex };
-	ofParameter<ofFloatColor> color2{ "Color2", colorByIndex };
+		// alpha
+		float _a = ofMap(alpha, alpha.getMin(), alpha.getMax(), 0.1, 1);
+		// size
+		float _sz = 100 + size * 1.1;
 
-	int a = ofMap(size1, 0, 2, 255, 170);
+		float _rot = rotation / 3.0;
+		ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
+		ofRotateZDeg(45);
+		ofRotateDeg(_rot);
 
-	float _scale2 = 0.2f;
-	float staticAnimationPos = 1;
-	int rectSize = size2 + abs((((ofGetHeight() * _scale2 - size2)*size1))*(staticAnimationPos));
+		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
-	ofTranslate(ofGetWidth()*.5f, ofGetHeight()*.5f);
-	ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
+		ofRotateDeg(_rot);
+		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
-	float rot = rotation2 / 3.0;
-	ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
-	ofRotateZDeg(rotation1 * 45);
-	ofScale(1.3);
-	ofRotateDeg(rot);
+		ofRotateDeg(_rot);
+		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
-	int a2 = ofMap(size2, 0, size2.getMax(), 255, 225);
-
-	ofSetColor(color1->r * 255, color1->g * 255, color1->b * 255, color1->a * a2);
-	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
-
-	ofRotateDeg(rot);
-	ofSetColor(color1->r * 255, color1->g * 255, color1->b * 255, color1->a * a2);
-	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
-
-	ofRotateDeg(rot);
-	ofSetColor(color2->r * 255, color2->g * 255, color2->b * 255, color2->a * a2);
-	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
-
-	ofRotateDeg(rot);
-	ofSetColor(color2->r * 255, color2->g * 255, color2->b * 255, color2->a * a2);
-	drawShape(index, -rectSize * .5f, -rectSize * .5f, rectSize);
-
+		ofRotateDeg(_rot);
+		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		drawShape(index, -_sz / 2, -_sz / 2, _sz);
+	}
 	ofPopMatrix();
 	ofPopStyle();
 }
@@ -127,19 +121,19 @@ void ofApp::drawShape(int type, int x, int y, int size)
 {
 
 #ifdef USE_ONLY_RECTANGLES
-	float r = ofMap(rotation1, 0, 2, 0, 50);
+	float r = ofMap(round, 0, 1, 0, 110);
 	ofDrawRectRounded(x, y, size, size, r);
 #endif
 
 #ifndef USE_ONLY_RECTANGLES
-	float offset = size1 * 15;
+	float offset = alpha * 15;
 
 	switch (type)
 	{
 
 	case 0: // rectangle
 	{
-		float r = ofMap(rotation1, 0, 2, 0, 50);
+		float r = ofMap(round, 0, 2, 0, 50);
 		ofDrawRectRounded(x, y, size, size, r);
 	}
 	break;

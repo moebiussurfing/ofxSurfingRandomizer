@@ -27,7 +27,7 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(bPLAY.set("PLAY", false));
 	params_AppState.add(bTarget.set("Target", false));
 	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
-	params_AppState.add(surfingIndexGroupRandomizer.params_Clicker);
+	params_AppState.add(surfingIndexRandomizer.params_Clicker);
 
 	bPLAY.setSerializable(false);
 }
@@ -62,7 +62,7 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
-	// gui
+	// Gui
 
 #ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	//guiManager.setImGuiAutodraw(bAutoDraw);
@@ -76,32 +76,32 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
-	// index randomizer
+	// Index randomizer
 
 	if (!bCustomIndex) {
 		const int NUM_INDEX_ITEMS = 9;
 		indexTarget.set("Index", 0, 0, NUM_INDEX_ITEMS - 1);
 	}
 
-	//surfingIndexGroupRandomizer.indexSelected.makeReferenceTo(indexTarget);// TODO: link
-	//surfingIndexGroupRandomizer.setup(indexTarget.getMax());
-	//surfingIndexGroupRandomizer.setBoolGui(bGui_Index);
-	////surfingIndexGroupRandomizer.setBoolGuiPtr(bGui_Index);
+	//surfingIndexRandomizer.indexSelected.makeReferenceTo(indexTarget);// TODO: link
+	//surfingIndexRandomizer.setup(indexTarget.getMax());
+	//surfingIndexRandomizer.setBoolGui(bGui_Index);
+	////surfingIndexRandomizer.setBoolGuiPtr(bGui_Index);
 
-	surfingIndexGroupRandomizer.setPath(path_Global);
-	surfingIndexGroupRandomizer.setup(indexTarget, bGui_Index);
+	surfingIndexRandomizer.setPath(path_Global);
+	surfingIndexRandomizer.setup(indexTarget, bGui_Index);
 
 	//-
 
-	setupEditor(group); // build the editor for all the params
+	setupEditor(group); // Build the editor for all the params
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::drawImGui_Editor() {
+void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 	// window editor
 	ImGuiWindowFlags _flagsw;
-	string n;
+	std::string n;
 
 	bool bOpen;
 	ImGuiColorEditFlags _flagc;
@@ -147,7 +147,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 			ImGuiSliderFlags sflag = ImGuiSliderFlags_None;
 			//sflag |= ImGuiSliderFlags_ReadOnly;
 
-			string spcl = "    ";//space between min-max range slider label
+			std::string spcl = "    ";//space between min-max range slider label
 
 			//--
 
@@ -165,15 +165,15 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 					if (enablersForParams[i].get() == false) continue;//akip and don't draw disbled params
 
 					//numerize
-					string tag;//to push ids
-					string n = "#" + ofToString(i < 10 ? "0" : "") + ofToString(i);
+					std::string tag;//to push ids
+					std::string n = "#" + ofToString(i < 10 ? "0" : "") + ofToString(i);
 					//ImGui::Dummy(ImVec2(0,10));
 
 					ImGui::AlignTextToFramePadding();
 					ImGui::Text(n.c_str());
 					ImGui::SameLine();
 
-					string _name = enablersForParams[i].getName();
+					std::string _name = enablersForParams[i].getName();
 					auto g = params_EditorGroups.getGroup(_name);
 
 					auto &p0 = g.get(_name);
@@ -226,7 +226,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						if (!bMinimal) {
 							ImGui::AlignTextToFramePadding();
 							//ImGui::Text("GET");
-							//ImGui::SameLine(0, 0);
+							//ImGui::SameLine();
 							// 0. MIN-MAX
 							tag = n + "getMIN";
 							ImGui::PushID(tag.c_str());
@@ -235,7 +235,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 								_p0 = pmin;
 							}
 							ImGui::PopID();
-							ImGui::SameLine(0, 0);
+							ImGui::SameLine(0, 1);
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
 							if (ImGui::Button("GETMAX"))
@@ -256,7 +256,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 							ImGui::AlignTextToFramePadding();
 							//ImGui::Text("SET");
-							//ImGui::SameLine(0, 0);
+							//ImGui::SameLine();
 							// 0. MIN-MAX
 							tag = n + "setMIN";
 							ImGui::PushID(tag.c_str());
@@ -265,7 +265,8 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 								pmin = _p0;
 							}
 							ImGui::PopID();
-							ImGui::SameLine(0, 0);
+							ImGui::SameLine(0, 1);
+
 							tag = n + "setMAX";
 							ImGui::PushID(tag.c_str());
 							if (ImGui::Button("SETMAX"))
@@ -275,14 +276,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							ImGui::PopID();
 						}
 
-						ImGui::SameLine();
-						
-						if (bMinimal) {
-							ImGui::Text("RANGE");
-							ImGui::SameLine();
-						}
 
-						// 2. range
+						if (bMinimal) {
+							ImGui::SameLine();
+							ImGui::Text("RANGE");
+						}
+						ImGui::SameLine();
+
+						// 2. Range
 						//vanilla
 						tag = n + "dragMin";
 						ImGui::PushID(tag.c_str());
@@ -293,12 +294,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 						if (!bMinimal) {
 							ImGui::SameLine();
+							//ImGui::SameLine(0, 0);//not works
+
 							//widget
 							float power = 1;
 							tag = n + "dragMax";
 							ImGui::PushID(tag.c_str());
 							ImGui::PushItemWidth(_ww2);
-							string ss = "%.3f" + spcl + "%.3f";
+							std::string ss = "%.3f" + spcl + "%.3f";
 							ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
 							//ofxImGuiSurfing::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
 							ImGui::PopItemWidth();
@@ -353,7 +356,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						if (!bMinimal) {
 							ImGui::AlignTextToFramePadding();
 							//ImGui::Text("GET");
-							//ImGui::SameLine(0, 0);
+							//ImGui::SameLine();
 
 							// 0. MIN-MAX
 							tag = n + "getMIN";
@@ -363,7 +366,8 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 								_p0 = pmin;
 							}
 							ImGui::PopID();
-							ImGui::SameLine(0, 0);
+							ImGui::SameLine(0, 1);
+
 							tag = n + "getMAX";
 							ImGui::PushID(tag.c_str());
 							if (ImGui::Button("GETMAX"))
@@ -381,7 +385,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						if (!bMinimal) {
 							ImGui::AlignTextToFramePadding();
 							//ImGui::Text("SET");
-							//ImGui::SameLine(0, 0);
+							//ImGui::SameLine();
 
 							// 0. MIN-MAX
 							tag = n + "setMIN";
@@ -391,7 +395,7 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 								pmin = _p0;
 							}
 							ImGui::PopID();
-							ImGui::SameLine(0, 0);
+							ImGui::SameLine(0, 1);
 
 							tag = n + "setMAX";
 							ImGui::PushID(tag.c_str());
@@ -401,14 +405,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 							}
 							ImGui::PopID();
 						}
-						
+
 						if (bMinimal) {
 							ImGui::Text("RANGE");
 							ImGui::SameLine();
 						}
 
 
-						// 2. range
+						// 2. Range
 						// vanilla
 						ImGui::SameLine();
 						tag = n + "dragMin";
@@ -421,12 +425,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 						if (!bMinimal) {
 							ImGui::SameLine();
+							//ImGui::SameLine(0, 0);
+							
 							//widget
 							float power = 1;
 							tag = n + "dragMax";
 							ImGui::PushID(tag.c_str());
 							ImGui::PushItemWidth(_ww2);
-							string ss = "%.0f" + spcl + "%.0f";
+							std::string ss = "%.0f" + spcl + "%.0f";
 							ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
 							//ofxImGuiSurfing::AddRangeParam("%.0f   %.0f", pmin, pmax, ss.c_str(), power);
 							ImGui::PopItemWidth();
@@ -472,12 +478,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 
 			//--
 
+			// Resets
+
 			if (!bMinimal) {
 				bOpen = false;
 				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 				_flagw |= ImGuiTreeNodeFlags_Framed;
 
-				if (ImGui::TreeNodeEx("RESET", _flagw))
+				if (ImGui::TreeNodeEx("RESETS", _flagw))
 				{
 					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
@@ -501,9 +509,14 @@ void ofxSurfingRandomizer::drawImGui_Editor() {
 						doResetParams(RESET_RANGE_MAX);
 					}
 
-					if (ImGui::Button("RANGES TO PARAMS LIMITS", ImVec2(_w100, _h)))
+					if (ImGui::Button("RANGES TO PARAMS LIMITS FULL", ImVec2(_w50, _h)))
 					{
-						doResetRanges();
+						doResetRangesFull();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("RANGES TO PARAMS LIMITS HALF", ImVec2(_w50, _h)))
+					{
+						doResetRangesHalf();
 					}
 
 					ImGui::TreePop();
@@ -521,7 +534,7 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 
 	{
 		drawImGui_Main();
-		drawImGui_Editor();
+		drawImGui_RangeEditor();
 		drawImGui_Params();
 		drawImGui_Index();
 
@@ -535,7 +548,7 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 void ofxSurfingRandomizer::drawImGui_Main() {
 
 	ImGuiWindowFlags _flagsw = ImGuiWindowFlags_None;
-	string n;
+	std::string n;
 
 	bool bOpen;
 	ImGuiColorEditFlags _flagc;
@@ -576,7 +589,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					}
 					if (ImGui::Button("RND INDEX", ImVec2(_w100, 3 * _h)))
 					{
-						surfingIndexGroupRandomizer.doRandom();
+						surfingIndexRandomizer.doRandom();
 					}
 
 					ImGui::Spacing();
@@ -588,7 +601,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					bOpen = false;
 					ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 					_flagw |= ImGuiTreeNodeFlags_Framed;
-
+					ImGui::Indent();
 					if (ImGui::TreeNodeEx("TESTER", _flagw))
 					{
 						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
@@ -611,12 +624,13 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 						ImGui::TreePop();
 					}
+					ImGui::Unindent();
 				}
 			}
 
 			//-
 
-			// panels
+			// Panels
 			{
 				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
@@ -624,15 +638,22 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 				if (ImGui::CollapsingHeader("PANELS", _flagc))
 				{
-					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+					ImGui::Indent();
+					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
+					//if(bGui_Editor) ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
+					ImGui::Unindent();
+
+					ImGui::Separator();
+
 					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
+					//if (bGui_Index) ofxImGuiSurfing::AddParameter(indexTarget);
+					ofxImGuiSurfing::AddParameter(indexTarget);
+					ofxImGuiSurfing::AddBigToggleNamed(surfingIndexRandomizer.bPLAY, _w100, _h, "PLAYING RND", "PLAY RND", true, 1 - surfingIndexRandomizer.getPlayerPct());
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
 					ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
 #endif
-
-					if (bGui_Index) ofxImGuiSurfing::AddParameter(indexTarget);
 				}
 			}
 
@@ -667,7 +688,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 						//bool isGroup = type == typeid(ofParameterGroup).name();
 						//bool isFloat = type == typeid(ofParameter<float>).name();
 						//bool isInt = type == typeid(ofParameter<int>).name();
-						string name = p.getName();
+						std::string name = p.getName();
 
 						if (isBool)//just in case... 
 						{
@@ -736,7 +757,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 			//	auto &p = params_EditorEnablers[i];// ofAbstractParameter
 			//	auto type = p.type();
 			//	bool isBool = type == typeid(ofParameter<bool>).name();
-			//	string name =
+			//	std::string name =
 			//		ofxImGui::AddRange("range", parameterMin, parameterMax, speed);
 			//}
 
@@ -769,7 +790,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 		if (tf == 0)
 		{
 			// Target Selector
-			if (!bTarget) surfingIndexGroupRandomizer.doRandom();
+			if (!bTarget) surfingIndexRandomizer.doRandom();
 			else doRandomize();
 		}
 	}
@@ -777,7 +798,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 	//-
 
 	// Randomizers group
-	surfingIndexGroupRandomizer.update();
+	surfingIndexRandomizer.update();
 }
 
 //--------------------------------------------------------------
@@ -820,7 +841,7 @@ void ofxSurfingRandomizer::drawImGui_Index() {
 
 	if (bGui_Index)
 	{
-		surfingIndexGroupRandomizer.drawImGui();
+		surfingIndexRandomizer.drawImGui();
 
 		//guiManager.beginWindow(bGui_Index, _flagsw);
 		//{
@@ -829,7 +850,7 @@ void ofxSurfingRandomizer::drawImGui_Index() {
 		//	flags |= ImGuiTreeNodeFlags_Framed;
 		//	//ofxImGuiSurfing::AddGroup(params, flags);
 		//	{
-		//		surfingIndexGroupRandomizer.drawImGui();
+		//		surfingIndexRandomizer.drawImGui();
 		//	}
 		//}
 		//guiManager.endWindow();
@@ -869,7 +890,7 @@ void ofxSurfingRandomizer::doSetAll(bool b) {
 		auto &p = params_EditorEnablers[i];//ofAbstractParameter
 		auto type = p.type();
 		bool isBool = type == typeid(ofParameter<bool>).name();
-		string name = p.getName();
+		std::string name = p.getName();
 
 		if (isBool) {
 			ofParameter<bool> pb = p.cast<bool>();
@@ -898,7 +919,7 @@ void ofxSurfingRandomizer::doResetParams(ResetPramsType type) {
 
 		//-
 
-		string name = p.getName();//name
+		std::string name = p.getName();//name
 		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
 
@@ -935,7 +956,7 @@ void ofxSurfingRandomizer::doResetParams(ResetPramsType type) {
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::doResetRanges() {
+void ofxSurfingRandomizer::doResetRangesFull() {
 	ofLogNotice(__FUNCTION__);
 
 	for (auto p : enablersForParams)
@@ -944,7 +965,7 @@ void ofxSurfingRandomizer::doResetRanges() {
 
 		//-
 
-		string name = p.getName();//name
+		std::string name = p.getName();//name
 		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
 
@@ -974,6 +995,54 @@ void ofxSurfingRandomizer::doResetRanges() {
 			//reset to abs min
 			_pmin.set(pmin);
 			_pmax.set(pmax);
+		}
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::doResetRangesHalf() {
+	ofLogNotice(__FUNCTION__);
+
+	for (auto p : enablersForParams)
+	{
+		if (!p.get()) continue;//only reset this param if it's enabled
+
+		float _ratio = 0.25f;//to close a bit
+
+		//-
+
+		std::string name = p.getName();//name
+		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
+		auto &e = g.get(name);//ofAbstractParameter
+
+		auto type = e.type();
+		bool isFloat = type == typeid(ofParameter<float>).name();
+		bool isInt = type == typeid(ofParameter<int>).name();
+
+		if (isFloat)
+		{
+			ofParameter<float> p0 = e.cast<float>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<float>();
+			auto _pmax = g.get("Max").cast<float>();
+			//reset to abs min a bit closed
+			float w = (pmax - pmin) * _ratio;
+			_pmin.set(pmin + w);
+			_pmax.set(pmax - w);
+		}
+
+		else if (isInt)
+		{
+			ofParameter<int> p0 = e.cast<int>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<int>();
+			auto _pmax = g.get("Max").cast<int>();
+			//reset to abs min a bit closed
+			float w = (pmax - pmin) * _ratio;
+			_pmin.set(pmin + w);
+			_pmax.set(pmax - w);
 		}
 	}
 }
@@ -1014,7 +1083,7 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 
 		//-
 
-		string name = p.getName();//name
+		std::string name = p.getName();//name
 		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
 
@@ -1103,15 +1172,17 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 	//-
 
 	// Help
-	string helpInfo = "";
+	std::string helpInfo = "";
+	helpInfo += "ofxSurfingRandomizer\n";
+	helpInfo += "\n";
 	helpInfo += "HELP\n";
 	helpInfo += "KEY COMMANDS\n";
 	helpInfo += "\n";
-	helpInfo += "SPACE      : Randomize Parameters\n";
-	helpInfo += "Ctrl+SPACE : Randomize Index\n";
-	helpInfo += "RETURN     : Play timed randomizer\n";
-	helpInfo += "BACKSPACE  : Reset parameters\n";
+	helpInfo += "SPACE      : Rnd Params\n";
+	helpInfo += "BACKSPACE  : Reset params\n";
+	helpInfo += "Ctrl+SPACE : Rnd Index\n";
 	helpInfo += "LEFT-RIGHT : Browse Index\n";
+	helpInfo += "RETURN     : Play\n";
 	helpInfo = ofToUpper(helpInfo);//make uppercase
 
 	textBoxWidget.setText(helpInfo);
@@ -1284,7 +1355,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 
 	// randomizer
 	if (!mod_CONTROL && key == ' ') { doRandomize(); }
-	if (mod_CONTROL && key == ' ') { (surfingIndexGroupRandomizer.doRandom()); }
+	if (mod_CONTROL && key == ' ') { (surfingIndexRandomizer.doRandom()); }
 	if (key == OF_KEY_BACKSPACE) { doResetParams(); }
 	if (key == OF_KEY_RETURN) bPLAY = !bPLAY;
 
@@ -1300,7 +1371,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	//--
 
 	// Index randomizer
-	surfingIndexGroupRandomizer.keyPressed(key);
+	surfingIndexRandomizer.keyPressed(key);
 
 	//----
 

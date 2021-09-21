@@ -7,6 +7,10 @@
 
 TODO:
 
++ add multidim vec and colors
++ add anothe mode. center + % spread variation
++ tune range slider on ImGui
+	drag from center
 
 */
 
@@ -66,7 +70,7 @@ public:
 	//-
 
 private:
-	SurfingIndexRandomizer surfingIndexGroupRandomizer;
+	SurfingIndexRandomizer surfingIndexRandomizer;
 	ofParameter<int> indexTarget{ "index", 0, 0, 9 };
 	bool bCustomIndex = false;
 
@@ -94,7 +98,7 @@ public:
 private:
 	void drawImGui_Main();
 	void drawImGui_Params();
-	void drawImGui_Editor();
+	void drawImGui_RangeEditor();
 	void drawImGui_Index();
 
 //public:
@@ -110,7 +114,8 @@ public:
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
 	void doResetParams(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
-	void doResetRanges();//set ranges to abs min/max from each parameter
+	void doResetRangesFull();//set ranges to abs min/max from each parameter
+	void doResetRangesHalf();//set ranges to abs min/max from each parameter but a bit closed
 
 private:
 	void doSaveState();//save the memory state

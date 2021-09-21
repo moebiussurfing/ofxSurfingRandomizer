@@ -42,10 +42,11 @@ public:
 
 	// Scene params
 	ofParameterGroup params;
-	ofParameter<float> size1;
-	ofParameter<float> rotation1;
-	ofParameter<float> rotation2;
-	ofParameter<int> size2;
+	ofParameter<float> alpha;
+	ofParameter<float> round;
+	ofParameter<float> rotation;
+	ofParameter<int> size;
+	ofParameter<glm::vec2> position;
 
 	ofxSurfingRandomizer randomizer;
 
