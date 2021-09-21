@@ -5,14 +5,16 @@ void ofApp::setup()
 {
 	ofSetCircleResolution(120);
 
+	//--
+
 	// A. Params to randomize
 	params.setName("paramsGroup");
 	params.add(alpha.set("alpha", 0.5f, 0, 1.0f));
 	params.add(size.set("size", (int)ofGetHeight() / 2, 10, (int)ofGetHeight() / 4));
 	params.add(round.set("round", 0.5, 0, 1));
 	params.add(rotation.set("rotation", 180, 0, 360));
-	params.add(position.set("position", 
-		glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2), 
+	params.add(position.set("position",
+		glm::vec2(0.5*ofGetWidth(), 0.5*ofGetHeight()),
 		glm::vec2(0.2*ofGetWidth(), 0.2*ofGetHeight()),
 		glm::vec2(0.8*ofGetWidth(), 0.8*ofGetHeight())));
 
@@ -20,13 +22,11 @@ void ofApp::setup()
 
 	// Randomizer
 
-	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
-
-	// B. Index
-	randomizer.setIndexPtr(index); // -> Must be setted before call setup.
-
 	// A. Setup with Params
 	randomizer.setup(params);
+
+	// B. Index
+	randomizer.setIndexPtr(index);
 
 	// Lambda callback to receive the randomized index target
 	//--------------------------------------------------------------
@@ -34,9 +34,9 @@ void ofApp::setup()
 	{
 		ofLogNotice("ofApp") << "Index: " << index.get();
 
-		refreshColorByIndex(); //-> will set the color getting index.
+		refreshColorByIndex(); //-> Will set the color getting the index.
 
-		// Another common usage Example:
+		// Example for another common usage:
 		// presets.load(index);
 	});
 
@@ -91,7 +91,7 @@ void ofApp::drawScene()
 		float _a = ofMap(alpha, alpha.getMin(), alpha.getMax(), 0.1, 1);
 		// size
 		float _sz = 100 + size * 1.1;
-
+		// rotation
 		float _rot = rotation / 3.0;
 		ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
 		ofRotateZDeg(45);
@@ -119,9 +119,9 @@ void ofApp::drawScene()
 //--------------------------------------------------------------
 void ofApp::drawShape(int type, int x, int y, int size)
 {
-
+	// only rectangles
 #ifdef USE_ONLY_RECTANGLES
-	float r = ofMap(round, 0, 1, 0, 110);
+	float r = ofMap(round, 0, 1, 0, 30);
 	ofDrawRectRounded(x, y, size, size, r);
 #endif
 

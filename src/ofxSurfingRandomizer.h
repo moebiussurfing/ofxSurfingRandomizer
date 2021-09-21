@@ -37,8 +37,6 @@ TODO:
 #include "ofxSurfingUndoHelper.h"
 #endif
 
-#define USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER // -> can't be disabled out of the box, but should be simple to use another gui like ofxGui..
-
 class ofxSurfingRandomizer
 {
 	enum ResetPramsType
@@ -67,6 +65,8 @@ public:
 	void exit();
 	void keyPressed(ofKeyEventArgs &eventArgs);
 
+	void startup();
+
 	//-
 
 private:
@@ -79,6 +79,11 @@ public:
 	{
 		bCustomIndex = true;
 		indexTarget.makeReferenceTo(index);
+
+		indexTarget.set("Index", 0, 0, index.getMax());
+
+		surfingIndexRandomizer.setPath(path_Global);
+		surfingIndexRandomizer.setup(indexTarget, bGui_Index);
 	}
 
 	//-
@@ -113,7 +118,7 @@ private:
 public:
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
-	void doResetParams(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
+	void doResetParamsFull(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
 	void doResetRangesFull();//set ranges to abs min/max from each parameter
 	void doResetRangesHalf();//set ranges to abs min/max from each parameter but a bit closed
 
@@ -127,9 +132,7 @@ private:
 
 	//-
 
-#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 	ofxSurfing_ImGui_Manager guiManager;
-#endif
 
 public:
 	void setAutodraw(bool autodraw) { // required to set to true when only one ofxImGUi instance will be used between all the ofApp project add-ons using ofxImGui
@@ -164,7 +167,7 @@ private:
 public:
 	ofParameter<bool> bGui;
 	ofParameter<bool> bGui_Params;
-	ofParameter<bool> bGui_Editor;
+	ofParameter<bool> bGui_RangesEditor;
 	ofParameter<bool> bGui_Index;
 
 	ofParameter<bool> bKeys;
@@ -172,7 +175,6 @@ public:
 
 	//-
 
-//#ifdef USE_RANDOMIZE_IMGUI_LAYOUT_MANAGER
 //	//--------------------------------------------------------------
 //	void setImGuiAutodraw(bool b){ guiManager.setImGuiAutodraw(b); }//required to set to false when only one ImGui instance is created
 //
@@ -180,7 +182,6 @@ public:
 //	void setImGuiSharedMode(bool b) {
 //		guiManager.setSharedMode(b); // Force shared context
 //	}
-//#endif
 
 private:
 	//settings
