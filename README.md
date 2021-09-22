@@ -95,15 +95,14 @@ void ofApp::setup()
   params.add(speed.set("shapeType", 0, 0, 3));
 
   // Setup
-  randomizer.setTarget(index); // B -> Must be setted before call setup.
+  randomizer.setIndexPtr(index); // B -> Must be setted before call setup.
   randomizer.setup(params); // A
 
   // B. Index
-  // Lambda callback:
-  // To receive the randomized index target
+  // Lambda callback to receive the randomized index target.
   //--------------------------------------------------------------
   listenerIndex = index.newListener([this](int &i) {
-    ofLogNotice("ofApp") << "Index: " << i;
+    ofLogNotice("ofApp") << "Index: " << index;
   });
 }
 ```

@@ -86,9 +86,11 @@ void ofApp::drawScene()
 	ofPushMatrix();
 	{
 		ofTranslate(position.get());
-
+		
 		// alpha
 		float _a = ofMap(alpha, alpha.getMin(), alpha.getMax(), 0.1, 1);
+		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+
 		// size
 		float _sz = 100 + size * 1.1;
 		// rotation
@@ -97,19 +99,24 @@ void ofApp::drawScene()
 		ofRotateZDeg(45);
 		ofRotateDeg(_rot);
 
-		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		float _s = ofMap(rotation, rotation.getMin(), rotation.getMax(), 0, 0.1);
+		float _scale = 1;
+
 		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
 		ofRotateDeg(_rot);
-		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		_scale -= _s;
+		ofScale(_scale);
 		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
 		ofRotateDeg(_rot);
-		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		_scale -= _s;
+		ofScale(_scale);
 		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 
 		ofRotateDeg(_rot);
-		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		_scale -= _s;
+		ofScale(_scale);
 		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 	}
 	ofPopMatrix();
