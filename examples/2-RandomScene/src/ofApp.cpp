@@ -126,7 +126,7 @@ void ofApp::drawScene()
 //--------------------------------------------------------------
 void ofApp::drawShape(int type, int x, int y, int size)
 {
-	// only rectangles
+	// Only rectangles
 #ifdef USE_ONLY_RECTANGLES
 	float r = ofMap(round, 0, 1, 0, 30);
 	ofDrawRectRounded(x, y, size, size, r);
@@ -138,14 +138,14 @@ void ofApp::drawShape(int type, int x, int y, int size)
 	switch (type)
 	{
 
-	case 0: // rectangle
+	case 0: // Rectangle
 	{
 		float r = ofMap(round, 0, 2, 0, 50);
 		ofDrawRectRounded(x, y, size, size, r);
 	}
 	break;
 
-	case 1: // circle
+	case 1: // Circle
 	{
 		ofPushMatrix();
 		ofTranslate(+size / offset, -size / offset);
@@ -154,7 +154,7 @@ void ofApp::drawShape(int type, int x, int y, int size)
 	}
 	break;
 
-	case 2: // triangle
+	case 2: // Triangle
 	{
 		ofPushMatrix();
 		ofTranslate(size / offset, size / offset);
@@ -169,7 +169,7 @@ void ofApp::drawShape(int type, int x, int y, int size)
 	}
 	break;
 
-	case 3: // star
+	case 3: // Star
 	{
 		ofPushMatrix();
 		//ofTranslate(-size / 2, -size / 2);
