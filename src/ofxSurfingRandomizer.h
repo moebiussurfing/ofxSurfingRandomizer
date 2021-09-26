@@ -111,7 +111,7 @@ private:
 	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
 	void drawImGui_Index();
 
-	const int WIDGET_R_DRAG = 60;
+	const int WIDGET_R_DRAG = 70;
 	const int WIDGET_R_SLIDER = 200;
 	std::string spcl = "    ";//space between min-max range slider label
 

@@ -5,19 +5,25 @@ void ofApp::setup()
 {
 	ofSetCircleResolution(120);
 
+	float w, h;
+	w = 1920;
+	h = 1080;
+	//w = ofGetWidth();
+	//h = ofGetHeight();
+
 	//--
 
 	// A. Params to randomize
 	params.setName("paramsGroup");
 	params.add(alpha.set("alpha", 0.5f, 0, 1.0f));
-	params.add(size.set("size", (int)ofGetHeight() / 2, 10, (int)ofGetHeight() / 4));
+	params.add(size.set("size", (int) w / 2, 10, (int) w / 4));
 	params.add(round.set("round", 0.5, 0, 1));
 	params.add(rotation.set("rotation", 180, 0, 360));
 
 	params.add(position.set("position",
-		glm::vec2(0.5*ofGetWidth(), 0.5*ofGetHeight()),
-		glm::vec2(0.2*ofGetWidth(), 0.2*ofGetHeight()),
-		glm::vec2(0.8*ofGetWidth(), 0.8*ofGetHeight())));
+		glm::vec2(0.5 * w, 0.5 * h),
+		glm::vec2(0.1 * w, 0.2 * h),
+		glm::vec2(0.9 * w, 0.8 * h)));
 
 	params.add(rotator.set("rotator",
 		glm::vec3(0, 0, 0),
@@ -210,6 +216,6 @@ void ofApp::drawShape(int type, int x, int y, int size)
 
 	default:
 		break;
-}
+	}
 #endif
 }

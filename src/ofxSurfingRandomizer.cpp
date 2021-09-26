@@ -507,6 +507,8 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorResets()
 	{
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 
+		//-
+
 		if (ImGui::Button("PARAMS TO PARAMS MIN", ImVec2(_w33, _h)))
 		{
 			doResetParamsFull(RESET_PARAM_MIN);
@@ -528,7 +530,6 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorResets()
 		{
 			doResetParamsFull(RESET_RANGE_MIN);
 		}
-		//TODO:
 		ImGui::SameLine();
 		if (ImGui::Button("PARAMS TO RANGES CENTER", ImVec2(_w33, _h)))
 		{
@@ -1210,7 +1211,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	for (int i = 0; i < enablersForParams.size(); i++)
 	{
 		doRandomize(i, false);
-}
+	}
 
 	//--
 
@@ -1349,16 +1350,21 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimParamdim) {
 
-	std::string tag;//to push ids
 	int i = indexParam;
+	const int dim = dimParamdim;
+
+	std::string tag;//to push ids
 	ImGuiSliderFlags flagSld = ImGuiSliderFlags_None;
 
+	// All the added params have a bool param as a toggle  to enable or not the randomizator to them.
 	std::string _name = enablersForParams[i].getName();
+
+	// Each added param has a group with their min/max range params, with the same name that the orginal param
 	auto g = params_EditorGroups.getGroup(_name);
 
+	// First column label #01..
 	std::string n = "#" + ofToString(i < 10 ? "0" : "") + ofToString(i);//same for each coord (xyzw)
 
-	const int dim = dimParamdim;
 
 	// Ugly workaround
 
@@ -1374,14 +1380,18 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 	ofParameter<ofDefaultVec4> &pv4min = g.getVec4f("Min");
 	ofParameter<ofDefaultVec4> &pv4max = g.getVec4f("Max");
 
-	for (int id = 0; id < dim; id++)// each coord (xyzw)
+	for (int id = 0; id < dim; id++)// Iterate each coord (xyzw)
 	{
+		// The ranges are delimited by floats
 		float f;
 		float fmin;
 		float fmax;
+
 		string _namev = _name;
 
+		// First column label #01..
 		ImGui::Text(n.c_str());
+
 		ImGui::SameLine();
 
 		if (id == 0)//x
@@ -1449,12 +1459,15 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 			_namev += " W";
 		}
 
+		//-
+
 		// Power
 		float speed = (fmax - fmin) / 100.f;
 
 		//-
 
 		// 0. Random Button
+
 		tag = n + _namev + "random" + ofToString(id);
 		ImGui::PushID(tag.c_str());
 		if (ImGui::Button("RND"))
@@ -1468,6 +1481,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 		//-
 
 		// 1. Value
+
 		tag = _namev + "value" + ofToString(id);
 		ImGui::PushID(tag.c_str());
 		ImGui::PushItemWidth(WIDGET_R_DRAG);
@@ -1516,7 +1530,9 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 				else if (dim == 4) p4.set(glm::vec4(fmin, p4.get().y, p4.get().z, p4.get().w));
 			}
 			ImGui::PopID();
+			
 			ImGui::SameLine(0, 1);
+
 			tag = n + _namev + "getMAX" + ofToString(id);
 			ImGui::PushID(tag.c_str());
 			if (ImGui::Button("GETMAX"))
@@ -1538,6 +1554,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 		{
 			ImGui::AlignTextToFramePadding();
 			tag = n + _namev + "setMIN" + ofToString(id);
+
 			ImGui::PushID(tag.c_str());
 			if (ImGui::Button("SETMIN"))
 			{
@@ -1546,9 +1563,11 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 				else if (dim == 4) pv4min.set(glm::vec4(f, p4.get().y, p4.get().z, p4.get().w));
 			}
 			ImGui::PopID();
+
 			ImGui::SameLine(0, 1);
 
 			tag = n + _namev + "setMAX" + ofToString(id);
+			
 			ImGui::PushID(tag.c_str());
 			if (ImGui::Button("SETMAX"))
 			{
@@ -1571,23 +1590,59 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 
 		// 3. Range vanilla
 
-		tag = n + _namev + "dragMin" + ofToString(id);
+		tag = "##" + n + _namev + "dragMin" + ofToString(id);
 		ImGui::PushID(tag.c_str());
 		ImGui::PushItemWidth(WIDGET_R_DRAG * 2);
 
 		if (ImGui::DragFloatRange2("", &fmin, &fmax, speed, fmin, fmax, "%.3f", "%.3f"))
 		{
-			if (dim == 2) {
-				pv2min.set(glm::vec2(fmin, p2.get().y));
-				pv2max.set(glm::vec2(fmax, p2.get().y));
+			if (id == 0)//x
+			{
+				if (dim == 2) {
+					pv2min.set(glm::vec2(fmin, p2.get().y));
+					pv2max.set(glm::vec2(fmax, p2.get().y));
+				}
+				else if (dim == 3) {
+					pv3min.set(glm::vec3(fmin, p3.get().y, p3.get().z));
+					pv3max.set(glm::vec3(fmax, p3.get().y, p3.get().z));
+				}
+				else if (dim == 4) {
+					pv4min.set(glm::vec4(fmin, p4.get().y, p4.get().z, p4.get().w));
+					pv4max.set(glm::vec4(fmax, p4.get().y, p4.get().z, p4.get().w));
+				}
 			}
-			else if (dim == 3) {
-				pv3min.set(glm::vec3(fmin, p3.get().y, p3.get().z));
-				pv3max.set(glm::vec3(fmax, p3.get().y, p3.get().z));
+			else if (id == 1)//y
+			{
+				if (dim == 2) {
+					pv2min.set(glm::vec2(p2.get().x, fmin));
+					pv2max.set(glm::vec2(p2.get().x, fmax));
+				}
+				else if (dim == 3) {
+					pv3min.set(glm::vec3(p3.get().x, fmin, p3.get().z));
+					pv3max.set(glm::vec3(p3.get().x, fmax, p3.get().z));
+				}
+				else if (dim == 4) {
+					pv4min.set(glm::vec4(p4.get().x, fmin, p4.get().z, p4.get().w));
+					pv4max.set(glm::vec4(p4.get().x, fmax, p4.get().z, p4.get().w));
+				}
 			}
-			else if (dim == 4) {
-				pv4min.set(glm::vec4(fmin, p4.get().y, p4.get().z, p4.get().w));
-				pv4max.set(glm::vec4(fmax, p4.get().y, p4.get().z, p4.get().w));
+			else if (id == 2)//z
+			{
+				if (dim == 3) {
+					pv3min.set(glm::vec3(p3.get().x, p3.get().y, fmin));
+					pv3max.set(glm::vec3(p3.get().x, p3.get().y, fmax));
+				}
+				else if (dim == 4) {
+					pv4min.set(glm::vec4(p4.get().x, p4.get().y, fmin, p4.get().w));
+					pv4max.set(glm::vec4(p4.get().x, p4.get().y, fmax, p4.get().w));
+				}
+			}
+			else if (id == 3)//w
+			{
+				if (dim == 4) {
+					pv4min.set(glm::vec4(p4.get().x, p4.get().y, p4.get().z, fmin));
+					pv4max.set(glm::vec4(p4.get().x, p4.get().y, p4.get().z, fmax));
+				}
 			}
 		}
 
@@ -1605,19 +1660,20 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 
 			float power = 1;
 
-			if (id == 0) tag = n + _namev + "dragMax" + "X";
-			else if (id == 1) tag = n + _namev + "dragMax" + "Y";
-			else if (id == 2) tag = n + _namev + "dragMax" + "Z";
-			else if (id == 3) tag = n + _namev + "dragMax" + "W";
+			if (id == 0) tag = "##" + n + _namev + "dragMax" + "X";
+			else if (id == 1) tag = "##" + n + _namev + "dragMax" + "Y";
+			else if (id == 2) tag = "##" + n + _namev + "dragMax" + "Z";
+			else if (id == 3) tag = "##" + n + _namev + "dragMax" + "W";
 
 			ImGui::PushID(tag.c_str());
 			ImGui::PushItemWidth(WIDGET_R_SLIDER);
 
 			std::string ss = "%.3f" + spcl + "%.3f";
-			ofParameter<float> pfmin;
-			ofParameter<float> pfmax;
 
 			if (id == 0) {//x
+				ofParameter<float> pfmin;
+				ofParameter<float> pfmax;
+
 				if (dim == 2) {
 					pfmin.set("min", pv2min.get().x, pv2min.getMin().x, pv2min.getMax().x);
 					pfmax.set("max", pv2max.get().x, pv2max.getMin().x, pv2max.getMax().x);
@@ -1630,6 +1686,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 					pfmin.set("min", pv4min.get().x, pv4min.getMin().x, pv4min.getMax().x);
 					pfmax.set("max", pv4max.get().x, pv4max.getMin().x, pv4max.getMax().x);
 				}
+				else { continue; };
 
 				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
 				{
@@ -1648,6 +1705,8 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 				}
 			}
 			else if (id == 1) {//y
+				ofParameter<float> pfmin;
+				ofParameter<float> pfmax;
 
 				if (dim == 2) {
 					pfmin.set("min", pv2min.get().y, pv2min.getMin().y, pv2min.getMax().y);
@@ -1661,6 +1720,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 					pfmin.set("min", pv4min.get().y, pv4min.getMin().y, pv4min.getMax().y);
 					pfmax.set("max", pv4max.get().y, pv4max.getMin().y, pv4max.getMax().y);
 				}
+				else { continue; };
 
 				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
 				{
@@ -1679,6 +1739,8 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 				}
 			}
 			else if (id == 2) {//z
+				ofParameter<float> pfmin;
+				ofParameter<float> pfmax;
 
 				if (dim == 3) {
 					pfmin.set("min", pv3min.get().z, pv3min.getMin().z, pv3min.getMax().z);
@@ -1688,6 +1750,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 					pfmin.set("min", pv4min.get().z, pv4min.getMin().z, pv4min.getMax().z);
 					pfmax.set("max", pv4max.get().z, pv4max.getMin().z, pv4max.getMax().z);
 				}
+				else { continue; };
 
 				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
 				{
@@ -1702,11 +1765,14 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 				}
 			}
 			else if (id == 3) {//w
+				ofParameter<float> pfmin;
+				ofParameter<float> pfmax;
 
 				if (dim == 4) {
 					pfmin.set("min", pv4min.get().w, pv4min.getMin().w, pv4min.getMax().w);
 					pfmax.set("max", pv4max.get().w, pv4max.getMin().w, pv4max.getMax().w);
 				}
+				else { continue; };
 
 				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
 				{
@@ -2171,4 +2237,4 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 #endif
 
 	//----
-	}
+}
