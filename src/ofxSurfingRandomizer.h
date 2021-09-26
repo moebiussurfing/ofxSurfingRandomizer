@@ -8,6 +8,7 @@
 TODO:
 
 + add multidim vec and colors
++ add resets for vec
 + add anothe mode. center + % spread variation
 + tune range slider on ImGui
 	drag from center
@@ -42,6 +43,8 @@ class ofxSurfingRandomizer
 	enum ResetPramsType
 	{
 	RESET_PARAM_MIN = 0,
+	RESET_PARAM_FULL_CENTER,
+	RESET_PARAM_RANGE_CENTER,
 	RESET_PARAM_MAX,
 	RESET_RANGE_MIN,
 	RESET_RANGE_MAX,
@@ -104,7 +107,13 @@ private:
 	void drawImGui_Main();
 	void drawImGui_Params();
 	void drawImGui_RangeEditor();
+	void drawImGui_RangeEditorResets();
+	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
 	void drawImGui_Index();
+
+	const int WIDGET_R_DRAG = 60;
+	const int WIDGET_R_SLIDER = 200;
+	std::string spcl = "    ";//space between min-max range slider label
 
 //public:
 	void drawImGui_Widgets();

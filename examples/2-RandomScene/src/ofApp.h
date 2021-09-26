@@ -47,6 +47,7 @@ public:
 	ofParameter<float> rotation;
 	ofParameter<int> size;
 	ofParameter<glm::vec2> position;
+	ofParameter<glm::vec3> rotator;
 
 	ofxSurfingRandomizer randomizer;
 

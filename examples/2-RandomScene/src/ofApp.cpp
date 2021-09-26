@@ -13,10 +13,16 @@ void ofApp::setup()
 	params.add(size.set("size", (int)ofGetHeight() / 2, 10, (int)ofGetHeight() / 4));
 	params.add(round.set("round", 0.5, 0, 1));
 	params.add(rotation.set("rotation", 180, 0, 360));
+
 	params.add(position.set("position",
 		glm::vec2(0.5*ofGetWidth(), 0.5*ofGetHeight()),
 		glm::vec2(0.2*ofGetWidth(), 0.2*ofGetHeight()),
 		glm::vec2(0.8*ofGetWidth(), 0.8*ofGetHeight())));
+
+	params.add(rotator.set("rotator",
+		glm::vec3(0, 0, 0),
+		glm::vec3(-180, -180, -180),
+		glm::vec3(180, 180, 180)));
 
 	//--
 
@@ -86,7 +92,7 @@ void ofApp::drawScene()
 	ofPushMatrix();
 	{
 		ofTranslate(position.get());
-		
+
 		// alpha
 		float _a = ofMap(alpha, alpha.getMin(), alpha.getMax(), 0.1, 1);
 		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
@@ -204,6 +210,6 @@ void ofApp::drawShape(int type, int x, int y, int size)
 
 	default:
 		break;
-	}
+}
 #endif
 }

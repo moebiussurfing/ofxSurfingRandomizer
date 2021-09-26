@@ -92,6 +92,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 	bool bOpen;
 	ImGuiColorEditFlags _flagc;
+	ImGuiColorEditFlags _flagw;
 
 	// widgets sizes
 	float _w100;
@@ -117,18 +118,13 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 			//ofxImGuiSurfing::AddGroup(params_EditorGroups, flags);
 
 			bool bOpen = true;
-			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+			_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 			_flagw |= ImGuiTreeNodeFlags_Framed;
 
 			// Sliders props
 
-			const int _ww1 = 60;
-			const int _ww2 = 200;
-
 			ImGuiSliderFlags sflag = ImGuiSliderFlags_None;
-			//sflag |= ImGuiSliderFlags_ReadOnly;
-
-			std::string spcl = "    ";//space between min-max range slider label
+			//flagSld |= ImGuiSliderFlags_ReadOnly;
 
 			//--
 
@@ -162,7 +158,10 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 					bool isFloat = type == typeid(ofParameter<float>).name();
 					bool isInt = type == typeid(ofParameter<int>).name();
 					bool isBool = type == typeid(ofParameter<bool>).name();
+
 					bool isVec2 = type == typeid(ofParameter<glm::vec2>).name();
+					bool isVec3 = type == typeid(ofParameter<glm::vec3>).name();
+					bool isVec4 = type == typeid(ofParameter<glm::vec4>).name();
 
 					//-
 
@@ -190,137 +189,6 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 					//-
 
-					else if (isFloat)
-					{
-						ImGui::Text(n.c_str());
-						ImGui::SameLine();
-
-						auto &_p0 = g.getFloat(_name);
-						auto &pmin = g.getFloat("Min");
-						auto &pmax = g.getFloat("Max");
-						float speed = (pmax - pmin) / 100.f;
-
-						// 0. Button random
-						tag = n + "random";
-						ImGui::PushID(tag.c_str());
-						//required to allow same name in all buttons
-						if (ImGui::Button("RND"))
-						{
-							doRandomize(i, true);
-						}
-						ImGui::PopID();
-						ImGui::SameLine();
-
-						// 1. Value
-						tag = n + "value";
-						ImGui::PushID(tag.c_str());
-						ImGui::PushItemWidth(_ww1);
-						ImGui::DragFloat("", (float*)&_p0.get(), speed, pmin.get(), pmax.get(), "%.3f", sflag);
-						ImGui::PopItemWidth();
-						ImGui::PopID();
-						ImGui::SameLine();
-
-						//ImGui::PushItemWidth(_ww2);
-						//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-						//ofxImGuiSurfing::AddParameter(_p0);
-						//ImGui::PopItemWidth();
-
-						//-
-
-						// Get from min max
-
-						if (!bMinimal)
-						{
-							ImGui::AlignTextToFramePadding();
-							//ImGui::Text("GET");
-							//ImGui::SameLine();
-							// 0. MIN-MAX
-							tag = n + "getMIN";
-							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GETMIN"))
-							{
-								_p0 = pmin;
-							}
-							ImGui::PopID();
-							ImGui::SameLine(0, 1);
-							tag = n + "getMAX";
-							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("GETMAX"))
-							{
-								_p0 = pmax;
-							}
-							ImGui::PopID();
-						}
-
-						ImGui::SameLine();
-
-						//-
-
-						// Set to min max
-
-						if (!bMinimal)
-						{
-							ImGui::AlignTextToFramePadding();
-							//ImGui::Text("SET");
-							//ImGui::SameLine();
-							// 0. MIN-MAX
-							tag = n + "setMIN";
-							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("SETMIN"))
-							{
-								pmin = _p0;
-							}
-							ImGui::PopID();
-							ImGui::SameLine(0, 1);
-
-							tag = n + "setMAX";
-							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("SETMAX"))
-							{
-								pmax = _p0;
-							}
-							ImGui::PopID();
-						}
-
-						if (bMinimal) {
-							ImGui::SameLine();
-							ImGui::Text("RANGE");
-						}
-						ImGui::SameLine();
-
-						// 2. Range vanilla
-						tag = n + "dragMin";
-						ImGui::PushID(tag.c_str());
-						ImGui::PushItemWidth(_ww1 * 2);
-						ImGui::DragFloatRange2(""/*_name.c_str()*/, (float*)&pmin.get(), (float*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.3f", "%.3f");
-						ImGui::PopItemWidth();
-						ImGui::PopID();
-
-						if (!bMinimal) {
-							ImGui::SameLine();
-
-							// widget
-							float power = 1;
-							tag = n + "dragMax";
-							ImGui::PushID(tag.c_str());
-							ImGui::PushItemWidth(_ww2);
-							std::string ss = "%.3f" + spcl + "%.3f";
-							ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
-							//ofxImGuiSurfing::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
-							ImGui::PopItemWidth();
-							ImGui::PopID();
-						}
-
-						//-
-
-						//ImGui::PushItemWidth(_ww2);
-						//ofxImGuiSurfing::AddParameter(_p0);
-						//ImGui::PopItemWidth();
-						//ImGui::Columns(1);
-					}
-
-					//-
-
 					else if (isInt)
 					{
 						ImGui::Text(n.c_str());
@@ -344,13 +212,13 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 						// 1. Value
 						tag = n + "value";
 						ImGui::PushID(tag.c_str());
-						ImGui::PushItemWidth(_ww1);
+						ImGui::PushItemWidth(WIDGET_R_DRAG);
 						ImGui::DragInt("", (int*)&_p0.get(), speed, pmin.get(), pmax.get(), "%.0f", sflag);
 						ImGui::PopItemWidth();
 						ImGui::PopID();
 						ImGui::SameLine();
 
-						//ImGui::PushItemWidth(_ww2);
+						//ImGui::PushItemWidth(WIDGET_R_SLIDER);
 						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 						//ImGui::SameLine();
@@ -423,20 +291,19 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 						tag = n + "dragMin";
 						ImGui::NextColumn();
 						ImGui::PushID(tag.c_str());
-						ImGui::PushItemWidth(_ww1 * 2);
+						ImGui::PushItemWidth(WIDGET_R_DRAG * 2);
 						ImGui::DragIntRange2(""/*_name.c_str()*/, (int*)&pmin.get(), (int*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.0f", "%.0f");
 						ImGui::PopItemWidth();
 						ImGui::PopID();
 
 						if (!bMinimal) {
 							ImGui::SameLine();
-							//ImGui::SameLine(0, 0);
 
-							//widget
+							// 3. Range Surfing widget
 							float power = 1;
 							tag = n + "dragMax";
 							ImGui::PushID(tag.c_str());
-							ImGui::PushItemWidth(_ww2);
+							ImGui::PushItemWidth(WIDGET_R_SLIDER);
 							std::string ss = "%.0f" + spcl + "%.0f";
 							ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
 							//ofxImGuiSurfing::AddRangeParam("%.0f   %.0f", pmin, pmax, ss.c_str(), power);
@@ -446,7 +313,138 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 						//-
 
-						//ImGui::PushItemWidth(_ww2);
+						//ImGui::PushItemWidth(WIDGET_R_SLIDER);
+						//ofxImGuiSurfing::AddParameter(_p0);
+						//ImGui::PopItemWidth();
+						//ImGui::Columns(1);
+					}
+
+					//-
+
+					else if (isFloat)
+					{
+						ImGui::Text(n.c_str());
+						ImGui::SameLine();
+
+						auto &_p0 = g.getFloat(_name);
+						auto &pmin = g.getFloat("Min");
+						auto &pmax = g.getFloat("Max");
+						float speed = (pmax - pmin) / 100.f;
+
+						// 0. Button random
+						tag = n + "random";
+						ImGui::PushID(tag.c_str());
+						//required to allow same name in all buttons
+						if (ImGui::Button("RND"))
+						{
+							doRandomize(i, true);
+						}
+						ImGui::PopID();
+						ImGui::SameLine();
+
+						// 1. Value
+						tag = n + "value";
+						ImGui::PushID(tag.c_str());
+						ImGui::PushItemWidth(WIDGET_R_DRAG);
+						ImGui::DragFloat("", (float*)&_p0.get(), speed, pmin.get(), pmax.get(), "%.3f", sflag);
+						ImGui::PopItemWidth();
+						ImGui::PopID();
+						ImGui::SameLine();
+
+						//ImGui::PushItemWidth(WIDGET_R_SLIDER);
+						//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+						//ofxImGuiSurfing::AddParameter(_p0);
+						//ImGui::PopItemWidth();
+
+						//-
+
+						// Get from min max
+
+						if (!bMinimal)
+						{
+							ImGui::AlignTextToFramePadding();
+							//ImGui::Text("GET");
+							//ImGui::SameLine();
+							// 0. MIN-MAX
+							tag = n + "getMIN";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("GETMIN"))
+							{
+								_p0 = pmin;
+							}
+							ImGui::PopID();
+							ImGui::SameLine(0, 1);
+							tag = n + "getMAX";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("GETMAX"))
+							{
+								_p0 = pmax;
+							}
+							ImGui::PopID();
+						}
+
+						ImGui::SameLine();
+
+						//-
+
+						// Set to min max
+
+						if (!bMinimal)
+						{
+							ImGui::AlignTextToFramePadding();
+							//ImGui::Text("SET");
+							//ImGui::SameLine();
+							// 0. MIN-MAX
+							tag = n + "setMIN";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("SETMIN"))
+							{
+								pmin = _p0;
+							}
+							ImGui::PopID();
+							ImGui::SameLine(0, 1);
+
+							tag = n + "setMAX";
+							ImGui::PushID(tag.c_str());
+							if (ImGui::Button("SETMAX"))
+							{
+								pmax = _p0;
+							}
+							ImGui::PopID();
+						}
+
+						if (bMinimal) {
+							ImGui::SameLine();
+							ImGui::Text("RANGE");
+						}
+						ImGui::SameLine();
+
+						// 2. Range vanilla
+						tag = n + "dragMin";
+						ImGui::PushID(tag.c_str());
+						ImGui::PushItemWidth(WIDGET_R_DRAG * 2);
+						ImGui::DragFloatRange2(""/*_name.c_str()*/, (float*)&pmin.get(), (float*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.3f", "%.3f");
+						ImGui::PopItemWidth();
+						ImGui::PopID();
+
+						if (!bMinimal) {
+							ImGui::SameLine();
+
+							// 3. Range Surfing widget
+							float power = 1;
+							tag = n + "dragMax";
+							ImGui::PushID(tag.c_str());
+							ImGui::PushItemWidth(WIDGET_R_SLIDER);
+							std::string ss = "%.3f" + spcl + "%.3f";
+							ofxImGuiSurfing::AddRangeParam(_name, pmin, pmax, ss.c_str(), power);
+							//ofxImGuiSurfing::AddRangeParam("%.3f   %.3f", pmin, pmax, ss.c_str(), power);
+							ImGui::PopItemWidth();
+							ImGui::PopID();
+						}
+
+						//-
+
+						//ImGui::PushItemWidth(WIDGET_R_SLIDER);
 						//ofxImGuiSurfing::AddParameter(_p0);
 						//ImGui::PopItemWidth();
 						//ImGui::Columns(1);
@@ -456,183 +454,17 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 					else if (isVec2)
 					{
-						const int dim = 2;
-						auto &p2 = g.getVec2f(_name);
-						auto &pv2min = g.getVec2f("Min");
-						auto &pv2max = g.getVec2f("Max");
+						drawImGui_RangeEditorVecRow(i, 2);
+					}
 
-						for (int i = 0; i < dim; i++)
-						{
-							float f;
-							float fmin;
-							float fmax;
-							string _namev = _name;
+					else if (isVec3)
+					{
+						drawImGui_RangeEditorVecRow(i, 3);
+					}
 
-							ImGui::Text(n.c_str());
-							ImGui::SameLine();
-
-							if (i == 0)
-							{
-								f = p2.get().x;
-								fmin = pv2min.get().x;
-								fmax = pv2max.get().x;
-								_namev += "X";
-							}
-							if (i == 1)
-							{
-								f = p2.get().y;
-								fmin = pv2min.get().y;
-								fmax = pv2max.get().y;
-								_namev += "Y";
-							}
-
-							float speed = (fmax - fmin) / 100.f;
-
-							// 0. Random Button
-							tag = n + "random";
-							ImGui::PushID(tag.c_str());
-							if (ImGui::Button("RND"))
-							{
-								doRandomize(i, true);
-							}
-							ImGui::PopID();
-
-							ImGui::SameLine();
-
-							// 1. Value
-							tag = n + "value";
-							ImGui::PushID(tag.c_str());
-							ImGui::PushItemWidth(_ww1);
-							if (ImGui::DragFloat("", &f, speed, fmin, fmax, "%.3f", sflag))
-							{
-								p2.set(glm::vec2(f, p2.get().y));
-							}
-							ImGui::PopItemWidth();
-							ImGui::PopID();
-
-							ImGui::SameLine();
-
-							//-
-
-							// Get from min max
-
-							if (!bMinimal)
-							{
-								ImGui::AlignTextToFramePadding();
-								tag = n + "getMIN";
-								ImGui::PushID(tag.c_str());
-								if (ImGui::Button("GETMIN"))
-								{
-									p2.set(glm::vec2(fmin, p2.get().y));
-								}
-								ImGui::PopID();
-								ImGui::SameLine(0, 1);
-								tag = n + "getMAX";
-								ImGui::PushID(tag.c_str());
-								if (ImGui::Button("GETMAX"))
-								{
-									p2.set(glm::vec2(fmax, p2.get().y));
-								}
-								ImGui::PopID();
-							}
-
-							ImGui::SameLine();
-
-							//-
-
-							// Set to min max
-
-							if (!bMinimal)
-							{
-								ImGui::AlignTextToFramePadding();
-								tag = n + "setMIN";
-								ImGui::PushID(tag.c_str());
-								if (ImGui::Button("SETMIN"))
-								{
-									pv2min.set(glm::vec2(f, p2.get().y));
-								}
-								ImGui::PopID();
-								ImGui::SameLine(0, 1);
-
-								tag = n + "setMAX";
-								ImGui::PushID(tag.c_str());
-								if (ImGui::Button("SETMAX"))
-								{
-									pv2max.set(glm::vec2(f, p2.get().y));
-								}
-								ImGui::PopID();
-							}
-
-							if (bMinimal)
-							{
-								ImGui::SameLine();
-								ImGui::Text("RANGE");
-							}
-
-							ImGui::SameLine();
-
-							//-
-
-							// 2. Range vanilla
-
-							tag = n + "dragMin";
-							ImGui::PushID(tag.c_str());
-							ImGui::PushItemWidth(_ww1 * 2);
-
-							//if (ImGui::DragFloatRange2("", (float*)&pmin.get(), (float*)&pmax.get(), speed, pmin.getMin(), pmin.getMax(), "%.3f", "%.3f"))
-							if (ImGui::DragFloatRange2("", &fmin, &fmax, speed, fmin, fmax, "%.3f", "%.3f"))
-							{
-								pv2min.set(glm::vec2(fmin, p2.get().y));
-								pv2max.set(glm::vec2(fmax, p2.get().y));
-							}
-
-							ImGui::PopItemWidth();
-
-							ImGui::PopID();
-
-							//-
-
-							// 3. Range
-
-							if (!bMinimal)
-							{
-								ImGui::SameLine();
-
-								float power = 1;
-
-								if (i == 0) tag = n + "dragMax" + "X";
-								if (i == 1) tag = n + "dragMax" + "Y";
-
-								ImGui::PushID(tag.c_str());
-								ImGui::PushItemWidth(_ww2);
-
-								std::string ss = "%.3f" + spcl + "%.3f";
-								ofParameter<float> pfmin;
-								ofParameter<float> pfmax;
-
-								if (i == 0) {
-									pfmin.set("min", pv2min.get().x, pv2min.getMin().x, pv2min.getMax().x);
-									pfmax.set("max", pv2max.get().x, pv2max.getMin().x, pv2max.getMax().x);
-									if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
-									{
-										pv2min.set(glm::vec2(pfmin, pv2min.get().y));
-										pv2max.set(glm::vec2(pfmax, pv2max.get().y));
-									}
-								}
-								if (i == 1) {
-									pfmin.set("min", pv2min.get().y, pv2min.getMin().y, pv2min.getMax().y);
-									pfmax.set("max", pv2max.get().y, pv2max.getMin().y, pv2max.getMax().y);
-									if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
-									{
-										pv2min.set(glm::vec2(pv2min.get().x, pfmin));
-										pv2max.set(glm::vec2(pv2max.get().x, pfmax));
-									}
-								}
-
-								ImGui::PopItemWidth();
-								ImGui::PopID();
-							}
-						}
+					else if (isVec4)
+					{
+						drawImGui_RangeEditorVecRow(i, 4);
 					}
 				}
 
@@ -645,50 +477,82 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 			// Resets
 
-			if (!bMinimal) {
-				bOpen = false;
-				_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-				_flagw |= ImGuiTreeNodeFlags_Framed;
-
-				if (ImGui::TreeNodeEx("RESETS", _flagw))
-				{
-					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-
-					if (ImGui::Button("PARAMS TO PARAM MIN", ImVec2(_w50, _h)))
-					{
-						doResetParamsFull(RESET_PARAM_MIN);
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("PARAMS TO PARAM MAX", ImVec2(_w50, _h)))
-					{
-						doResetParamsFull(RESET_PARAM_MAX);
-					}
-
-					if (ImGui::Button("PARAMS TO RANGE MIN", ImVec2(_w50, _h)))
-					{
-						doResetParamsFull(RESET_RANGE_MIN);
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("PARAMS TO RANGE MAX", ImVec2(_w50, _h)))
-					{
-						doResetParamsFull(RESET_RANGE_MAX);
-					}
-
-					if (ImGui::Button("RANGES TO PARAMS LIMITS FULL", ImVec2(_w50, _h)))
-					{
-						doResetRangesFull();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("RANGES TO PARAMS LIMITS HALF", ImVec2(_w50, _h)))
-					{
-						doResetRangesHalf();
-					}
-
-					ImGui::TreePop();
-				}
+			if (!bMinimal)
+			{
+				drawImGui_RangeEditorResets();
 			}
 		}
 		guiManager.endWindow();
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGui_RangeEditorResets()
+{
+	bool bOpen;
+	ImGuiColorEditFlags _flagc;
+	ImGuiColorEditFlags _flagw;
+
+	float _w100;
+	float _w50;
+	float _w33;
+	float _w25;
+	float _h;
+
+	bOpen = false;
+	_flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+	_flagw |= ImGuiTreeNodeFlags_Framed;
+
+	if (ImGui::TreeNodeEx("RESETS", _flagw))
+	{
+		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+
+		if (ImGui::Button("PARAMS TO PARAMS MIN", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_PARAM_MIN);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("PARAMS TO PARAMS CENTER", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_PARAM_FULL_CENTER);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("PARAMS TO PARAMS MAX", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_PARAM_MAX);
+		}
+
+		//-
+
+		if (ImGui::Button("PARAMS TO RANGES MIN", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_RANGE_MIN);
+		}
+		//TODO:
+		ImGui::SameLine();
+		if (ImGui::Button("PARAMS TO RANGES CENTER", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_PARAM_RANGE_CENTER);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("PARAMS TO RANGES MAX", ImVec2(_w33, _h)))
+		{
+			doResetParamsFull(RESET_RANGE_MAX);
+		}
+
+		//-
+
+		if (ImGui::Button("RANGES TO PARAMS LIMITS FULL", ImVec2(_w50, _h)))
+		{
+			doResetRangesFull();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("RANGES TO PARAMS LIMITS HALF", ImVec2(_w50, _h)))
+		{
+			doResetRangesHalf();
+		}
+
+		ImGui::TreePop();
 	}
 }
 
@@ -1060,13 +924,17 @@ void ofxSurfingRandomizer::doEnableAll() {
 	doSetAll(true);
 }
 
+//--
+
+// Resets
+
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType type) {
+void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 	ofLogNotice(__FUNCTION__);
 
 	for (auto p : enablersForParams)
 	{
-		if (!p.get()) continue;//only reset this param if it's enabled
+		if (!p.get()) continue;//only reset this iterated param if it's enabled
 
 		//-
 
@@ -1074,9 +942,13 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType type) {
 		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
 		auto &e = g.get(name);//ofAbstractParameter
 
-		auto ptype = e.type();
-		bool isFloat = ptype == typeid(ofParameter<float>).name();
-		bool isInt = ptype == typeid(ofParameter<int>).name();
+		auto type = e.type();
+		bool isFloat = type == typeid(ofParameter<float>).name();
+		bool isInt = type == typeid(ofParameter<int>).name();
+
+		bool isVec2 = type == typeid(ofParameter<glm::vec2>).name();
+		bool isVec3 = type == typeid(ofParameter<glm::vec3>).name();
+		bool isVec4 = type == typeid(ofParameter<glm::vec4>).name();
 
 		if (isFloat)
 		{
@@ -1085,10 +957,12 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType type) {
 			ofParameter<float> p0 = e.cast<float>();
 
 			if (0) {}
-			else if (type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
-			else if (type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
-			else if (type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
-			else if (type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 		}
 
 		else if (isInt)
@@ -1098,10 +972,55 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType type) {
 			ofParameter<int> p0 = e.cast<int>();
 
 			if (0) {}
-			else if (type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
-			else if (type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
-			else if (type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
-			else if (type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+		}
+
+		else if (isVec2)
+		{
+			auto pmin = g.getVec2f("Min").get();
+			auto pmax = g.getVec2f("Max").get();
+			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
+
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+		}
+		else if (isVec3)
+		{
+			auto pmin = g.getVec3f("Min").get();
+			auto pmax = g.getVec3f("Max").get();
+			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
+
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+		}
+		else if (isVec4)
+		{
+			auto pmin = g.getVec4f("Min").get();
+			auto pmax = g.getVec4f("Max").get();
+			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
+
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 		}
 	}
 }
@@ -1124,6 +1043,10 @@ void ofxSurfingRandomizer::doResetRangesFull() {
 		bool isFloat = type == typeid(ofParameter<float>).name();
 		bool isInt = type == typeid(ofParameter<int>).name();
 
+		bool isVec2 = type == typeid(ofParameter<glm::vec2>).name();
+		bool isVec3 = type == typeid(ofParameter<glm::vec3>).name();
+		bool isVec4 = type == typeid(ofParameter<glm::vec4>).name();
+
 		if (isFloat)
 		{
 			ofParameter<float> p0 = e.cast<float>();
@@ -1143,6 +1066,40 @@ void ofxSurfingRandomizer::doResetRangesFull() {
 			auto pmax = p0.getMax();
 			auto _pmin = g.get("Min").cast<int>();
 			auto _pmax = g.get("Max").cast<int>();
+			//reset to abs min
+			_pmin.set(pmin);
+			_pmax.set(pmax);
+		}
+
+		else if (isVec2)
+		{
+			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec2>();
+			auto _pmax = g.get("Max").cast<glm::vec2>();
+			//reset to abs min
+			_pmin.set(pmin);
+			_pmax.set(pmax);
+		}
+		else if (isVec3)
+		{
+			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec3>();
+			auto _pmax = g.get("Max").cast<glm::vec3>();
+			//reset to abs min
+			_pmin.set(pmin);
+			_pmax.set(pmax);
+		}
+		else if (isVec4)
+		{
+			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec4>();
+			auto _pmax = g.get("Max").cast<glm::vec4>();
 			//reset to abs min
 			_pmin.set(pmin);
 			_pmax.set(pmax);
@@ -1170,6 +1127,10 @@ void ofxSurfingRandomizer::doResetRangesHalf() {
 		bool isFloat = type == typeid(ofParameter<float>).name();
 		bool isInt = type == typeid(ofParameter<int>).name();
 
+		bool isVec2 = type == typeid(ofParameter<glm::vec2>).name();
+		bool isVec3 = type == typeid(ofParameter<glm::vec3>).name();
+		bool isVec4 = type == typeid(ofParameter<glm::vec4>).name();
+
 		if (isFloat)
 		{
 			ofParameter<float> p0 = e.cast<float>();
@@ -1195,6 +1156,49 @@ void ofxSurfingRandomizer::doResetRangesHalf() {
 			_pmin.set(pmin + w);
 			_pmax.set(pmax - w);
 		}
+
+		else if (isVec2)
+		{
+			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec2>();
+			auto _pmax = g.get("Max").cast<glm::vec2>();
+			//reset to abs min a bit closed
+			float wx = (pmax.x - pmin.x) * _ratio;
+			float wy = (pmax.y - pmin.y) * _ratio;
+			_pmin.set(glm::vec2(pmin.x + wx, pmin.y + wy));
+			_pmax.set(glm::vec2(pmax.x - wx, pmax.y - wy));
+		}
+		else if (isVec3)
+		{
+			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec3>();
+			auto _pmax = g.get("Max").cast<glm::vec3>();
+			//reset to abs min a bit closed
+			float wx = (pmax.x - pmin.x) * _ratio;
+			float wy = (pmax.y - pmin.y) * _ratio;
+			float wz = (pmax.z - pmin.z) * _ratio;
+			_pmin.set(glm::vec3(pmin.x + wx, pmin.y + wy, pmin.z + wz));
+			_pmax.set(glm::vec3(pmax.x - wx, pmax.y - wy, pmax.z - wz));
+		}
+		else if (isVec4)
+		{
+			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
+			auto pmin = p0.getMin();
+			auto pmax = p0.getMax();
+			auto _pmin = g.get("Min").cast<glm::vec4>();
+			auto _pmax = g.get("Max").cast<glm::vec4>();
+			//reset to abs min a bit closed
+			float wx = (pmax.x - pmin.x) * _ratio;
+			float wy = (pmax.y - pmin.y) * _ratio;
+			float wz = (pmax.z - pmin.z) * _ratio;
+			float ww = (pmax.w - pmin.w) * _ratio;
+			_pmin.set(glm::vec4(pmin.x + wx, pmin.y + wy, pmin.z + wz, pmin.w + ww));
+			_pmax.set(glm::vec4(pmax.x - wx, pmax.y - wy, pmax.z - wz, pmax.w - ww));
+		}
 	}
 }
 
@@ -1206,7 +1210,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	for (int i = 0; i < enablersForParams.size(); i++)
 	{
 		doRandomize(i, false);
-	}
+}
 
 	//--
 
@@ -1244,12 +1248,22 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 		bool isInt = type == typeid(ofParameter<int>).name();
 		bool isBool = type == typeid(ofParameter<bool>).name();
 
-		if (isFloat)
+		bool isVec2 = type == typeid(ofParameter<glm::vec2>).name();
+		bool isVec3 = type == typeid(ofParameter<glm::vec3>).name();
+		bool isVec4 = type == typeid(ofParameter<glm::vec4>).name();
+
+		////TODO:
+		//bool isiVec2 = type == typeid(ofParameter<glm::ivec2>).name();
+		//bool isiVec3 = type == typeid(ofParameter<glm::ivec3>).name();
+		//bool isiVec4 = type == typeid(ofParameter<glm::ivec4>).name();
+
+		if (0) {}
+
+		else if (isBool)
 		{
-			auto pmin = g.getFloat("Min").get();
-			auto pmax = g.getFloat("Max").get();
-			ofParameter<float> p0 = e.cast<float>();
-			p0.set((float)ofRandom(pmin, pmax));//random
+			bool b = (ofRandom(0, 2) >= 1);
+			ofParameter<bool> p0 = e.cast<bool>();
+			p0.set(b);
 		}
 
 		else if (isInt)
@@ -1260,11 +1274,451 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 			p0.set((int)ofRandom(pmin, pmax + 1));//random
 		}
 
-		else if (isBool)
+		else if (isFloat)
 		{
-			bool b = (ofRandom(0, 2) >= 1);
-			ofParameter<bool> p0 = e.cast<bool>();
-			p0.set(b);
+			auto pmin = g.getFloat("Min").get();
+			auto pmax = g.getFloat("Max").get();
+			ofParameter<float> p0 = e.cast<float>();
+			p0.set((float)ofRandom(pmin, pmax));//random
+		}
+
+		else if (isVec2)
+		{
+			auto pvmin = g.getVec2f("Min").get();
+			auto pvmax = g.getVec2f("Max").get();
+			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			p0.set(glm::vec2(x, y));
+		}
+		else if (isVec3)
+		{
+			auto pvmin = g.getVec3f("Min").get();
+			auto pvmax = g.getVec3f("Max").get();
+			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			float z = (float)ofRandom(pvmin.z, pvmax.z);
+			p0.set(glm::vec3(x, y, z));
+		}
+		else if (isVec4)
+		{
+			auto pvmin = g.getVec4f("Min").get();
+			auto pvmax = g.getVec4f("Max").get();
+			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			float z = (float)ofRandom(pvmin.z, pvmax.z);
+			float w = (float)ofRandom(pvmin.w, pvmax.w);
+			p0.set(glm::vec4(x, y, z, w));
+		}
+
+		//else if (isiVec2)
+		//{
+		//	auto pvmin = g.getVec2f("Min").get();
+		//	auto pvmax = g.getVec2f("Max").get();
+		//	ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
+		//	float x = (float)ofRandom(pvmin.x, pvmax.x);
+		//	float y = (float)ofRandom(pvmin.y, pvmax.y);
+		//	p0.set(glm::vec2(x, y));
+		//}
+		//else if (isVec3)
+		//{
+		//	auto pvmin = g.getVec3f("Min").get();
+		//	auto pvmax = g.getVec3f("Max").get();
+		//	ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
+		//	float x = (float)ofRandom(pvmin.x, pvmax.x);
+		//	float y = (float)ofRandom(pvmin.y, pvmax.y);
+		//	float z = (float)ofRandom(pvmin.z, pvmax.z);
+		//	p0.set(glm::vec3(x, y, z));
+		//}
+		//else if (isVec4)
+		//{
+		//	auto pvmin = g.getVec4f("Min").get();
+		//	auto pvmax = g.getVec4f("Max").get();
+		//	ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
+		//	float x = (float)ofRandom(pvmin.x, pvmax.x);
+		//	float y = (float)ofRandom(pvmin.y, pvmax.y);
+		//	float z = (float)ofRandom(pvmin.z, pvmax.z);
+		//	float w = (float)ofRandom(pvmin.w, pvmax.w);
+		//	p0.set(glm::vec4(x, y, z, w));
+		//}
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimParamdim) {
+
+	std::string tag;//to push ids
+	int i = indexParam;
+	ImGuiSliderFlags flagSld = ImGuiSliderFlags_None;
+
+	std::string _name = enablersForParams[i].getName();
+	auto g = params_EditorGroups.getGroup(_name);
+
+	std::string n = "#" + ofToString(i < 10 ? "0" : "") + ofToString(i);//same for each coord (xyzw)
+
+	const int dim = dimParamdim;
+
+	// Ugly workaround
+
+	ofParameter<ofDefaultVec2> &p2 = g.getVec2f(_name);
+	ofParameter<ofDefaultVec2> &pv2min = g.getVec2f("Min");
+	ofParameter<ofDefaultVec2> &pv2max = g.getVec2f("Max");
+
+	ofParameter<ofDefaultVec3> &p3 = g.getVec3f(_name);
+	ofParameter<ofDefaultVec3> &pv3min = g.getVec3f("Min");
+	ofParameter<ofDefaultVec3> &pv3max = g.getVec3f("Max");
+
+	ofParameter<ofDefaultVec4> &p4 = g.getVec4f(_name);
+	ofParameter<ofDefaultVec4> &pv4min = g.getVec4f("Min");
+	ofParameter<ofDefaultVec4> &pv4max = g.getVec4f("Max");
+
+	for (int id = 0; id < dim; id++)// each coord (xyzw)
+	{
+		float f;
+		float fmin;
+		float fmax;
+		string _namev = _name;
+
+		ImGui::Text(n.c_str());
+		ImGui::SameLine();
+
+		if (id == 0)//x
+		{
+			if (dim == 2) {
+				f = p2.get().x;
+				fmin = pv2min.get().x;
+				fmax = pv2max.get().x;
+			}
+			else if (dim == 3) {
+				f = p3.get().x;
+				fmin = pv3min.get().x;
+				fmax = pv3max.get().x;
+			}
+			else if (dim == 4) {
+				f = p4.get().x;
+				fmin = pv4min.get().x;
+				fmax = pv4max.get().x;
+			}
+			_namev += " X";
+		}
+
+		else if (id == 1)//y
+		{
+			if (dim == 2) {
+				f = p2.get().y;
+				fmin = pv2min.get().y;
+				fmax = pv2max.get().y;
+			}
+			else if (dim == 3) {
+				f = p3.get().y;
+				fmin = pv3min.get().y;
+				fmax = pv3max.get().y;
+			}
+			else if (dim == 4) {
+				f = p4.get().y;
+				fmin = pv4min.get().y;
+				fmax = pv4max.get().y;
+			}
+			_namev += " Y";
+		}
+
+		else if (id == 2)//z
+		{
+			if (dim == 3) {
+				f = p3.get().z;
+				fmin = pv3min.get().z;
+				fmax = pv3max.get().z;
+			}
+			else if (dim == 4) {
+				f = p4.get().z;
+				fmin = pv4min.get().z;
+				fmax = pv4max.get().z;
+			}
+			_namev += " Z";
+		}
+
+		else if (id == 3)//w
+		{
+			if (dim == 4) {
+				f = p4.get().w;
+				fmin = pv4min.get().w;
+				fmax = pv4max.get().w;
+			}
+			_namev += " W";
+		}
+
+		// Power
+		float speed = (fmax - fmin) / 100.f;
+
+		//-
+
+		// 0. Random Button
+		tag = n + _namev + "random" + ofToString(id);
+		ImGui::PushID(tag.c_str());
+		if (ImGui::Button("RND"))
+		{
+			doRandomize(i, true);//TODO: we randomize all the coords (xyzw). we can pick one of them..
+		}
+		ImGui::PopID();
+
+		ImGui::SameLine();
+
+		//-
+
+		// 1. Value
+		tag = _namev + "value" + ofToString(id);
+		ImGui::PushID(tag.c_str());
+		ImGui::PushItemWidth(WIDGET_R_DRAG);
+		if (ImGui::DragFloat("", &f, speed, fmin, fmax, "%.3f", flagSld))
+		{
+			if (id == 0)//x
+			{
+				if (dim == 2) p2.set(glm::vec2(f, p2.get().y));
+				else if (dim == 3) p3.set(glm::vec3(f, p3.get().y, p3.get().z));
+				else if (dim == 4) p4.set(glm::vec4(f, p4.get().y, p4.get().z, p4.get().w));
+			}
+			else if (id == 1)//y
+			{
+				if (dim == 2) p2.set(glm::vec2(p2.get().x, f));
+				else if (dim == 3) p3.set(glm::vec3(p3.get().x, f, p3.get().z));
+				else if (dim == 4) p4.set(glm::vec4(p4.get().x, f, p4.get().z, p4.get().w));
+			}
+			else if (id == 2)//z
+			{
+				if (dim == 3) p3.set(glm::vec3(p3.get().x, p3.get().y, f));
+				else if (dim == 4) p4.set(glm::vec4(p4.get().x, p4.get().y, f, p4.get().w));
+			}
+			else if (id == 3)//w
+			{
+				if (dim == 4) p4.set(glm::vec4(p4.get().x, p4.get().y, p4.get().z, f));
+			}
+		}
+		ImGui::PopItemWidth();
+		ImGui::PopID();
+
+		ImGui::SameLine();
+
+		//-
+
+		// 1. Get from min max
+
+		if (!bMinimal)
+		{
+			ImGui::AlignTextToFramePadding();
+			tag = n + _namev + "getMIN" + ofToString(id);
+			ImGui::PushID(tag.c_str());
+			if (ImGui::Button("GETMIN"))
+			{
+				if (dim == 2) p2.set(glm::vec2(fmin, p2.get().y));
+				else if (dim == 3) p3.set(glm::vec3(fmin, p3.get().y, p3.get().z));
+				else if (dim == 4) p4.set(glm::vec4(fmin, p4.get().y, p4.get().z, p4.get().w));
+			}
+			ImGui::PopID();
+			ImGui::SameLine(0, 1);
+			tag = n + _namev + "getMAX" + ofToString(id);
+			ImGui::PushID(tag.c_str());
+			if (ImGui::Button("GETMAX"))
+			{
+				if (dim == 2) p2.set(glm::vec2(fmax, p2.get().y));
+				else if (dim == 3) p3.set(glm::vec3(fmax, p3.get().y, p3.get().z));
+				else if (dim == 4) p4.set(glm::vec4(fmax, p4.get().y, p4.get().z, p4.get().w));
+			}
+			ImGui::PopID();
+		}
+
+		ImGui::SameLine();
+
+		//-
+
+		// 2. Set to min max
+
+		if (!bMinimal)
+		{
+			ImGui::AlignTextToFramePadding();
+			tag = n + _namev + "setMIN" + ofToString(id);
+			ImGui::PushID(tag.c_str());
+			if (ImGui::Button("SETMIN"))
+			{
+				if (dim == 2) pv2min.set(glm::vec2(f, p2.get().y));
+				else if (dim == 3) pv3min.set(glm::vec3(f, p3.get().y, p3.get().z));
+				else if (dim == 4) pv4min.set(glm::vec4(f, p4.get().y, p4.get().z, p4.get().w));
+			}
+			ImGui::PopID();
+			ImGui::SameLine(0, 1);
+
+			tag = n + _namev + "setMAX" + ofToString(id);
+			ImGui::PushID(tag.c_str());
+			if (ImGui::Button("SETMAX"))
+			{
+				if (dim == 2) pv2max.set(glm::vec2(f, p2.get().y));
+				else if (dim == 3) pv2max.set(glm::vec3(f, p3.get().y, p3.get().z));
+				else if (dim == 4) pv2max.set(glm::vec4(f, p4.get().y, p4.get().z, p4.get().w));
+			}
+			ImGui::PopID();
+		}
+
+		if (bMinimal)
+		{
+			ImGui::SameLine();
+			ImGui::Text("RANGE");
+		}
+
+		ImGui::SameLine();
+
+		//-
+
+		// 3. Range vanilla
+
+		tag = n + _namev + "dragMin" + ofToString(id);
+		ImGui::PushID(tag.c_str());
+		ImGui::PushItemWidth(WIDGET_R_DRAG * 2);
+
+		if (ImGui::DragFloatRange2("", &fmin, &fmax, speed, fmin, fmax, "%.3f", "%.3f"))
+		{
+			if (dim == 2) {
+				pv2min.set(glm::vec2(fmin, p2.get().y));
+				pv2max.set(glm::vec2(fmax, p2.get().y));
+			}
+			else if (dim == 3) {
+				pv3min.set(glm::vec3(fmin, p3.get().y, p3.get().z));
+				pv3max.set(glm::vec3(fmax, p3.get().y, p3.get().z));
+			}
+			else if (dim == 4) {
+				pv4min.set(glm::vec4(fmin, p4.get().y, p4.get().z, p4.get().w));
+				pv4max.set(glm::vec4(fmax, p4.get().y, p4.get().z, p4.get().w));
+			}
+		}
+
+		ImGui::PopItemWidth();
+
+		ImGui::PopID();
+
+		//-
+
+		// 4. Range Surfing
+
+		if (!bMinimal)
+		{
+			ImGui::SameLine();
+
+			float power = 1;
+
+			if (id == 0) tag = n + _namev + "dragMax" + "X";
+			else if (id == 1) tag = n + _namev + "dragMax" + "Y";
+			else if (id == 2) tag = n + _namev + "dragMax" + "Z";
+			else if (id == 3) tag = n + _namev + "dragMax" + "W";
+
+			ImGui::PushID(tag.c_str());
+			ImGui::PushItemWidth(WIDGET_R_SLIDER);
+
+			std::string ss = "%.3f" + spcl + "%.3f";
+			ofParameter<float> pfmin;
+			ofParameter<float> pfmax;
+
+			if (id == 0) {//x
+				if (dim == 2) {
+					pfmin.set("min", pv2min.get().x, pv2min.getMin().x, pv2min.getMax().x);
+					pfmax.set("max", pv2max.get().x, pv2max.getMin().x, pv2max.getMax().x);
+				}
+				else if (dim == 3) {
+					pfmin.set("min", pv3min.get().x, pv3min.getMin().x, pv3min.getMax().x);
+					pfmax.set("max", pv3max.get().x, pv3max.getMin().x, pv3max.getMax().x);
+				}
+				else if (dim == 4) {
+					pfmin.set("min", pv4min.get().x, pv4min.getMin().x, pv4min.getMax().x);
+					pfmax.set("max", pv4max.get().x, pv4max.getMin().x, pv4max.getMax().x);
+				}
+
+				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
+				{
+					if (dim == 2) {
+						pv2min.set(glm::vec2(pfmin, pv2min.get().y));
+						pv2max.set(glm::vec2(pfmax, pv2max.get().y));
+					}
+					else if (dim == 3) {
+						pv3min.set(glm::vec3(pfmin, pv3min.get().y, pv3min.get().z));
+						pv3max.set(glm::vec3(pfmax, pv3max.get().y, pv3min.get().z));
+					}
+					else if (dim == 4) {
+						pv4min.set(glm::vec4(pfmin, pv4min.get().y, pv4min.get().z, pv4min.get().w));
+						pv4max.set(glm::vec4(pfmax, pv4max.get().y, pv4min.get().z, pv4min.get().w));
+					}
+				}
+			}
+			else if (id == 1) {//y
+
+				if (dim == 2) {
+					pfmin.set("min", pv2min.get().y, pv2min.getMin().y, pv2min.getMax().y);
+					pfmax.set("max", pv2max.get().y, pv2max.getMin().y, pv2max.getMax().y);
+				}
+				else if (dim == 3) {
+					pfmin.set("min", pv3min.get().y, pv3min.getMin().y, pv3min.getMax().y);
+					pfmax.set("max", pv3max.get().y, pv3max.getMin().y, pv3max.getMax().y);
+				}
+				else if (dim == 4) {
+					pfmin.set("min", pv4min.get().y, pv4min.getMin().y, pv4min.getMax().y);
+					pfmax.set("max", pv4max.get().y, pv4max.getMin().y, pv4max.getMax().y);
+				}
+
+				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
+				{
+					if (dim == 2) {
+						pv2min.set(glm::vec2(pv2min.get().x, pfmin));
+						pv2max.set(glm::vec2(pv2max.get().x, pfmax));
+					}
+					else if (dim == 3) {
+						pv3min.set(glm::vec3(pv3min.get().x, pfmin, pv3max.get().z));
+						pv3max.set(glm::vec3(pv3max.get().x, pfmax, pv3max.get().z));
+					}
+					else if (dim == 4) {
+						pv4min.set(glm::vec4(pv4min.get().x, pfmin, pv4max.get().z, pv4max.get().w));
+						pv4max.set(glm::vec4(pv4max.get().x, pfmax, pv4max.get().z, pv4max.get().w));
+					}
+				}
+			}
+			else if (id == 2) {//z
+
+				if (dim == 3) {
+					pfmin.set("min", pv3min.get().z, pv3min.getMin().z, pv3min.getMax().z);
+					pfmax.set("max", pv3max.get().z, pv3max.getMin().z, pv3max.getMax().z);
+				}
+				else if (dim == 4) {
+					pfmin.set("min", pv4min.get().z, pv4min.getMin().z, pv4min.getMax().z);
+					pfmax.set("max", pv4max.get().z, pv4max.getMin().z, pv4max.getMax().z);
+				}
+
+				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
+				{
+					if (dim == 3) {
+						pv3min.set(glm::vec3(pv3min.get().x, pv3max.get().y, pfmin));
+						pv3max.set(glm::vec3(pv3max.get().x, pv3max.get().y, pfmax));
+					}
+					else if (dim == 4) {
+						pv4min.set(glm::vec4(pv4min.get().x, pv4max.get().y, pfmin, pv4max.get().w));
+						pv4max.set(glm::vec4(pv4max.get().x, pv4max.get().y, pfmax, pv4max.get().w));
+					}
+				}
+			}
+			else if (id == 3) {//w
+
+				if (dim == 4) {
+					pfmin.set("min", pv4min.get().w, pv4min.getMin().w, pv4min.getMax().w);
+					pfmax.set("max", pv4max.get().w, pv4max.getMin().w, pv4max.getMax().w);
+				}
+
+				if (ofxImGuiSurfing::AddRangeParam(_namev, pfmin, pfmax, ss.c_str(), power))
+				{
+					if (dim == 4) {
+						pv4min.set(glm::vec4(pv4min.get().x, pv4max.get().y, pv4max.get().z, pfmin));
+						pv4max.set(glm::vec4(pv4max.get().x, pv4max.get().y, pv4max.get().z, pfmax));
+					}
+				}
+			}
+
+			ImGui::PopItemWidth();
+			ImGui::PopID();
 		}
 	}
 }
@@ -1365,8 +1819,12 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 		auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
 
 		auto parameterVec2 = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(p);
-		//bool AddParameter(ofParameter<glm::ivec3>& parameter);
-		//bool AddParameter(ofParameter<glm::ivec4>& parameter);
+		auto parameterVec3 = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(p);
+		auto parameterVec4 = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(p);
+
+		auto parameteriVec2 = std::dynamic_pointer_cast<ofParameter<glm::ivec2>>(p);
+		auto parameteriVec3 = std::dynamic_pointer_cast<ofParameter<glm::ivec3>>(p);
+		auto parameteriVec4 = std::dynamic_pointer_cast<ofParameter<glm::ivec4>>(p);
 
 		//auto type = p->type();
 		//bool isFloat = type == typeid(ofParameter<float>).name();
@@ -1424,6 +1882,37 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 		//-
 
+		// Int
+		else if (parameterInt)
+		{
+			std::string _name = parameterInt->getName();
+
+			int vtot = parameterInt->getMax() - parameterInt->getMin();
+			int vmin = parameterInt->getMin() + DEFAULT_MIN_PCT * vtot;
+			int vmax = parameterInt->getMin() + DEFAULT_MAX_PCT * vtot;
+
+			ofParameterGroup _g{ _name };
+			ofParameter<int> p0 = group.getInt(_name);
+			ofParameter<int> pmin{ "Min", vmin, parameterInt->getMin() , parameterInt->getMax() };
+			ofParameter<int> pmax{ "Max", vmax, parameterInt->getMin() , parameterInt->getMax() };
+
+			_g.add(p0);
+			_g.add(pmin);
+			_g.add(pmax);
+
+			params_EditorGroups.add(_g);
+
+			//-
+
+			ofParameter<bool> b0{ _name, false };
+			enablersForParams.push_back(b0);
+			params_EditorEnablers.add(b0);
+
+			continue;
+		}
+
+		//-
+
 		// Float
 		else if (parameterFloat)
 		{
@@ -1457,29 +1946,76 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 		//-
 
-		// Int
-		else if (parameterInt)
+		// Vec2
+		else if (parameterVec2)
 		{
-			std::string _name = parameterInt->getName();
+			auto vtot = parameterVec2->getMax() - parameterVec2->getMin();
+			auto vmin = parameterVec2->getMin() + DEFAULT_MAX_PCT * vtot;
+			auto vmax = parameterVec2->getMax() - (1 - DEFAULT_MAX_PCT) * vtot;
 
-			int vtot = parameterInt->getMax() - parameterInt->getMin();
-			int vmin = parameterInt->getMin() + DEFAULT_MIN_PCT * vtot;
-			int vmax = parameterInt->getMin() + DEFAULT_MAX_PCT * vtot;
-
+			std::string _name = parameterVec2->getName();
 			ofParameterGroup _g{ _name };
-			//ofParameter<bool> b{ "Enable " + _name, false };
-			ofParameter<int> p0 = group.getInt(_name);
-			ofParameter<int> pmin{ "Min", vmin, parameterInt->getMin() , parameterInt->getMax() };
-			ofParameter<int> pmax{ "Max", vmax, parameterInt->getMin() , parameterInt->getMax() };
+			ofParameter<glm::vec2> p0 = group.getVec2f(_name);
+			ofParameter<glm::vec2> pmin{ "Min", vmin, parameterVec2->getMin() , parameterVec2->getMax() };
+			ofParameter<glm::vec2> pmax{ "Max", vmax, parameterVec2->getMin() , parameterVec2->getMax() };
 
-			//_g.add(b);
 			_g.add(p0);
 			_g.add(pmin);
 			_g.add(pmax);
 
 			params_EditorGroups.add(_g);
 
-			//-
+			ofParameter<bool> b0{ _name, false };
+			enablersForParams.push_back(b0);
+			params_EditorEnablers.add(b0);
+
+			continue;
+		}
+
+		// Vec3
+		else if (parameterVec3)
+		{
+			auto vtot = parameterVec3->getMax() - parameterVec3->getMin();
+			auto vmin = parameterVec3->getMin() + DEFAULT_MAX_PCT * vtot;
+			auto vmax = parameterVec3->getMax() - (1 - DEFAULT_MAX_PCT) * vtot;
+
+			std::string _name = parameterVec3->getName();
+			ofParameterGroup _g{ _name };
+			ofParameter<glm::vec3> p0 = group.getVec3f(_name);
+			ofParameter<glm::vec3> pmin{ "Min", vmin, parameterVec3->getMin() , parameterVec3->getMax() };
+			ofParameter<glm::vec3> pmax{ "Max", vmax, parameterVec3->getMin() , parameterVec3->getMax() };
+
+			_g.add(p0);
+			_g.add(pmin);
+			_g.add(pmax);
+
+			params_EditorGroups.add(_g);
+
+			ofParameter<bool> b0{ _name, false };
+			enablersForParams.push_back(b0);
+			params_EditorEnablers.add(b0);
+
+			continue;
+		}
+
+		// Vec4
+		else if (parameterVec4)
+		{
+			auto vtot = parameterVec4->getMax() - parameterVec4->getMin();
+			auto vmin = parameterVec4->getMin() + DEFAULT_MAX_PCT * vtot;
+			auto vmax = parameterVec4->getMax() - (1 - DEFAULT_MAX_PCT) * vtot;
+
+			std::string _name = parameterVec4->getName();
+			ofParameterGroup _g{ _name };
+			ofParameter<glm::vec4> p0 = group.getVec4f(_name);
+			ofParameter<glm::vec4> pmin{ "Min", vmin, parameterVec4->getMin() , parameterVec4->getMax() };
+			ofParameter<glm::vec4> pmax{ "Max", vmax, parameterVec4->getMin() , parameterVec4->getMax() };
+
+			_g.add(p0);
+			_g.add(pmin);
+			_g.add(pmax);
+
+			params_EditorGroups.add(_g);
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
@@ -1490,30 +2026,26 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 		//-
 
-		// Vec2
-		else if (parameterVec2)
+		//TODO:
+		/*
+		// iVec2
+		else if (parameteriVec2)
 		{
-			std::string _name = parameterVec2->getName();
+			auto vtot = parameteriVec2->getMax() - parameteriVec2->getMin();
+			auto vmin = parameteriVec2->getMin();
+			auto vmax = parameteriVec2->getMax();
 
-			auto vtot = parameterVec2->getMax() - parameterVec2->getMin();
-			//auto vmin = parameterVec2->getMin();
-			auto vmin = parameterVec2->getMin() + DEFAULT_MAX_PCT * vtot;
-			auto vmax = parameterVec2->getMax();//?
-
+			std::string _name = parameteriVec2->getName();
 			ofParameterGroup _g{ _name };
-			//ofParameter<bool> b{ "Enable " + _name, false };
 			ofParameter<glm::vec2> p0 = group.getVec2f(_name);
-			ofParameter<glm::vec2> pmin{ "Min", vmin, parameterVec2->getMin() , parameterVec2->getMax() };
-			ofParameter<glm::vec2> pmax{ "Max", vmax, parameterVec2->getMin() , parameterVec2->getMax() };
+			ofParameter<glm::vec2> pmin{ "Min", vmin, parameteriVec2->getMin() , parameteriVec2->getMax() };
+			ofParameter<glm::vec2> pmax{ "Max", vmax, parameteriVec2->getMin() , parameteriVec2->getMax() };
 
-			//_g.add(b);
 			_g.add(p0);
 			_g.add(pmin);
 			_g.add(pmax);
 
 			params_EditorGroups.add(_g);
-
-			//-
 
 			ofParameter<bool> b0{ _name, false };
 			enablersForParams.push_back(b0);
@@ -1521,6 +2053,59 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			continue;
 		}
+
+		// iVec3
+		else if (parameteriVec3)
+		{
+			auto vtot = parameteriVec3->getMax() - parameteriVec3->getMin();
+			auto vmin = parameteriVec3->getMin();
+			auto vmax = parameteriVec3->getMax();
+
+			std::string _name = parameteriVec3->getName();
+			ofParameterGroup _g{ _name };
+			ofParameter<glm::vec3> p0 = group.getVec3f(_name);
+			ofParameter<glm::vec3> pmin{ "Min", vmin, parameteriVec3->getMin() , parameteriVec3->getMax() };
+			ofParameter<glm::vec3> pmax{ "Max", vmax, parameteriVec3->getMin() , parameteriVec3->getMax() };
+
+			_g.add(p0);
+			_g.add(pmin);
+			_g.add(pmax);
+
+			params_EditorGroups.add(_g);
+
+			ofParameter<bool> b0{ _name, false };
+			enablersForParams.push_back(b0);
+			params_EditorEnablers.add(b0);
+
+			continue;
+		}
+
+		// iVec4
+		else if (parameteriVec4)
+		{
+			auto vtot = parameteriVec4->getMax() - parameteriVec4->getMin();
+			auto vmin = parameteriVec4->getMin();
+			auto vmax = parameteriVec4->getMax();
+
+			std::string _name = parameteriVec4->getName();
+			ofParameterGroup _g{ _name };
+			ofParameter<glm::vec4> p0 = group.getVec4f(_name);
+			ofParameter<glm::vec4> pmin{ "Min", vmin, parameteriVec4->getMin() , parameteriVec4->getMax() };
+			ofParameter<glm::vec4> pmax{ "Max", vmax, parameteriVec4->getMin() , parameteriVec4->getMax() };
+
+			_g.add(p0);
+			_g.add(pmin);
+			_g.add(pmax);
+
+			params_EditorGroups.add(_g);
+
+			ofParameter<bool> b0{ _name, false };
+			enablersForParams.push_back(b0);
+			params_EditorEnablers.add(b0);
+
+			continue;
+		}
+		*/
 
 		//-
 
@@ -1536,7 +2121,6 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 	//	params_EditorEnablers.add(pb);
 	//}
 }
-
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
@@ -1587,4 +2171,4 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 #endif
 
 	//----
-}
+	}
