@@ -7,6 +7,7 @@
 
 TODO:
 
++ fix many errors
 + add multidim vec and colors
 + add resets for vec
 + add anothe mode. center + % spread variation
