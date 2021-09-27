@@ -454,19 +454,19 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 					else if (isVec2)
 					{
 						drawImGui_RangeEditorVecRow(i, 2);
-						i += 2;
+						//i += 2;
 					}
 
 					else if (isVec3)
 					{
 						drawImGui_RangeEditorVecRow(i, 3);
-						i += 3;
+						//i += 3;
 					}
 
 					else if (isVec4)
 					{
 						drawImGui_RangeEditorVecRow(i, 4);
-						i += 4;
+						//i += 4;
 					}
 				}
 
@@ -935,7 +935,7 @@ void ofxSurfingRandomizer::doEnableAll() {
 void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 	ofLogNotice(__FUNCTION__);
 
-	/*
+	
 	for (int i = 0; i < enablersForParams.size(); i++)
 		//for (auto p : enablersForParams)
 	{
@@ -992,34 +992,34 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 			auto pmax = g.getVec2f("Max").get();
 			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
 
-			//if (0) {}
-			//else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
-			//else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
-			//else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
-			//else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
-			//else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
-			//else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 
-			for (int dim = 0; dim < 2; dim++) {
-				if (dim == 0) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec2(p0.getMin().x, p0.get().y));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec2(p0.getMax().x - p0.getMin().x / 2, p0.get().y));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec2(pmax.x - pmin.x / 2, p0.get().y));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec2(p0.getMax().x, p0.get().y));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec2(pmin.x, p0.get().y));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec2(pmax.x, p0.get().y));//reset to range max
-				}
-				else if (dim == 1) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec2(p0.get().x, p0.getMin().y));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec2(p0.get().x,p0.getMax().y - p0.getMin().y / 2));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec2(p0.get().x,pmax.y - pmin.y / 2));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec2(p0.getMax().x, p0.get().y));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec2(p0.get().x, pmin.y));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec2(p0.get().x, pmax.y));//reset to range max
-				}
-			}
+			//for (int dim = 0; dim < 2; dim++) {
+			//	if (dim == 0) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec2(p0.getMin().x, p0.get().y));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec2(p0.getMax().x - p0.getMin().x / 2, p0.get().y));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec2(pmax.x - pmin.x / 2, p0.get().y));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec2(p0.getMax().x, p0.get().y));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec2(pmin.x, p0.get().y));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec2(pmax.x, p0.get().y));//reset to range max
+			//	}
+			//	else if (dim == 1) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec2(p0.get().x, p0.getMin().y));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec2(p0.get().x,p0.getMax().y - p0.getMin().y / 2));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec2(p0.get().x,pmax.y - pmin.y / 2));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec2(p0.getMax().x, p0.get().y));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec2(p0.get().x, pmin.y));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec2(p0.get().x, pmax.y));//reset to range max
+			//	}
+			//}
 		}
 		else if (isVec3)
 		{
@@ -1027,43 +1027,43 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 			auto pmax = g.getVec3f("Max").get();
 			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
 
-			//if (0) {}
-			//else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
-			//else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
-			//else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
-			//else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
-			//else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
-			//else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 
-			for (int dim = 0; dim < 3; dim++) {
-				if (dim == 0) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.getMin().x, p0.get().y, p0.get().z));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.getMax().x - p0.getMin().x / 2, p0.get().y, p0.get().z));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(pmax.x - pmin.x / 2, p0.get().y, p0.get().z));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.get().z));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(pmin.x, p0.get().y, p0.get().z));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(pmax.x, p0.get().y, p0.get().z));//reset to range max
-				}
-				else if (dim == 1) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.get().x, p0.getMin().y, p0.getMin().z));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.get().x, p0.getMax().y - p0.getMin().y / 2, p0.getMin().z));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(p0.get().x, pmax.y - pmin.y / 2, p0.getMin().z));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.getMin().z));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(p0.get().x, pmin.y, p0.getMin().z));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(p0.get().x, pmax.y, p0.getMin().z));//reset to range max
-				}
-				else if (dim == 2) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.get().x, p0.get().y, p0.getMin().z));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.get().x, p0.get().y, p0.getMax().z - p0.getMin().z / 2));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(p0.get().x, p0.get().y, pmax.z - pmin.z / 2));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.get().z));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(p0.get().x, p0.get().y, pmin.z));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(p0.get().x, p0.get().y, pmax.z));//reset to range max
-				}
-			}
+			//for (int dim = 0; dim < 3; dim++) {
+			//	if (dim == 0) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.getMin().x, p0.get().y, p0.get().z));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.getMax().x - p0.getMin().x / 2, p0.get().y, p0.get().z));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(pmax.x - pmin.x / 2, p0.get().y, p0.get().z));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.get().z));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(pmin.x, p0.get().y, p0.get().z));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(pmax.x, p0.get().y, p0.get().z));//reset to range max
+			//	}
+			//	else if (dim == 1) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.get().x, p0.getMin().y, p0.getMin().z));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.get().x, p0.getMax().y - p0.getMin().y / 2, p0.getMin().z));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(p0.get().x, pmax.y - pmin.y / 2, p0.getMin().z));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.getMin().z));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(p0.get().x, pmin.y, p0.getMin().z));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(p0.get().x, pmax.y, p0.getMin().z));//reset to range max
+			//	}
+			//	else if (dim == 2) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec3(p0.get().x, p0.get().y, p0.getMin().z));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec3(p0.get().x, p0.get().y, p0.getMax().z - p0.getMin().z / 2));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec3(p0.get().x, p0.get().y, pmax.z - pmin.z / 2));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec3(p0.getMax().x, p0.get().y, p0.get().z));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec3(p0.get().x, p0.get().y, pmin.z));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec3(p0.get().x, p0.get().y, pmax.z));//reset to range max
+			//	}
+			//}
 		}
 		else if (isVec4)
 		{
@@ -1071,55 +1071,55 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 			auto pmax = g.getVec4f("Max").get();
 			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
 
-			//if (0) {}
-			//else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
-			//else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
-			//else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
-			//else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
-			//else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
-			//else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
+			if (0) {}
+			else if (MS_type == RESET_PARAM_MIN) p0.set(p0.getMin());//reset to param min
+			else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set((p0.getMax() - p0.getMin()) / 2);
+			else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set((pmax - pmin) / 2);
+			else if (MS_type == RESET_PARAM_MAX) p0.set(p0.getMax());//reset to param max
+			else if (MS_type == RESET_RANGE_MIN) p0.set(pmin);//reset to range min
+			else if (MS_type == RESET_RANGE_MAX) p0.set(pmax);//reset to range max
 
-			for (int dim = 0; dim < 4; dim++) {
-				if (dim == 0) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.getMin().x, p0.get().y, p0.get().z, p0.get().w));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4((p0.getMax().x - p0.getMin().x) / 2, p0.get().y, p0.get().z, p0.get().w));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4((pmax.x - pmin.x) / 2, p0.get().y, p0.get().z, p0.get().w));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.getMax().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(pmin.x, p0.get().y, p0.get().z, p0.get().w));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(pmax.x, p0.get().y, p0.get().z, p0.get().w));//reset to range max
-				}
-				else if (dim == 1) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.getMin().y, p0.get().z, p0.get().w));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, (p0.getMax().y - p0.getMin().y) / 2, p0.get().z, p0.get().w));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, (pmax.y - pmin.y) / 2, p0.get().z, p0.get().w));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.getMax().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, pmin.y, p0.get().z, p0.get().w));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, pmax.y, p0.get().z, p0.get().w));//reset to range max
-				}
-				else if (dim == 2) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.getMin().z, p0.get().w));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, (p0.getMax().z - p0.getMin().z) / 2, p0.get().w));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, (pmax.z - pmin.z) / 2, p0.get().w));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, pmin.z, p0.get().w));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, pmax.z, p0.get().w));//reset to range max
-				}
-				else if (dim == 3) {
-					if (0) {}
-					else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.getMin()));//reset to param min
-					else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, (p0.getMax().w - p0.getMin().w) / 2));
-					else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, (pmax.w - pmin.w) / 2));
-					else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.getMax().w));//reset to param max
-					else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, pmin));//reset to range min
-					else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, pmax));//reset to range max
-				}
-			}
+			//for (int dim = 0; dim < 4; dim++) {
+			//	if (dim == 0) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.getMin().x, p0.get().y, p0.get().z, p0.get().w));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4((p0.getMax().x - p0.getMin().x) / 2, p0.get().y, p0.get().z, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4((pmax.x - pmin.x) / 2, p0.get().y, p0.get().z, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.getMax().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(pmin.x, p0.get().y, p0.get().z, p0.get().w));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(pmax.x, p0.get().y, p0.get().z, p0.get().w));//reset to range max
+			//	}
+			//	else if (dim == 1) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.getMin().y, p0.get().z, p0.get().w));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, (p0.getMax().y - p0.getMin().y) / 2, p0.get().z, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, (pmax.y - pmin.y) / 2, p0.get().z, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.getMax().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, pmin.y, p0.get().z, p0.get().w));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, pmax.y, p0.get().z, p0.get().w));//reset to range max
+			//	}
+			//	else if (dim == 2) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.getMin().z, p0.get().w));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, (p0.getMax().z - p0.getMin().z) / 2, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, (pmax.z - pmin.z) / 2, p0.get().w));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.get().w));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, pmin.z, p0.get().w));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, pmax.z, p0.get().w));//reset to range max
+			//	}
+			//	else if (dim == 3) {
+			//		if (0) {}
+			//		else if (MS_type == RESET_PARAM_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.getMin()));//reset to param min
+			//		else if (MS_type == RESET_PARAM_FULL_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, (p0.getMax().w - p0.getMin().w) / 2));
+			//		else if (MS_type == RESET_PARAM_RANGE_CENTER) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, (pmax.w - pmin.w) / 2));
+			//		else if (MS_type == RESET_PARAM_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, p0.getMax().w));//reset to param max
+			//		else if (MS_type == RESET_RANGE_MIN) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, pmin));//reset to range min
+			//		else if (MS_type == RESET_RANGE_MAX) p0.set(glm::vec4(p0.get().x, p0.get().y, p0.get().z, pmax));//reset to range max
+			//	}
+			//}
 		}
 	}
-	*/
+	
 }
 
 //--------------------------------------------------------------
@@ -1384,10 +1384,13 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 			auto pvmin = g.getVec2f("Min").get();
 			auto pvmax = g.getVec2f("Max").get();
 			ofParameter<glm::vec2> p0 = e.cast<glm::vec2>();
-			float x = p0.get().x;
-			float y = p0.get().y;
-			if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
-			if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
+
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			//float x = p0.get().x;
+			//float y = p0.get().y;
+			//if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
+			//if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
 			p0.set(glm::vec2(x, y));
 		}
 		else if (isVec3)
@@ -1395,12 +1398,16 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 			auto pvmin = g.getVec3f("Min").get();
 			auto pvmax = g.getVec3f("Max").get();
 			ofParameter<glm::vec3> p0 = e.cast<glm::vec3>();
-			float x = p0.get().x;
-			float y = p0.get().y;
-			float z = p0.get().z;
-			if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
-			if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
-			if (enablersForParams[i + 2]) z = (float)ofRandom(pvmin.z, pvmax.z);
+
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			float z = (float)ofRandom(pvmin.z, pvmax.z);
+			//float x = p0.get().x;
+			//float y = p0.get().y;
+			//float z = p0.get().z;
+			//if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
+			//if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
+			//if (enablersForParams[i + 2]) z = (float)ofRandom(pvmin.z, pvmax.z);
 			p0.set(glm::vec3(x, y, z));
 		}
 		else if (isVec4)
@@ -1408,14 +1415,20 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 			auto pvmin = g.getVec4f("Min").get();
 			auto pvmax = g.getVec4f("Max").get();
 			ofParameter<glm::vec4> p0 = e.cast<glm::vec4>();
-			float x = p0.get().x;
-			float y = p0.get().y;
-			float z = p0.get().z;
-			float w = p0.get().w;
-			if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
-			if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
-			if (enablersForParams[i + 2]) z = (float)ofRandom(pvmin.z, pvmax.z);
-			if (enablersForParams[i + 3]) w = (float)ofRandom(pvmin.w, pvmax.w);
+			
+			float x = (float)ofRandom(pvmin.x, pvmax.x);
+			float y = (float)ofRandom(pvmin.y, pvmax.y);
+			float z = (float)ofRandom(pvmin.z, pvmax.z);
+			float w = (float)ofRandom(pvmin.w, pvmax.w);
+
+			//float x = p0.get().x;
+			//float y = p0.get().y;
+			//float z = p0.get().z;
+			//float w = p0.get().w;
+			//if (enablersForParams[i]) x = (float)ofRandom(pvmin.x, pvmax.x);
+			//if (enablersForParams[i + 1]) y = (float)ofRandom(pvmin.y, pvmax.y);
+			//if (enablersForParams[i + 2]) z = (float)ofRandom(pvmin.z, pvmax.z);
+			//if (enablersForParams[i + 3]) w = (float)ofRandom(pvmin.w, pvmax.w);
 			p0.set(glm::vec4(x, y, z, w));
 		}
 
@@ -1998,11 +2011,6 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 		//auto parameteriVec3 = std::dynamic_pointer_cast<ofParameter<glm::ivec3>>(p);
 		//auto parameteriVec4 = std::dynamic_pointer_cast<ofParameter<glm::ivec4>>(p);
 
-		//auto type = p->type();
-		//bool isFloat = type == typeid(ofParameter<float>).name();
-		//bool isInt = type == typeid(ofParameter<int>).name();
-		//bool isBool = type == typeid(ofParameter<bool>).name();
-
 		//---
 
 		// Group Type
@@ -2138,14 +2146,18 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 			params_EditorGroups.add(_g);
 
 			ofParameter<bool> b0{ _name, false };
-			ofParameter<bool> b0_x{ _name + " X", false };
-			ofParameter<bool> b0_y{ _name + " Y", false };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
-			enablersForParams.push_back(b0_x);
-			enablersForParams.push_back(b0_y);
-			params_EditorEnablers.add(b0_x);
-			params_EditorEnablers.add(b0_y);
+
+			//ofParameter<bool> b0{ _name, false };//-> The global toggle for all the coords
+			//ofParameter<bool> b0_x{ _name + " X", false };
+			//ofParameter<bool> b0_y{ _name + " Y", false };
+			//enablersForParams.push_back(b0);
+			//params_EditorEnablers.add(b0);
+			//enablersForParams.push_back(b0_x);
+			//enablersForParams.push_back(b0_y);
+			//params_EditorEnablers.add(b0_x);
+			//params_EditorEnablers.add(b0_y);
 
 			continue;
 		}
@@ -2170,17 +2182,21 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 			params_EditorGroups.add(_g);
 
 			ofParameter<bool> b0{ _name, false };
-			ofParameter<bool> b0_x{ _name + " X", false };
-			ofParameter<bool> b0_y{ _name + " Y", false };
-			ofParameter<bool> b0_z{ _name + " Z", false };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
-			enablersForParams.push_back(b0_x);
-			enablersForParams.push_back(b0_y);
-			enablersForParams.push_back(b0_z);
-			params_EditorEnablers.add(b0_x);
-			params_EditorEnablers.add(b0_y);
-			params_EditorEnablers.add(b0_z);
+
+			//ofParameter<bool> b0{ _name, false };
+			//ofParameter<bool> b0_x{ _name + " X", false };
+			//ofParameter<bool> b0_y{ _name + " Y", false };
+			//ofParameter<bool> b0_z{ _name + " Z", false };
+			//enablersForParams.push_back(b0);
+			//params_EditorEnablers.add(b0);
+			//enablersForParams.push_back(b0_x);
+			//enablersForParams.push_back(b0_y);
+			//enablersForParams.push_back(b0_z);
+			//params_EditorEnablers.add(b0_x);
+			//params_EditorEnablers.add(b0_y);
+			//params_EditorEnablers.add(b0_z);
 
 			continue;
 		}
@@ -2203,22 +2219,26 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 			_g.add(pmax);
 
 			params_EditorGroups.add(_g);
-
+			
 			ofParameter<bool> b0{ _name, false };
-			ofParameter<bool> b0_x{ _name + " X", false };
-			ofParameter<bool> b0_y{ _name + " Y", false };
-			ofParameter<bool> b0_z{ _name + " Z", false };
-			ofParameter<bool> b0_w{ _name + " W", false };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
-			enablersForParams.push_back(b0_x);
-			enablersForParams.push_back(b0_y);
-			enablersForParams.push_back(b0_z);
-			enablersForParams.push_back(b0_w);
-			params_EditorEnablers.add(b0_x);
-			params_EditorEnablers.add(b0_y);
-			params_EditorEnablers.add(b0_z);
-			params_EditorEnablers.add(b0_w);
+
+			//ofParameter<bool> b0{ _name, false };
+			//ofParameter<bool> b0_x{ _name + " X", false };
+			//ofParameter<bool> b0_y{ _name + " Y", false };
+			//ofParameter<bool> b0_z{ _name + " Z", false };
+			//ofParameter<bool> b0_w{ _name + " W", false };
+			//enablersForParams.push_back(b0);
+			//params_EditorEnablers.add(b0);
+			//enablersForParams.push_back(b0_x);
+			//enablersForParams.push_back(b0_y);
+			//enablersForParams.push_back(b0_z);
+			//enablersForParams.push_back(b0_w);
+			//params_EditorEnablers.add(b0_x);
+			//params_EditorEnablers.add(b0_y);
+			//params_EditorEnablers.add(b0_z);
+			//params_EditorEnablers.add(b0_w);
 
 			continue;
 		}
