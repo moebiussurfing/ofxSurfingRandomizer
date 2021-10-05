@@ -6,27 +6,29 @@
 
 #include "ofxWindowApp.h" // -> Not required
 
+
 /*
 
-This example shows how we apply the randomizations to the both targets types:
+	This example shows how we apply the randomizations to the both targets types:
 
-A. Group Parameters
-The scene parameters determines the shapes and sizes.
-Notice that  you can enable some of the parameters that the groups includes.
-Notice that the min-max ranges will be limiting the randomizations.
+	A. Group Parameters
+	The scene parameters determines the shapes and sizes.
+	Notice that  you can enable some of the parameters that the groups includes.
+	Notice that the min-max ranges will be limiting the randomizations.
 
-B. An int index
-The index target randoms determines wich of the colors and shapes to draw.
-Notice that some colorsand shapes are more common to appears, and some appears with a short duration when the index happens.
+	B. An int index
+	The index target randoms determines wich of the colors and shapes to draw.
+	Notice that some colorsand shapes are more common to appears, and some appears with a short duration when the index happens.
 
-KEYS:
-SPACE      : Randomize Parameters
-Ctrl+SPACE : Randomize Index
-RETURN     : Play timed randomizer
-BACKSPACE  : Reset parameters
-LEFT-RIGHT : Browse Index
+	KEYS:
+	SPACE      : Randomize Parameters
+	Ctrl+SPACE : Randomize Index
+	RETURN     : Play timed randomizer
+	BACKSPACE  : Reset parameters
+	LEFT-RIGHT : Browse Index
 
 */
+
 
 class ofApp : public ofBaseApp{
 

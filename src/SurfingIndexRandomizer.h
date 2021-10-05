@@ -42,8 +42,8 @@ public:
 	ofParameterGroup params_Clicker{ "Clicker" };
 
 private:
-	ofParameterGroup params_PresetsProbs{ "INDEX PROBS" };
-	ofParameterGroup params_PresetDurations{ "INDEX DURATION" };
+	ofParameterGroup params_PresetsProbs{ "Index Probs" };
+	ofParameterGroup params_PresetDurations{ "Index Duration" };
 
 private:
 	float timerPlayerPct;
@@ -131,8 +131,8 @@ private:
 	int amountPresets;// amount of box-clickable handled presets on current favorites/kit
 	bool bIsDoneLoad = false;
 	void loadPreset(int p);
-	ofParameter<bool> MODE_Editor{ "MODE EDIT", true };// this mode improves performance disabling autosave, undo history..etc
-	vector<int> keys;// queued trigger keys for each group ? (all presets) (size of)
+	ofParameter<bool> MODE_Editor{ "MODE EDIT", true }; // this mode improves performance disabling autosave, undo history..etc
+	vector<int> keys; // queued trigger keys for each group ? (all presets) (size of)
 
 	//----
 
@@ -143,8 +143,8 @@ private:
 
 	//private:
 public:
-	ofParameter<bool> bPLAY; //play randomizer
-	ofParameter<bool> bRandomizeIndex;// trig randomize index
+	ofParameter<bool> bPLAY; // play randomizer
+	ofParameter<bool> bRandomizeIndex; // trig randomize index
 	ofParameter<float> randomizeDurationBpm; // bpm
 	ofParameter<int> randomizeDuration;
 	ofParameter<int> randomizeDurationShort;
@@ -159,27 +159,27 @@ private:
 	bool bLatchRun = false;
 
 private:
-	int randomizeSpeed;// real time duration
+	int randomizeSpeed; // real time duration
 	uint32_t randomizerTimer;
 	float MAX_DURATION_RATIO = 2.0f;
 	int randomize_MAX_DURATION = MAX_DURATION_RATIO * 6000;
 	//int randomize_MAX_DURATION_SHORT = 6000 / 2.f;
 
-	vector<ofParameter<int>> presetsRandomFactor;// probability of every preset
-	vector<ofParameter<bool>> presetsRandomModeShort;// mode short for ebvery preset
+	vector<ofParameter<int>> presetsRandomFactor; // probability of every preset
+	vector<ofParameter<bool>> presetsRandomModeShort; // mode short for ebvery preset
 
 	vector<int> randomFactorsDices;
 
 	void buildRandomizers();
-	void setup_RandomizerIndexes();// engine to get a random between all posible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
+	void setup_RandomizerIndexes(); // engine to get a random between all posible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
 	int doRandomIndexChanged();
-	void doResetDices();// reset all probs to 0
-	int dicesTotalAmount;// total dices summing the prob of any preset probability (PROB1 + PROB2 + ...)
+	void doResetDices(); // reset all probs to 0
+	int dicesTotalAmount; // total dices summing the prob of any preset probability (PROB1 + PROB2 + ...)
 
 	int timerRandomizer;
 
 public:
-	void doRandom();// randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
+	void doRandom(); // randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
 
 	//--
 
@@ -203,13 +203,13 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setPlayRandomizerTimer(bool b)// play randomizer timer
+	void setPlayRandomizerTimer(bool b) // play randomizer timer
 	{
 		bPLAY = b;
 		if (b) doRandom();
 	}
 	//--------------------------------------------------------------
-	void setTogglePlayRandomizerPreset()// toggle randomizer timer
+	void setTogglePlayRandomizerPreset() // toggle randomizer timer
 	{
 		bPLAY = !bPLAY;
 	}
@@ -235,13 +235,13 @@ public:
 	}
 	private:
 	//--------------------------------------------------------------
-	void doRandomizePresetFromFavs()// trig randomize and select one of the favs presets
+	void doRandomizePresetFromFavs() // trig randomize and select one of the favs presets
 	{
 		bRandomizeIndex = true;
 	}
 	public:
 	////--------------------------------------------------------------
-	//void doRandomizePresetSelected() {// randomize params of current selected preset
+	//void doRandomizePresetSelected() { // randomize params of current selected preset
 	//	ofLogNotice(__FUNCTION__);
 	//	doRandomPreset();
 	//}
@@ -267,6 +267,6 @@ public:
 	}
 
 private:
-	bool DISABLE_CALLBACKS = true;// to avoid startup crashes and objects are not initialized properly
+	bool DISABLE_CALLBACKS = true; // to avoid startup crashes and objects are not initialized properly
 };
 

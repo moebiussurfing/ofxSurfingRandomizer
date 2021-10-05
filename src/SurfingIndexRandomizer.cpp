@@ -17,16 +17,16 @@ SurfingIndexRandomizer::~SurfingIndexRandomizer()
 void SurfingIndexRandomizer::setup(int _numPresets) {
 	ofLogNotice(__FUNCTION__) << " amount presets: " << _numPresets;
 
-	// update control gui panel params
+	// Update control gui panel params
 	amountPresets = _numPresets;
 
 	indexSelected.set("Index", 0, 0, amountPresets - 1);
 
-	bGui_Editor.set("INDEX EDITOR", true);
+	bGui_Editor.set("Index Editor", true);
 
 	//-
 
-	// clicker
+	// Clicker
 	if (amountPresets != 0)
 	{
 		amntBtnsClicker.setMax(amountPresets);
@@ -39,10 +39,10 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	//-
 
-	// randomizers
+	// Randomizers
 	buildRandomizers();
 
-	// to store settings
+	// To store settings
 	params_RandomizerSettings.add(params_RandomizerIndex);
 	//params_RandomizerSettings.add(params_Clicker);
 	params_RandomizerSettings.add(bGui_Editor);
@@ -57,7 +57,7 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	//----
 
-	// startup
+	// Startup
 	startup();
 }
 
@@ -66,7 +66,7 @@ void SurfingIndexRandomizer::startup()
 {
 	DISABLE_CALLBACKS = false;
 
-	// load randomizers settings
+	// Load randomizers settings
 	ofxSurfingHelpers::loadGroup(params_RandomizerSettings, path_Global + "/" + filename_RandomizerSettings);
 
 	doDices();
@@ -83,11 +83,11 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 
 	if (bEnableRandomizerIndex)
 	{
-		// 1. dice randomize
+		// 1. Dice randomize
 
 #ifndef DEBUG_randomTest
 		{
-			// get a random between all possible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
+			// Get a random between all possible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
 			// each preset has many dices: more dices means more probality to be selected by the randomizer
 			randomizedDice = ofRandom(0, dicesTotalAmount);
 
@@ -97,7 +97,7 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 
 		//-
 
-		// 2. define limits for range dices associated to any preset
+		// 2. Define limits for range dices associated to any preset
 
 		//randomFactorsDices[0] = 0;
 		for (int i = 0; i < presetsRandomFactor.size(); i++) {
@@ -110,12 +110,12 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 
 		//-
 
-		// 3. check if dice is inside both ranges. to select preset (_rr) associated to dice 
+		// 3. Check if dice is inside both ranges. to select preset (_rr) associated to dice 
 
 		int _rr = 0;
 		for (int i = 0; i <= presetsRandomFactor.size(); i++) {
 
-			// define upper/lower limits for each dices/preset
+			// Define upper/lower limits for each dices/preset
 			int start;
 			int end;
 
@@ -123,7 +123,7 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 			else start = randomFactorsDices[i - 1];
 
 			// TODO:
-			// bug on last preset..
+			// Bug on last preset..
 
 			//if (i == presetsRandomFactor.size() - 1)
 			//	end = presetsRandomFactor.size()-1;
@@ -138,7 +138,7 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 			//ofLogNotice(__FUNCTION__) << "[" << i << "] " << start << "-" << end;
 			ofLogNotice(__FUNCTION__) << (start == end ? "\t\t\t\t\t" : "") << "[" << i << "] " << start << "-" << end;// this are empty probs
 #endif
-			// check if dice is inside both limits
+			// Check if dice is inside both limits
 			if (randomizedDice >= start && randomizedDice < end)
 			{
 				_rr = i - 1;
@@ -161,7 +161,7 @@ int SurfingIndexRandomizer::doRandomIndexChanged()
 #endif
 		}
 
-		// last
+		// Last
 #ifdef DEBUG_randomTest
 		ofLogNotice(__FUNCTION__) << "randomFactorsDices: [" << presetsRandomFactor.size() << "] " << dicesTotalAmount;
 #endif
@@ -204,7 +204,7 @@ void SurfingIndexRandomizer::doRandom()
 	ofLogNotice(__FUNCTION__) << "---------------------------------------------------";
 #endif
 
-	// we avoid that the random is the same previous preset (TODO:improve). we want force change, not stay in the same. 
+	// We avoid that the random is the same previous preset (TODO:improve). we want force change, not stay in the same. 
 	// bc sometimes the random gets the same current preset.
 
 	int _PRESET_selected_PRE = indexSelected;
@@ -216,7 +216,7 @@ void SurfingIndexRandomizer::doRandom()
 #endif
 
 	// TODO:
-	// if there's only one posible dice.. cant avoid repetition. so force avoid toggle to false
+	// If there's only one posible dice.. cant avoid repetition. so force avoid toggle to false
 	if (MODE_AvoidRandomRepeat && dicesTotalAmount < 2) MODE_AvoidRandomRepeat = false;
 
 	if (MODE_AvoidRandomRepeat)
@@ -240,13 +240,13 @@ void SurfingIndexRandomizer::doRandom()
 
 	//--
 
-	// 4. apply preset selection
+	// 4. Apply preset selection
 
 	loadPreset(r);
 
 	//--
 
-	// 5. start timer again
+	// 5. Start timer again
 
 	if (bPLAY)
 	{
@@ -260,8 +260,11 @@ void SurfingIndexRandomizer::doResetDices()
 	for (auto &p : presetsRandomFactor) {
 		p = 0;
 	}
-	if (presetsRandomFactor.size() > 0) {
+
+	// 0 and 1 to prob 1
+	if (presetsRandomFactor.size() > 1) {
 		presetsRandomFactor[0] = 1;
+		presetsRandomFactor[1] = 1;
 		dicesTotalAmount = 1;
 		randomizedDice = 0;
 	}
@@ -272,23 +275,27 @@ void SurfingIndexRandomizer::doResetDices()
 	randomizeDuration = 1000;
 	randomizeDurationShort = randomizeDuration * randomizeDurationShortRatio;
 
-	//rest all to long
+	// Reset all to long
 	for (auto &p : presetsRandomModeShort) {
 		p.set(false);
 	}
+
+	// Two last to true
+	presetsRandomModeShort[presetsRandomModeShort.size() - 1] = true;
+	presetsRandomModeShort[presetsRandomModeShort.size() - 2] = true;
 }
 
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::buildRandomizers()
 {
-	// radomizer
+	// Radomizer
 	setup_RandomizerIndexes();
 }
 
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::exit()
 {
-	// save randomizers settings
+	// Save randomizers settings
 	ofxSurfingHelpers::CheckFolder(path_Global);
 	ofxSurfingHelpers::saveGroup(params_RandomizerSettings, path_Global + "/" + filename_RandomizerSettings);
 
@@ -301,13 +308,13 @@ void SurfingIndexRandomizer::update()
 {
 	//----
 
-	// randomizer timer mode latch
+	// Randomizer timer mode latch
 
 	// TODO:
-	// on this mode: when we click to some presets, we load the preset, but after duration, 
+	// On this mode: when we click to some presets, we load the preset, but after duration, 
 	// we jump back to preset index 0
 
-	// easy callback
+	// Easy callback
 	// latch mode
 	//if (bIsDoneLoad && MODE_LatchTrig && !bPLAY)
 	if (bIsDoneLoad && !bPLAY)
@@ -337,7 +344,7 @@ void SurfingIndexRandomizer::update()
 
 		if (indexSelected < presetsRandomModeShort.size()) {// avoid out of range
 
-			// A. long mode
+			// A. Long mode
 			if (presetsRandomModeShort[indexSelected] == false)// get if it's marked as shor or long by default (false)
 			{
 				timerPlayerPct = ofMap(timerRandomizer, 0, randomizeDuration, 0, 1, true);
@@ -358,7 +365,7 @@ void SurfingIndexRandomizer::update()
 
 			//-
 
-			// B. short mode
+			// B. Short mode
 			else
 			{
 				timerPlayerPct = ofMap(timerRandomizer, 0, randomizeDurationShort, 0, 1, true);
@@ -381,7 +388,7 @@ void SurfingIndexRandomizer::update()
 
 	//--
 
-	// 1.0.2 draw progress bar for the randomizer timer
+	// 1.0.2 Draw progress bar for the randomizer timer
 
 	//// long mode
 	//if (presetsRandomModeShort[indexSelected - 1] == false) randomizerProgressPrc = timerRandomizer / (float)randomizeDuration;
@@ -416,48 +423,48 @@ void SurfingIndexRandomizer::setup_RandomizerIndexes()
 {
 	bPLAY.set("PLAY INDEX", false);
 	bPLAY.setSerializable(false);
-	bRandomizeIndex.set("RND INDEX", false);
-	bEnableRandomizerIndex.set("ENABLE MODE RND", true);
+	bRandomizeIndex.set("RND Index", false);
+	bEnableRandomizerIndex.set("Enable Mode RND", true);
 	//MODE_LatchTrig.set("MODE LATCH-N-BACK", false);
-	MODE_AvoidRandomRepeat.set("MODE AVOID REPEAT", true);
-	randomizeDuration.set("t DURATION", 1000, 10, randomize_MAX_DURATION);
-	randomizeDurationShortRatio.set("t RATIO", 0.25, 0.005, 1);
-	randomizeDurationShort.set("t SHORT", 250, 10, randomize_MAX_DURATION);// locked
+	MODE_AvoidRandomRepeat.set("Avoid Repeat", true);
+	randomizeDuration.set("t Duration", 1000, 10, randomize_MAX_DURATION);
+	randomizeDurationShortRatio.set("t Ratio", 0.25, 0.005, 1);
+	randomizeDurationShort.set("t Short", 250, 10, randomize_MAX_DURATION);// locked
 	randomizeDurationBpm.set("t BPM", 120, 10, 400);
 	randomizedDice.set("DICE", 0, 0, amountPresets - 1);
-	bResetProbs.set("RESET PROBS", false);
+	bResetProbs.set("Reset Probs", false);
 
-	// exclude
+	// Exclude
 	randomizeDurationShort.setSerializable(false);// lock
 	bRandomizeIndex.setSerializable(false);
 	bResetProbs.setSerializable(false);
 
-	// erase
+	// Erase
 	presetsRandomFactor.clear();
 	presetsRandomModeShort.clear();
 	randomFactorsDices.clear();
 
-	// resize
+	// Resize
 	presetsRandomFactor.resize(amountPresets);
 	presetsRandomModeShort.resize(amountPresets);
 	randomFactorsDices.resize(amountPresets);
 
 	int i;
 
-	// ints as probability for every preset
+	// Ints as probability for every preset
 	params_PresetsProbs.clear();
 	i = 0;
 	for (auto &p : presetsRandomFactor) {
-		string n = "PROB " + ofToString(i++);
+		string n = "Prob " + ofToString(i++);
 		p.set(n, 5, 0, 10);
 		params_PresetsProbs.add(p);
 	}
 
-	// toggles to enable short duration mode
+	// Toggles to enable short duration mode
 	params_PresetDurations.clear();
 	i = 0;
 	for (auto &p : presetsRandomModeShort) {
-		string n = "SHORT " + ofToString(i++);
+		string n = "Short " + ofToString(i++);
 		p.set(n, false);
 		params_PresetDurations.add(p);
 	}
@@ -540,12 +547,12 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 				ofxImGuiSurfing::AddBigToggle(bEnableRandomizerIndex);
 				if (bEnableRandomizerIndex) {
 
-					// blink by timer progress
+					// Blink by timer progress
 					float tn = getPlayerPct();
 					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
 
 					ofxImGuiSurfing::AddBigToggle(bRandomizeIndex);
-					ImGui::Dummy(ImVec2(0, 2));
+					ImGui::Spacing();
 
 					bool bOpen = true;
 					ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
@@ -559,20 +566,22 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 						ofxImGuiSurfing::AddParameter(randomizeDuration);
 						ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
 						ofxImGuiSurfing::AddParameter(randomizeDurationShort);
+
 						if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
 						ImGui::SameLine();
 						if (ImGui::Button("Double", ImVec2(_w2, _h))) { randomizeDurationBpm *= 2.f; }
 						if (ImGui::Button("Reset", ImVec2(_w1, _h))) { randomizeDurationBpm = 120; }
+
 						ImGui::TreePop();
 					}
 
-					ImGui::Dummy(ImVec2(0, 2));
+					ImGui::Spacing();
 					//ofxImGuiSurfing::AddToggleRoundedButton(MODE_LatchTrig);
 					ofxImGuiSurfing::AddToggleRoundedButton(MODE_AvoidRandomRepeat);
-					ImGui::Dummy(ImVec2(0, 2));
+					ImGui::Spacing();
 					ofxImGuiSurfing::AddGroup(params_PresetsProbs, flags);
 					ofxImGuiSurfing::AddGroup(params_PresetDurations, flags);
-					ImGui::Dummy(ImVec2(0, 2));
+					ImGui::Spacing();
 					ofxImGuiSurfing::AddBigButton(bResetProbs, _w1, _h);
 				}
 
@@ -613,17 +622,19 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			//---
 
-			ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+			//ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
+			//guiManager.Add(bGui_Editor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+			ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
 
 			//--
 
-			// 1. presets randomizers
+			// 1. Presets randomizers
 
 			//-
 
-			ImGui::Dummy(ImVec2(0, 2));
+			ImGui::Spacing();
 
-			// 1.0.1 play randomizer index
+			// 1.0.1 Play randomizer index
 
 			// blink by timer
 			float tn = getPlayerPct();
@@ -631,20 +642,18 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			//--
 
-			// 1.0.2 draw progress bar for the randomizer timer
+			// 1.0.2 Draw progress bar for the randomizer timer
 			{
 				ofxImGuiSurfing::ProgressBar2(tn); // to get the short timers scaled to bar
 				//ofxImGuiSurfing::ProgressBar2(randomizerProgressPrc);
 				//ofxImGuiSurfing::ProgressBar2(randomizerProgress);
-
-				ImGui::Dummy(ImVec2(0, 5));
 			}
+
+			ImGui::Spacing();
 
 			//--
 
-			// index selector
-
-			ImGui::Dummy(ImVec2(0, 5));
+			// Index Selector
 
 			str = "Index: " + ofToString(indexSelected.get());
 			ImGui::Text(str.c_str());
@@ -653,24 +662,25 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 			ofxImGuiSurfing::AddParameter(indexSelected);
 			ImGui::PopItemWidth();
 
-			ImGui::Dummy(ImVec2(0, 2));
+			ImGui::Spacing();
+			//ImGui::Spacing();
 
 			//--
 
-			// clicker
+			// Clicker
 			{
 				//widgetsManager.refreshPanelShape();
 				_w100 = getWidgetsWidth(1);
 				_w50 = getWidgetsWidth(2);
 				float __h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-				ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h );
-				ImGui::Dummy(ImVec2(0, 2));
+				ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h);
+				ImGui::Spacing();
 			}
 
 			//--
 
-			// 1.0.1B bpm slider
+			// 1.0.1B Bpm slider
 
 			//auto parameter = randomizeDurationBpm;
 			//auto tmpRef = randomizeDurationBpm.get();
@@ -680,7 +690,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 			//	parameter.set(tmpRef);
 			//}
 
-			ImGui::Dummy(ImVec2(0, 2));
+			ImGui::Spacing();
 
 			//ImGui::PushItemWidth(_w50);
 			ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
@@ -689,12 +699,11 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 
 			//--
 
-			ImGui::Dummy(ImVec2(0, 2));
-
-			if (ImGui::Button("Reset", ImVec2(_w100, _h)))
-			{
-				randomizeDurationBpm = 120;
-			}
+			ImGui::Spacing();
+			if (ImGui::Button("Half", ImVec2(_w50, _h))) { randomizeDurationBpm /= 2.f; }
+			ImGui::SameLine();
+			if (ImGui::Button("Double", ImVec2(_w50, _h))) { randomizeDurationBpm *= 2.f; }
+			if (ImGui::Button("Reset", ImVec2(_w100, _h))) { randomizeDurationBpm = 120; }
 
 			//--
 
@@ -745,7 +754,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 }
 
 //--------------------------------------------------------------
-void SurfingIndexRandomizer::doDices()// calculate all probabilities for all presets
+void SurfingIndexRandomizer::doDices() // Calculate all probabilities for all presets
 {
 	// sum total dices/all probs
 	dicesTotalAmount = 0;
@@ -764,7 +773,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 	{
 		string name = e.getName();
 
-		// exclude log
+		// Exclude log
 		if ((name != MODE_AvoidRandomRepeat.getName()) &&
 			(name != bRandomizeIndex.getName()) //&&
 			//(name != "index") &&
@@ -778,7 +787,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 
 		//----
 
-		// index preset selector
+		// Index preset selector
 		else if (name == indexSelected.getName())
 		{
 			ofLogVerbose(__FUNCTION__) << group.getName() << " index: " << indexSelected.get();
@@ -789,7 +798,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 
 		//--
 
-		// randomizer
+		// Randomizer
 		else if (name == bRandomizeIndex.getName() && bRandomizeIndex)
 		{
 			//ofLogNotice(__FUNCTION__) << group.getName() << "RANDOMIZE !";
@@ -797,7 +806,8 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 			bRandomizeIndex = false;
 			doRandom();
 		}
-		// play randomizer
+
+		// Play randomizer
 		else if (name == bPLAY.getName())
 		{
 			//ofLogNotice(__FUNCTION__) << group.getName() << "MODE TIMER: " << e;
@@ -810,7 +820,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 			}
 		}
 
-		//// latch
+		//// Latch
 		//else if (name == "MODE LATCH-N-BACK")
 		//{
 		//	//ofLogNotice(__FUNCTION__) << "MODE LATCH: " << e;
@@ -819,7 +829,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 		//	}
 		//}
 
-		// durations
+		// Durations
 		else if (name == randomizeDuration.getName())
 		{
 			ofLogNotice(__FUNCTION__) << "DURATION: " << e;
@@ -861,14 +871,14 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter &e)
 
 		//--
 
-		// all other widgets/params that are populate on the thw fly, not hardcoded
+		// All other widgets/params that are populate on the thw fly, not hardcoded
 		else
 		{
 			// check if changed prob sliders
 			bool _doDices = false;
 			for (int i = 0; i < presetsRandomFactor.size(); i++)
 			{
-				if (name == "PROB " + ofToString(i)) {
+				if (name == "Prob " + ofToString(i)) {
 					ofLogNotice(__FUNCTION__) << name << " : " << e;
 					_doDices = true;// TODO: would be faster making return on first 'true'
 				}
