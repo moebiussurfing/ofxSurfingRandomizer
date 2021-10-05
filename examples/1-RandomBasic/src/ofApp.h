@@ -11,9 +11,10 @@
 
 	This example shows how we apply the randomizations to the both targets types:
 
-	A. Group Parameters
-	The scene parameters determines the shapes and sizes.
-	Notice that  you can enable some of the parameters that the groups includes.
+	A. A Group of Parameters
+	Here the Scene Parameters determines the shapes and sizes.
+	Notice that you can enable some of the parameters that the groups includes.
+	Or you can disable to hide the paramater and exclud it from param randomizations.
 	Notice that the min-max ranges will be limiting the randomizations.
 
 	B. An int index

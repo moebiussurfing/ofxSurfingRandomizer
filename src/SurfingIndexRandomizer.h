@@ -45,10 +45,14 @@ private:
 	ofParameterGroup params_PresetsProbs{ "Index Probs" };
 	ofParameterGroup params_PresetDurations{ "Index Duration" };
 
+public:
+	ofParameter<bool> bMinimize{ "Minimize", false };
+
 private:
 	float timerPlayerPct;
 
 public:
+	//--------------------------------------------------------------
 	float getPlayerPct() {
 		return timerPlayerPct;
 	}
@@ -72,6 +76,7 @@ private:
 	std::string filename_RandomizerSettings;
 
 public:
+	//--------------------------------------------------------------
 	void setPath(string path)
 	{
 		path_Global = path;
@@ -79,6 +84,7 @@ public:
 	}
 
 public:
+	//--------------------------------------------------------------
 	void setFilenameSettings(string folder)
 	{
 		ofLogNotice(__FUNCTION__) << "Path: " << folder;
@@ -96,6 +102,7 @@ public:
 	ofParameter<bool> bGui_Editor;
 	ofParameter<bool> bGui;
 
+	//--------------------------------------------------------------
 	void setBoolGui(ofParameter<bool> &b) {
 		bGui.makeReferenceTo(b);
 		//bGui = &b;
@@ -107,6 +114,7 @@ public:
 	//}
 
 public:
+	//--------------------------------------------------------------
 	void setup(ofParameter<int> & indexParam, ofParameter<bool> bOpenGui) {
 		bGui.makeReferenceTo(bOpenGui);
 		indexSelected.makeReferenceTo(indexParam);
@@ -246,7 +254,7 @@ public:
 	//	doRandomPreset();
 	//}
 	//--------------------------------------------------------------
-	ofParameterGroup getParamsRandomizers() {
+	ofParameterGroup& getParamsRandomizers() {
 		ofParameterGroup _g{ "RANDOMIZERS" };
 		_g.add(bPLAY);
 		_g.add(bRandomizeIndex);

@@ -151,7 +151,6 @@ public:
 
 private:
 	bool bAutoDraw = true;
-
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
 	//-

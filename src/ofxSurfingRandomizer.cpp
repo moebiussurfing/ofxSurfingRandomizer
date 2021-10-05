@@ -22,6 +22,7 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(bGui_RangesEditor);
 	params_AppState.add(bGui_Index);
 	params_AppState.add(bMinimize);
+	params_AppState.add(surfingIndexRandomizer.bMinimize);
 	params_AppState.add(bPLAY.set("PLAY", false));
 	params_AppState.add(bKeys.set("Keys", true));
 	params_AppState.add(bHelp.set("Help", false));

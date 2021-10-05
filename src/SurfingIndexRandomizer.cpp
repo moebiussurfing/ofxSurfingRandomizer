@@ -424,7 +424,7 @@ void SurfingIndexRandomizer::setup_RandomizerIndexes()
 	bPLAY.set("PLAY INDEX", false);
 	bPLAY.setSerializable(false);
 	bRandomizeIndex.set("RND Index", false);
-	bEnableRandomizerIndex.set("Enable Mode RND", true);
+	bEnableRandomizerIndex.set("Enable", true);
 	//MODE_LatchTrig.set("MODE LATCH-N-BACK", false);
 	MODE_AvoidRandomRepeat.set("Avoid Repeat", true);
 	randomizeDuration.set("t Duration", 1000, 10, randomize_MAX_DURATION);
@@ -544,14 +544,26 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 				float _w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
 				float _h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
-				ofxImGuiSurfing::AddBigToggle(bEnableRandomizerIndex);
+				//-
+
+				// Minimize
+				ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5*_h, 1.5*(2 / 3.f) * _h));
+
+				//-
+
+				// Enable
+				ofxImGuiSurfing::AddBigToggle(bEnableRandomizerIndex, _w1, _h);
+
 				if (bEnableRandomizerIndex) {
 
 					// Blink by timer progress
 					float tn = getPlayerPct();
 					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
 
-					ofxImGuiSurfing::AddBigToggle(bRandomizeIndex);
+					ofxImGuiSurfing::AddBigButton(bRandomizeIndex);
+
+					ofxImGuiSurfing::AddParameter(indexSelected);
+
 					ImGui::Spacing();
 
 					bool bOpen = true;
@@ -563,9 +575,12 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 						_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
 
 						ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
-						ofxImGuiSurfing::AddParameter(randomizeDuration);
-						ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
-						ofxImGuiSurfing::AddParameter(randomizeDurationShort);
+
+						if (!bMinimize) {
+							ofxImGuiSurfing::AddParameter(randomizeDuration);
+							ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
+							ofxImGuiSurfing::AddParameter(randomizeDurationShort);
+						}
 
 						if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
 						ImGui::SameLine();
@@ -575,25 +590,30 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 						ImGui::TreePop();
 					}
 
-					ImGui::Spacing();
-					//ofxImGuiSurfing::AddToggleRoundedButton(MODE_LatchTrig);
-					ofxImGuiSurfing::AddToggleRoundedButton(MODE_AvoidRandomRepeat);
-					ImGui::Spacing();
-					ofxImGuiSurfing::AddGroup(params_PresetsProbs, flags);
-					ofxImGuiSurfing::AddGroup(params_PresetDurations, flags);
-					ImGui::Spacing();
-					ofxImGuiSurfing::AddBigButton(bResetProbs, _w1, _h);
+					//-
+
+					if (!bMinimize) {
+						ImGui::Spacing();
+						//ofxImGuiSurfing::AddToggleRoundedButton(MODE_LatchTrig);
+						ofxImGuiSurfing::AddToggleRoundedButton(MODE_AvoidRandomRepeat);
+						ImGui::Spacing();
+						ofxImGuiSurfing::AddGroup(params_PresetsProbs, flags);
+						ofxImGuiSurfing::AddGroup(params_PresetDurations, flags);
+
+						ImGui::Spacing();
+						ofxImGuiSurfing::AddBigButton(bResetProbs, _w1, _h);
+					}
 				}
 
 #ifdef DEBUG_randomTest
 				ImGui::Text("%d/%d", randomizedDice.get(), randomizedDice.getMax());
 #endif
-				}
+					}
 			ImGui::End();
-			}
+				}
 		ImGui::PopStyleVar();
+			}
 		}
-	}
 
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::drawImGui_IndexMain()
