@@ -560,7 +560,7 @@ void SurfingIndexRandomizer::drawImGui_IndexEditor()
 					float tn = getPlayerPct();
 					ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
 
-					ofxImGuiSurfing::AddBigButton(bRandomizeIndex);
+					ofxImGuiSurfing::AddBigButton(bRandomizeIndex, ImVec2(-1,-1));
 
 					ofxImGuiSurfing::AddParameter(indexSelected);
 
