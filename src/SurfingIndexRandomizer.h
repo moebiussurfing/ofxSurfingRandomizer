@@ -3,6 +3,15 @@
 
 #include "ofMain.h"
 
+/*
+
+TODO:
+
+	+ split the use of index alone. to hide main gui
+
+
+*/
+
 
 //--------
 // OPTIONS
@@ -105,12 +114,12 @@ public:
 	//--------------------------------------------------------------
 	void setBoolGui(ofParameter<bool> &b) {
 		bGui.makeReferenceTo(b);
-		//bGui = &b;
+		//bGui_Main = &b;
 	}
 
-	//ofParameter<bool> *bGui = NULL;
+	//ofParameter<bool> *bGui_Main = NULL;
 	//void setBoolGuiPtr(ofParameter<bool> &b) {
-	//	bGui = &b;
+	//	bGui_Main = &b;
 	//}
 
 public:
@@ -151,7 +160,7 @@ private:
 
 	//private:
 public:
-	ofParameter<bool> bPLAY; // play randomizer
+	ofParameter<bool> bPlay; // play randomizer
 	ofParameter<bool> bRandomizeIndex; // trig randomize index
 	ofParameter<float> randomizeDurationBpm; // bpm
 	ofParameter<int> randomizeDuration;
@@ -213,13 +222,13 @@ public:
 	//--------------------------------------------------------------
 	void setPlayRandomizerTimer(bool b) // play randomizer timer
 	{
-		bPLAY = b;
+		bPlay = b;
 		if (b) doRandom();
 	}
 	//--------------------------------------------------------------
 	void setTogglePlayRandomizerPreset() // toggle randomizer timer
 	{
-		bPLAY = !bPLAY;
+		bPlay = !bPlay;
 	}
 	//--------------------------------------------------------------
 	void setRandomizerDuration(float t)
@@ -256,7 +265,7 @@ public:
 	//--------------------------------------------------------------
 	ofParameterGroup& getParamsRandomizers() {
 		ofParameterGroup _g{ "RANDOMIZERS" };
-		_g.add(bPLAY);
+		_g.add(bPlay);
 		_g.add(bRandomizeIndex);
 		_g.add(randomizeDurationBpm);
 		_g.add(randomizeDuration);

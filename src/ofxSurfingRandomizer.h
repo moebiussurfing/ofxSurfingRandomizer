@@ -5,14 +5,19 @@
 
 /*
 
-TODO:
+	BUG:
 
-+ fix many errors
-+ add multidim vec and colors
-+ add resets for vec
-+ add anothe mode. center + % spread variation
-+ tune range slider on ImGui
-	drag from center
+	+ command rnd index fail
+
+
+	TODO:
+
+	+ fix many errors
+	+ add multidim vec and colors
+	+ add resets for vec
+	+ add another mode. center + % spread variation
+	+ tune range slider on ImGui
+		drag from center
 
 */
 
@@ -43,23 +48,26 @@ class ofxSurfingRandomizer
 {
 	enum ResetPramsType
 	{
-	RESET_PARAM_MIN = 0,
-	RESET_PARAM_FULL_CENTER,
-	RESET_PARAM_RANGE_CENTER,
-	RESET_PARAM_MAX,
-	RESET_RANGE_MIN,
-	RESET_RANGE_MAX,
+		RESET_PARAM_MIN = 0,
+		RESET_PARAM_FULL_CENTER,
+		RESET_PARAM_RANGE_CENTER,
+		RESET_PARAM_MAX,
+		RESET_RANGE_MIN,
+		RESET_RANGE_MAX,
 	};
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-//public:
+
 private:
+
 	ofxSurfingUndoHelper undoManger;
+
 #endif
 
 	//----
 
 public:
+
 	ofxSurfingRandomizer();
 	~ofxSurfingRandomizer();
 
@@ -74,11 +82,14 @@ public:
 	//-
 
 private:
+
 	SurfingIndexRandomizer surfingIndexRandomizer;
 	ofParameter<int> indexTarget{ "index", 0, 0, 9 };
 	bool bCustomIndex = false;
 
 public:
+
+	//--------------------------------------------------------------
 	void setIndexPtr(ofParameter<int> index)
 	{
 		bCustomIndex = true;
@@ -92,19 +103,27 @@ public:
 
 	//-
 
-	// tester timers
+	ofParameter<bool> bPlay;
+	ofParameter<bool> bPlay_Index;
+
+	//--------------------------------------------------------------
+	float getPctRandomizerIndex() {
+		return (1 - surfingIndexRandomizer.getPlayerPct());
+	}
 
 private:
-	ofParameter<bool> bPLAY;
+
 	ofParameter<bool> bTarget;
 	ofParameter<float> playSpeed;
 	int tf;
 	float tn;
 
 public:
+
 	void draw_ImGui(); // -> exposed public to avoid bug that interferes between ImGui instances..
 
 private:
+
 	void drawImGui_Main();
 	void drawImGui_Params();
 	void drawImGui_RangeEditor();
@@ -116,16 +135,16 @@ private:
 	const int WIDGET_R_SLIDER = 200;
 	std::string spcl = "    ";//space between min-max range slider label
 
-//public:
 	void drawImGui_Widgets();
 	void drawHelp();
 	TextBoxWidget textBoxWidget;
-	
+
 	//-
 
 	// commands
 
 public:
+
 	void doRandomize();//do and set random in min/max range for all params
 	void doRandomize(int index, bool bForce);//do random in min/max range for a param. bForce ignores enabler
 	void doResetParamsFull(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
@@ -133,6 +152,7 @@ public:
 	void doResetRangesHalf();//set ranges to abs min/max from each parameter but a bit closed
 
 private:
+
 	void doSaveState();//save the memory state
 	void doLoadState();//load the memory state
 
@@ -145,11 +165,13 @@ private:
 	ofxSurfing_ImGui_Manager guiManager;
 
 public:
+
 	void setAutodraw(bool autodraw) { // required to set to true when only one ofxImGUi instance will be used between all the ofApp project add-ons using ofxImGui
 		bAutoDraw = autodraw;
 	}
 
 private:
+
 	bool bAutoDraw = true;
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
@@ -173,8 +195,10 @@ private:
 	//-
 
 	// exposed to external gui's
+
 public:
-	ofParameter<bool> bGui;
+
+	ofParameter<bool> bGui_Main;
 	ofParameter<bool> bGui_Params;
 	ofParameter<bool> bGui_RangesEditor;
 	ofParameter<bool> bGui_Index;
@@ -193,7 +217,8 @@ public:
 //	}
 
 private:
-	//settings
+
+	// settings
 	string path_Global = "ofxSurfingRandomizer/";
 	string path_Editor;//the editor settings
 	string path_AppState;//the control/panels states
@@ -219,5 +244,5 @@ private:
 	//	ofxImGui::AddParameter(*parameterBool);
 	//	continue;
 	//}
-};
+	};
 

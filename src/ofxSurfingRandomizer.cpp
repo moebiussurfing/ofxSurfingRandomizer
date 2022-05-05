@@ -11,19 +11,19 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_AppState = path_Global + "SurfingRandom_AppSession.json";
 	path_MemoryState = path_Global + "SurfingRandom_MemoryState.json";
 
-	bGui.set("SURFING RND", true);
-	bGui_RangesEditor.set("RND Ranges", true);
-	bGui_Params.set("RND Params", true);
-	bGui_Index.set("RND Index", true);
+	bGui_Main.set("SURFING RND", true);
+	bGui_RangesEditor.set("RND RANGES", false);
+	bGui_Params.set("RND RANGES PARAMS", false);
+	bGui_Index.set("RND INDEX", true);
 
 	params_AppState.setName("ofxSurfingRandomizer");
-	params_AppState.add(bGui);
+	params_AppState.add(bGui_Main);
 	params_AppState.add(bGui_Params);
 	params_AppState.add(bGui_RangesEditor);
 	params_AppState.add(bGui_Index);
 	params_AppState.add(bMinimize);
 	params_AppState.add(surfingIndexRandomizer.bMinimize);
-	params_AppState.add(bPLAY.set("PLAY", false));
+	params_AppState.add(bPlay.set("PLAY", false));
 	params_AppState.add(bKeys.set("Keys", true));
 	params_AppState.add(bHelp.set("Help", false));
 	params_AppState.add(bTarget.set("Target", false));
@@ -31,7 +31,7 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(surfingIndexRandomizer.params_Clicker);
 
 	// exclude
-	//bPLAY.setSerializable(false);
+	//bPlay.setSerializable(false);
 }
 
 //--------------------------------------------------------------
@@ -564,7 +564,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorResets()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGui_Widgets() {
 
-	if (!bGui) return;
+	if (!bGui_Main) return;
 	{
 		drawImGui_Main();
 		drawImGui_RangeEditor();
@@ -597,70 +597,13 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 	// Main panel
 
-	if (bGui)
+	if (bGui_Main)
 	{
-		if (guiManager.beginWindow(bGui, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None))
+		if (guiManager.beginWindow(bGui_Main, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None))
 		{
-			if (guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL)) {
-				//setupImGuiStyles();
-			}
+			guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
-			//-
-
-			// Commands
-			{
-				bOpen = true;
-				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-				if (ImGui::CollapsingHeader("COMMANDS", _flagc))
-				{
-					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-
-					if (ImGui::Button("RND Params", ImVec2(_w100, 3 * _h)))
-					{
-						doRandomize();
-					}
-					if (ImGui::Button("RND Index", ImVec2(_w100, 3 * _h)))
-					{
-						surfingIndexRandomizer.doRandom();
-					}
-
-					ImGui::Spacing();
-
-					//-
-
-					// Tester
-					if (!guiManager.bMinimize) {
-						bOpen = false;
-						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-						_flagw |= ImGuiTreeNodeFlags_Framed;
-						ImGui::Indent();
-						if (ImGui::TreeNodeEx("TESTER", _flagw))
-						{
-							ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
-
-							ofxImGuiSurfing::AddBigToggleNamed(bTarget, _w100, _h, "Params", "Index");
-							ofxImGuiSurfing::AddBigToggleNamed(bPLAY, _w100, 2 * _h, "TESTING RND", "TEST RND", true, 1 - tn);
-
-							//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h))) {
-							//	doRandomize();
-							//}
-
-							if (bPLAY)
-							{
-								ofxImGuiSurfing::ProgressBar2(tn);
-								ImGui::PushItemWidth(_w50);
-								ofxImGuiSurfing::AddParameter(playSpeed);
-								ImGui::PopItemWidth();
-							}
-
-							ImGui::TreePop();
-						}
-						ImGui::Unindent();
-					}
-				}
-			}
-
-			//-
+			//--
 
 			// Panels
 			{
@@ -687,7 +630,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 					if (!guiManager.bMinimize) {
 						ofxImGuiSurfing::AddParameter(indexTarget);
-						ofxImGuiSurfing::AddBigToggleNamed(surfingIndexRandomizer.bPLAY, _w100, _h, "PLAYING RND", "PLAY RND", true, 1 - surfingIndexRandomizer.getPlayerPct());
+						ofxImGuiSurfing::AddBigToggleNamed(surfingIndexRandomizer.bPlay, _w100, _h, "PLAYING RND", "PLAY RND", true, 1 - surfingIndexRandomizer.getPlayerPct());
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
 						ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
@@ -770,6 +713,61 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 			//-
 
+			// Commands
+			{
+				bOpen = true;
+				_flagc = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+				if (ImGui::CollapsingHeader("COMMANDS", _flagc))
+				{
+					ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+
+					if (ImGui::Button("RND Params", ImVec2(_w100, 2 * _h)))
+					{
+						doRandomize();
+					}
+					if (ImGui::Button("RND Index", ImVec2(_w100, 2 * _h)))
+					{
+						surfingIndexRandomizer.doRandom();
+					}
+
+					ImGui::Spacing();
+
+					//-
+
+					// Tester
+					if (!guiManager.bMinimize) {
+						bOpen = false;
+						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+						_flagw |= ImGuiTreeNodeFlags_Framed;
+						ImGui::Indent();
+						if (ImGui::TreeNodeEx("TESTER", _flagw))
+						{
+							ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+
+							ofxImGuiSurfing::AddBigToggleNamed(bTarget, _w100, _h, "Params", "Index");
+							ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w100, 2 * _h, "TESTING RND", "TEST RND", true, 1 - tn);
+
+							//if (ImGui::Button("RANDOMIZE", ImVec2(_w100, _h))) {
+							//	doRandomize();
+							//}
+
+							if (bPlay)
+							{
+								ofxImGuiSurfing::ProgressBar2(tn);
+								ImGui::PushItemWidth(_w50);
+								ofxImGuiSurfing::AddParameter(playSpeed);
+								ImGui::PopItemWidth();
+							}
+
+							ImGui::TreePop();
+						}
+						ImGui::Unindent();
+					}
+				}
+			}
+
+			//--
+
 			if (!guiManager.bMinimize) {
 
 				// Tools
@@ -835,7 +833,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 	// Tester
 	// Play timed randoms
 	static const int _secs = 2;
-	if (bPLAY)
+	if (bPlay)
 	{
 		//int max = 60 * _secs;
 		int max = ofMap(playSpeed, 0, 1, 60, 5) * _secs;
@@ -857,7 +855,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw_ImGui() {
-	if (!bGui) return;
+	if (!bGui_Main) return;
 
 	//----
 
@@ -871,7 +869,7 @@ void ofxSurfingRandomizer::draw_ImGui() {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
-	if (!bGui) return;
+	if (!bGui_Main) return;
 
 	if (bHelp) drawHelp();
 
@@ -1999,6 +1997,8 @@ void ofxSurfingRandomizer::startup() {
 
 	//-
 
+	bPlay_Index.makeReferenceTo(surfingIndexRandomizer.bPlay);
+		
 	// Settings
 	params_Editor.setName("Ranges Editor");
 	params_Editor.add(params_EditorEnablers);
@@ -2383,7 +2383,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	ofLogNotice(__FUNCTION__) << " : " << key;
 
 	// app
-	if (key == 'g') bGui = !bGui;
+	if (key == 'g') bGui_Main = !bGui_Main;
 	if (key == 'h') bHelp = !bHelp;
 
 	// randomize
@@ -2395,8 +2395,8 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	if (!mod_CONTROL && key == OF_KEY_BACKSPACE) { doResetParamsFull(RESET_RANGE_MIN); }
 
 	// play / tester
-	if (!mod_CONTROL && key == OF_KEY_RETURN) bPLAY = !bPLAY;
-	if (mod_CONTROL && key == OF_KEY_RETURN) surfingIndexRandomizer.bPLAY = !surfingIndexRandomizer.bPLAY;
+	if (!mod_CONTROL && key == OF_KEY_RETURN) bPlay = !bPlay;
+	if (mod_CONTROL && key == OF_KEY_RETURN) surfingIndexRandomizer.bPlay = !surfingIndexRandomizer.bPlay;
 
 	// index
 	if (key == OF_KEY_LEFT) {
