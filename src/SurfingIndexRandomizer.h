@@ -33,6 +33,7 @@ class SurfingIndexRandomizer
 {
 
 public:
+
 	SurfingIndexRandomizer();
 	~SurfingIndexRandomizer();
 
@@ -42,25 +43,32 @@ public:
 	//#endif
 
 	// clicker layout
+
 private:
+
 	ofParameter<int> amntBtnsClicker{ "Max Buttons", 1, 1, 1 };
 	ofParameter<bool> respBtnsClicker{ "Responsive", true };
 	ofParameter<bool> bExtraClicker{ "Extra", false };
 
 public:
+
 	ofParameterGroup params_Clicker{ "Clicker" };
 
 private:
+
 	ofParameterGroup params_PresetsProbs{ "Index Probs" };
 	ofParameterGroup params_PresetDurations{ "Index Duration" };
 
 public:
+
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
 private:
+
 	float timerPlayerPct;
 
 public:
+
 	//--------------------------------------------------------------
 	float getPlayerPct() {
 		return timerPlayerPct;
@@ -85,6 +93,7 @@ private:
 	std::string filename_RandomizerSettings;
 
 public:
+
 	//--------------------------------------------------------------
 	void setPath(string path)
 	{
@@ -93,6 +102,7 @@ public:
 	}
 
 public:
+
 	//--------------------------------------------------------------
 	void setFilenameSettings(string folder)
 	{
@@ -102,6 +112,7 @@ public:
 	}
 
 public:
+
 	void drawImGui();
 	void drawImGui_IndexMain();
 	void drawImGui_IndexEditor();
@@ -110,6 +121,7 @@ public:
 
 	ofParameter<bool> bGui_Editor;
 	ofParameter<bool> bGui;
+	ofParameter<bool> bGui_Parent{ "-1",false };
 
 	//--------------------------------------------------------------
 	void setBoolGui(ofParameter<bool> &b) {
@@ -123,6 +135,7 @@ public:
 	//}
 
 public:
+
 	//--------------------------------------------------------------
 	void setup(ofParameter<int> & indexParam, ofParameter<bool> bOpenGui) {
 		bGui.makeReferenceTo(bOpenGui);
@@ -134,11 +147,13 @@ public:
 	//-
 
 public:
+
 	ofParameter<int> indexSelected;// main group preset selector (current)
 
 	//----
 
 private:
+
 	ofParameterGroup params_HelperTools;
 	ofParameterGroup params_RandomizerIndex;
 	ofParameterGroup params_Control;// to use on external gui
@@ -156,10 +171,11 @@ private:
 	// randomizer
 
 private:
+
 	ofParameterGroup params_RandomizerSettings{ "Index_Editor" };
 
-	//private:
 public:
+
 	ofParameter<bool> bPlay; // play randomizer
 	ofParameter<bool> bRandomizeIndex; // trig randomize index
 	ofParameter<float> randomizeDurationBpm; // bpm
@@ -167,15 +183,18 @@ public:
 	ofParameter<int> randomizeDurationShort;
 	ofParameter<float> randomizeDurationShortRatio;
 
+	ofParameter<bool> bMODE_AvoidRandomRepeat; // this mode re makes randomize again if new index preset it's the same than previous!
+
 private:
+
 	ofParameter<bool> bEnableRandomizerIndex;
 	//ofParameter<bool> MODE_LatchTrig; // this mode trigs the preset but goes back to preset 0 after duration timer
-	ofParameter<bool> MODE_AvoidRandomRepeat; // this mode re makes randomize again if new index preset it's the same!
 	ofParameter<bool> bResetProbs;
 	ofParameter<int> randomizedDice; // to test
 	bool bLatchRun = false;
 
 private:
+
 	int randomizeSpeed; // real time duration
 	uint32_t randomizerTimer;
 	float MAX_DURATION_RATIO = 2.0f;
@@ -196,6 +215,7 @@ private:
 	int timerRandomizer;
 
 public:
+
 	void doRandom(); // randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
 
 	//--
@@ -204,6 +224,7 @@ public:
 //	ofParameterGroup params_randomizer;
 
 private:
+
 	ofParameter<int> randomizerProgress{ "%", 0, 0, 100 };
 	float randomizerProgressPrc;
 
@@ -250,13 +271,17 @@ public:
 		randomizeDurationShort = randomizeDuration * randomizeDurationShortRatio;
 		//randomizeDurationShort = randomizeDuration / 2.f;
 	}
-	private:
+
+private:
+
 	//--------------------------------------------------------------
 	void doRandomizePresetFromFavs() // trig randomize and select one of the favs presets
 	{
 		bRandomizeIndex = true;
 	}
-	public:
+
+public:
+
 	////--------------------------------------------------------------
 	//void doRandomizePresetSelected() { // randomize params of current selected preset
 	//	ofLogNotice(__FUNCTION__);
@@ -277,7 +302,7 @@ public:
 
 public:
 	void setModeRandomizeAvoidRepeat(bool b) {
-		MODE_AvoidRandomRepeat = b;
+		bMODE_AvoidRandomRepeat = b;
 	}
 	void setModeEditor(bool b) {
 		MODE_Editor = b;

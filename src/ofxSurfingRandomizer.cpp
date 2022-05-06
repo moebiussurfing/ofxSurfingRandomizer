@@ -11,12 +11,14 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_AppState = path_Global + "SurfingRandom_AppSession.json";
 	path_MemoryState = path_Global + "SurfingRandom_MemoryState.json";
 
-	bGui_Main.set("SURFING RND", true);
+	bGui_Global.set("SURFING RND", true);
+	bGui_Main.set("RND MAIN", false);
 	bGui_RangesEditor.set("RND RANGES", false);
 	bGui_Params.set("RND RANGES PARAMS", false);
-	bGui_Index.set("RND INDEX", true);
+	bGui_Index.set("RND INDEX", true);//->show by default
 
 	params_AppState.setName("ofxSurfingRandomizer");
+	params_AppState.add(bGui_Global);
 	params_AppState.add(bGui_Main);
 	params_AppState.add(bGui_Params);
 	params_AppState.add(bGui_RangesEditor);
@@ -88,6 +90,7 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGui_RangeEditor() {
+	if (!bGui_RangesEditor) return;
 
 	std::string n;
 
@@ -104,7 +107,6 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 
 	//--
 
-	if (bGui_RangesEditor)
 	{
 		if (guiManager.beginWindow(bGui_RangesEditor, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None))
 		{
@@ -564,7 +566,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorResets()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGui_Widgets() {
 
-	if (!bGui_Main) return;
+	if (!bGui_Global) return;
 	{
 		drawImGui_Main();
 		drawImGui_RangeEditor();
@@ -579,6 +581,7 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGui_Main() {
+	if (!bGui_Main) return;
 
 	std::string n;
 
@@ -596,8 +599,6 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 	//----
 
 	// Main panel
-
-	if (bGui_Main)
 	{
 		if (guiManager.beginWindow(bGui_Main, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None))
 		{
@@ -618,14 +619,8 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					guiManager.Add(bGui_Params, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 					ImGui::Unindent();
 
-					//ofxImGuiSurfing::AddToggleRoundedButton(bGui_RangesEditor);
-					//ImGui::Indent();
-					//ofxImGuiSurfing::AddToggleRoundedButton(bGui_Params);
-					//ImGui::Unindent();
-
 					ImGui::Separator();
 
-					//ofxImGuiSurfing::AddToggleRoundedButton(bGui_Index);
 					guiManager.Add(bGui_Index, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
 					if (!guiManager.bMinimize) {
@@ -778,6 +773,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 					_flagw |= ImGuiTreeNodeFlags_Framed;
 
 					// State memory
+
 					if (ImGui::TreeNodeEx("MEMORY", _flagw))
 					{
 						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
@@ -855,7 +851,7 @@ void ofxSurfingRandomizer::update(ofEventArgs & args) {
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw_ImGui() {
-	if (!bGui_Main) return;
+	if (!bGui_Global) return;
 
 	//----
 
@@ -869,7 +865,7 @@ void ofxSurfingRandomizer::draw_ImGui() {
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::draw(ofEventArgs & args) {
 
-	if (!bGui_Main) return;
+	if (!bGui_Global) return;
 
 	if (bHelp) drawHelp();
 
@@ -1991,21 +1987,30 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::startup() {
 
+	// Some customizations
+
 	// Link advanced params
 	bHelp.makeReferenceTo(guiManager.bHelp);
 	bKeys.makeReferenceTo(guiManager.bKeys);
 
+	surfingIndexRandomizer.bGui_Parent.makeReferenceTo(bGui_Main);
+	//-> To insert bGui_Main inside SurfingIndexRandomizer object
+
 	//-
 
 	bPlay_Index.makeReferenceTo(surfingIndexRandomizer.bPlay);
-		
+
+	surfingIndexRandomizer.bRandomizeIndex.setName("TEST RANDOM");
+	surfingIndexRandomizer.bMODE_AvoidRandomRepeat.set(false);//preferred workflow here
+
+	//--
+
 	// Settings
 	params_Editor.setName("Ranges Editor");
 	params_Editor.add(params_EditorEnablers);
 	params_Editor.add(params_EditorGroups);
 
 	ofxSurfingHelpers::loadGroup(params_Editor, path_Editor);
-
 	ofxSurfingHelpers::loadGroup(params_AppState, path_AppState);
 }
 
@@ -2383,7 +2388,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	ofLogNotice(__FUNCTION__) << " : " << key;
 
 	// app
-	if (key == 'g') bGui_Main = !bGui_Main;
+	if (key == 'g') bGui_Global = !bGui_Global;
 	if (key == 'h') bHelp = !bHelp;
 
 	// randomize

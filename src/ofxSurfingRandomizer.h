@@ -198,6 +198,7 @@ private:
 
 public:
 
+	ofParameter<bool> bGui_Global;
 	ofParameter<bool> bGui_Main;
 	ofParameter<bool> bGui_Params;
 	ofParameter<bool> bGui_RangesEditor;
