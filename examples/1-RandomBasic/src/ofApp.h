@@ -39,25 +39,12 @@ public:
 
 	ofxWindowApp windowApp;
 
-	// A. Params to randomize
 	ofParameterGroup params;
-	ofParameter<bool> bPrevious;
-	ofParameter<bool> bNext;
-	ofParameter<float> lineWidth;
-	ofParameter<float> separation;
-	ofParameter<float> speed;
-	ofParameter<int> shapeType;
-	ofParameter<int> amount;
-	ofParameter<int> size;
-	ofParameterGroup params2;
-	ofParameter<int> shapeType2;
-	ofParameter<int> amount2;
+	ofParameter<float> size1;
 	ofParameter<int> size2;
-	ofParameterGroup params3;
-	ofParameter<float> lineWidth3;
-	ofParameter<float> separation3;
-	ofParameter<float> speed3;
-	ofParameter<int> shapeType3;
+	ofParameter<float> rotation1;
+	ofParameter<float> rotation2;
+	ofParameter<int> indexColor;
 
 	//-
 
@@ -65,6 +52,8 @@ public:
 	ofxSurfingRandomizer randomizer;
 
 	// B. Index to randomize
-	ofParameter<int> index{ "index", 0, 0, 8 };
+	ofParameter<int> index{ "index", 0, 0, 2 };
 	ofEventListener listenerIndex;
+
+	void drawScene();
 };

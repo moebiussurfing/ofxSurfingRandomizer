@@ -809,7 +809,7 @@ void SurfingIndexRandomizer::drawImGui_IndexMain()
 					if (respBtnsClicker)
 					{
 						ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-						ofxImGuiSurfing::AddIntStepped(amntBtnsClicker);
+						ofxImGuiSurfing::AddStepperInt(amntBtnsClicker);
 						ImGui::PopItemWidth();
 					}
 

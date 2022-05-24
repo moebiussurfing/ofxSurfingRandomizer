@@ -3,22 +3,13 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// A. Params to randomize
+	// Group
 	params.setName("paramsGroup");
-	params2.setName("paramsGroup2");
-	params3.setName("paramsGroup3");
-	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
-	params.add(separation.set("separation", 50, 1, 100));
-	params.add(speed.set("speed", 0.5, 0, 1));
-	params.add(shapeType.set("shapeType", 0, -50, 50));
-	params.add(size.set("size", 100, 0, 100));
-	params.add(amount.set("amount", 10, 0, 25));
-	params.add(bPrevious.set("prev", false));//bools
-	params.add(bNext.set("next", false));
-	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
-	params2.add(size2.set("size2", 100, 0, 100));
-	params2.add(amount2.set("amount2", 10, 0, 25));
-	params.add(params2);
+	params.add(size1.set("size1", 0.5, 0, 1));
+	params.add(size2.set("size2", ofGetHeight() * 0.5, 0, ofGetHeight() * 0.25));
+	params.add(rotation1.set("rotation1", 1, 0, 2));
+	params.add(rotation2.set("rotation2", 180, 0, 360));
+	params.add(indexColor.set("indexColor", 0, 0, 2));
 
 	setupRandomizer();
 }
@@ -29,19 +20,22 @@ void ofApp::setupRandomizer()
 	// All the added parameters will auto-receive the randomizations
 
 	// Randomizer
-	//randomizer.setAutodraw(true); // -> required when only one ImGui instantiated
 
 	randomizer.setIndexPtr(index); // -> Must be setted before call setup.
 
 	randomizer.setup(params);
 
+	//--
+	// 
 	// B. Lambda callback:
 	// To receive the randomized index target
 	//--------------------------------------------------------------
 	listenerIndex = index.newListener([this](int &i) {
 		ofLogNotice("ofApp") << "Index: " << i;
 
-		// Example:
+		indexColor = i;
+
+		// Other Example:
 		// -> Typical use for an int index...
 		//presets.load(i); 
 	});
@@ -50,6 +44,10 @@ void ofApp::setupRandomizer()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	drawScene();
+
+	//--
+
 	randomizer.draw_ImGui();
 
 	//// B. Easy callback:
@@ -60,4 +58,81 @@ void ofApp::draw()
 	//	indexPre = index;
 	//	ofLogNotice(__FUNCTION__) << "Index: " << index << endl;
 	//}
+}
+
+//--------------------------------------------------------------
+void ofApp::drawScene()
+{
+	//-
+
+	// Some preprocess
+	//size1 += 0.2;
+	float _scale2 = size1 / 5.f;
+	int _rSz = size2 + (ofGetHeight() * _scale2);
+	float _rot = rotation2 / 3.0;
+	float _rat = ofMap(rotation2, 0, 360, 1, 0.5f + size1 * 0.4);
+	float _rag = ofMap(size1, 0, 1, 0, -30);
+
+	//-
+
+	// Bg Color
+	ofColor _colorBg = 255;//white
+
+	// Shape Color
+	ofColor _color;
+	switch (indexColor)
+	{
+	case 0: _color = ofColor::black; break;
+	case 1: _color = ofColor::orange; break;
+	case 2: _color = ofColor::green; break;
+	default: _color = ofColor::red; break;
+	}
+
+	int _alpha = ofMap(size2, 0, size2.getMax(), 200, 245);
+	ofColor c(_color.r, _color.g, _color.b, _alpha);
+
+	//--
+
+	// Draw the Scene
+
+	ofClear(_colorBg);
+
+	ofPushStyle();
+	ofPushMatrix();
+	{
+		ofTranslate(ofGetWidth() * .5f, ofGetHeight() * .5f);
+		ofRotateDeg(ofGetElapsedTimef() * TWO_PI);
+		ofRotateZDeg(rotation1 * 45);
+		ofScale(1.3f);
+		ofRotateDeg(_rot);
+
+		ofSetColor(c);
+		ofDrawRectangle(-_rSz * .5f, -_rSz * .5f, _rSz, _rSz);
+
+		_rSz *= _rat;
+		ofRotateDeg(_rot);
+		ofTranslate(0, 0);
+		_rot += _rag;
+
+		ofSetColor(c);
+		ofDrawRectangle(-_rSz * .5f, -_rSz * .5f, _rSz, _rSz);
+
+		_rSz *= _rat;
+		ofRotateDeg(_rot);
+		ofTranslate(0, 0);
+		_rot += _rag;
+
+		ofSetColor(c);
+		ofDrawRectangle(-_rSz * .5f, -_rSz * .5f, _rSz, _rSz);
+
+		_rSz *= _rat;
+		ofRotateDeg(_rot);
+		ofTranslate(0, 0);
+		_rot += _rag;
+
+		ofSetColor(c);
+		ofDrawRectangle(-_rSz * .5f, -_rSz * .5f, _rSz, _rSz);
+	}
+	ofPopMatrix();
+	ofPopStyle();
 }

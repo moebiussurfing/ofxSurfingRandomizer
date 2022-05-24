@@ -25,7 +25,10 @@
 //----
 
 // OPTIONAL
-//#define INCLUDE__OFX_UNDO_ENGINE
+
+// Undo Engine
+
+#define INCLUDE__OFX_UNDO_ENGINE
 
 //----
 
@@ -60,7 +63,7 @@ class ofxSurfingRandomizer
 
 private:
 
-	ofxSurfingUndoHelper undoManger;
+	ofxSurfingUndoHelper undoManager;
 
 #endif
 

@@ -33,7 +33,7 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	params_AppState.add(surfingIndexRandomizer.params_Clicker);
 
 	// exclude
-	//bPlay.setSerializable(false);
+	bPlay.setSerializable(false);
 }
 
 //--------------------------------------------------------------
@@ -55,9 +55,9 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	//--
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-	undoManger.setPathGlobal(path_Global);
-	undoManger.setup(params);
-	//params_AppState.add(undoManger.getParamsAppState());
+	undoManager.setPathGlobal(path_Global);
+	undoManager.setup(params);
+	//params_AppState.add(undoManager.getParamsAppState());
 #endif
 
 	//--
@@ -154,7 +154,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 					std::string _name = enablersForParams[i].getName();
 					auto g = params_EditorGroups.getGroup(_name);
 
-					auto &p0 = g.get(_name);
+					auto& p0 = g.get(_name);
 
 					auto type = p0.type();
 					bool isFloat = type == typeid(ofParameter<float>).name();
@@ -185,7 +185,7 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 						ImGui::PopID();
 						ImGui::SameLine();
 
-						auto &_p0 = g.getBool(_name);
+						auto& _p0 = g.getBool(_name);
 						ofxImGuiSurfing::AddParameter(_p0);
 					}
 
@@ -196,9 +196,9 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 						ImGui::Text(n.c_str());
 						ImGui::SameLine();
 
-						auto &_p0 = g.getInt(_name);
-						auto &pmin = g.getInt("Min");
-						auto &pmax = g.getInt("Max");
+						auto& _p0 = g.getInt(_name);
+						auto& pmin = g.getInt("Min");
+						auto& pmax = g.getInt("Max");
 						float speed = 1;
 
 						// 0. Button random
@@ -328,9 +328,9 @@ void ofxSurfingRandomizer::drawImGui_RangeEditor() {
 						ImGui::Text(n.c_str());
 						ImGui::SameLine();
 
-						auto &_p0 = g.getFloat(_name);
-						auto &pmin = g.getFloat("Min");
-						auto &pmax = g.getFloat("Max");
+						auto& _p0 = g.getFloat(_name);
+						auto& pmin = g.getFloat("Min");
+						auto& pmax = g.getFloat("Max");
 						float speed = (pmax - pmin) / 100.f;
 
 						// 0. Button random
@@ -574,7 +574,7 @@ void ofxSurfingRandomizer::drawImGui_Widgets() {
 		drawImGui_Index();
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-		undoManger.drawImGui();
+		undoManager.drawImGui();
 #endif
 	}
 }
@@ -628,9 +628,11 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 						ofxImGuiSurfing::AddBigToggleNamed(surfingIndexRandomizer.bPlay, _w100, _h, "PLAYING RND", "PLAY RND", true, 1 - surfingIndexRandomizer.getPlayerPct());
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-						ofxImGuiSurfing::AddToggleRoundedButton(undoManger.bGui_UndoEngine);
-					}
+						guiManager.AddSpacingSeparated();
+						guiManager.Add(undoManager.bGui_UndoEngine, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+						guiManager.AddSpacingSeparated();
 #endif
+					}
 				}
 			}
 
@@ -662,7 +664,7 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 
 					for (int i = 0; i < params_EditorEnablers.size(); i++)
 					{
-						auto &p = params_EditorEnablers[i]; // ofAbstractParameter
+						auto& p = params_EditorEnablers[i]; // ofAbstractParameter
 						auto type = p.type();
 						bool isBool = type == typeid(ofParameter<bool>).name();
 
@@ -821,10 +823,10 @@ void ofxSurfingRandomizer::drawImGui_Main() {
 		guiManager.endWindow();
 	}
 }
-}
+//}
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::update(ofEventArgs & args) {
+void ofxSurfingRandomizer::update(ofEventArgs& args) {
 
 	// Tester
 	// Play timed randoms
@@ -863,7 +865,7 @@ void ofxSurfingRandomizer::draw_ImGui() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::draw(ofEventArgs & args) {
+void ofxSurfingRandomizer::draw(ofEventArgs& args) {
 
 	if (!bGui_Global) return;
 
@@ -924,7 +926,7 @@ void ofxSurfingRandomizer::doSetAll(bool b) {
 
 	for (int i = 0; i < params_EditorEnablers.size(); i++)
 	{
-		auto &p = params_EditorEnablers[i];//ofAbstractParameter
+		auto& p = params_EditorEnablers[i];//ofAbstractParameter
 		auto type = p.type();
 		bool isBool = type == typeid(ofParameter<bool>).name();
 		std::string name = p.getName();
@@ -964,8 +966,8 @@ void ofxSurfingRandomizer::doResetParamsFull(ResetPramsType MS_type) {
 		//-
 
 		std::string name = p.getName();//name
-		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
-		auto &e = g.get(name);//ofAbstractParameter
+		auto& g = params_EditorGroups.getGroup(name);//ofParameterGroup
+		auto& e = g.get(name);//ofAbstractParameter
 
 		auto type = e.type();
 		bool isFloat = type == typeid(ofParameter<float>).name();
@@ -1152,8 +1154,8 @@ void ofxSurfingRandomizer::doResetRangesFull() {
 		//-
 
 		std::string name = p.getName();//name
-		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
-		auto &e = g.get(name);//ofAbstractParameter
+		auto& g = params_EditorGroups.getGroup(name);//ofParameterGroup
+		auto& e = g.get(name);//ofAbstractParameter
 
 		auto type = e.type();
 		bool isFloat = type == typeid(ofParameter<float>).name();
@@ -1236,8 +1238,8 @@ void ofxSurfingRandomizer::doResetRangesHalf() {
 		//-
 
 		std::string name = p.getName();//name
-		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
-		auto &e = g.get(name);//ofAbstractParameter
+		auto& g = params_EditorGroups.getGroup(name);//ofParameterGroup
+		auto& e = g.get(name);//ofAbstractParameter
 
 		auto type = e.type();
 		bool isFloat = type == typeid(ofParameter<float>).name();
@@ -1333,8 +1335,8 @@ void ofxSurfingRandomizer::doRandomize() {
 #ifdef INCLUDE__OFX_UNDO_ENGINE
 	// worfklow
 	// store current point to undo history
-	undoManger.doStoreUndoWhenAuto();
-	//if (undoManger.bAutoStore) undoManger.doStoreUndo();
+	undoManager.doStoreUndoWhenAuto();
+	//if (undoManager.bAutoStore) undoManager.doStoreUndo();
 #endif
 
 }
@@ -1356,8 +1358,8 @@ void ofxSurfingRandomizer::doRandomize(int index, bool bForce) {
 		//-
 
 		std::string name = p.getName();//name
-		auto &g = params_EditorGroups.getGroup(name);//ofParameterGroup
-		auto &e = g.get(name);//ofAbstractParameter
+		auto& g = params_EditorGroups.getGroup(name);//ofParameterGroup
+		auto& e = g.get(name);//ofAbstractParameter
 
 		auto type = e.type();
 		bool isFloat = type == typeid(ofParameter<float>).name();
@@ -1505,17 +1507,17 @@ void ofxSurfingRandomizer::drawImGui_RangeEditorVecRow(int indexParam, int dimPa
 
 	// Ugly workaround
 
-	ofParameter<ofDefaultVec2> &p2 = g.getVec2f(_name);
-	ofParameter<ofDefaultVec2> &pv2min = g.getVec2f("Min");
-	ofParameter<ofDefaultVec2> &pv2max = g.getVec2f("Max");
+	ofParameter<ofDefaultVec2>& p2 = g.getVec2f(_name);
+	ofParameter<ofDefaultVec2>& pv2min = g.getVec2f("Min");
+	ofParameter<ofDefaultVec2>& pv2max = g.getVec2f("Max");
 
-	ofParameter<ofDefaultVec3> &p3 = g.getVec3f(_name);
-	ofParameter<ofDefaultVec3> &pv3min = g.getVec3f("Min");
-	ofParameter<ofDefaultVec3> &pv3max = g.getVec3f("Max");
+	ofParameter<ofDefaultVec3>& p3 = g.getVec3f(_name);
+	ofParameter<ofDefaultVec3>& pv3min = g.getVec3f("Min");
+	ofParameter<ofDefaultVec3>& pv3max = g.getVec3f("Max");
 
-	ofParameter<ofDefaultVec4> &p4 = g.getVec4f(_name);
-	ofParameter<ofDefaultVec4> &pv4min = g.getVec4f("Min");
-	ofParameter<ofDefaultVec4> &pv4max = g.getVec4f("Max");
+	ofParameter<ofDefaultVec4>& p4 = g.getVec4f(_name);
+	ofParameter<ofDefaultVec4>& pv4min = g.getVec4f("Min");
+	ofParameter<ofDefaultVec4>& pv4max = g.getVec4f("Max");
 
 	for (int id = 0; id < dim; id++)// Iterate each coord (xyzw)
 	{
@@ -2373,7 +2375,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
+void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs& eventArgs) {
 
 	if (!bKeys) return;
 
@@ -2388,8 +2390,8 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 	ofLogNotice(__FUNCTION__) << " : " << key;
 
 	// app
-	if (key == 'g') bGui_Global = !bGui_Global;
-	if (key == 'h') bHelp = !bHelp;
+	if (key == 'G') bGui_Global = !bGui_Global;
+	//if (key == 'H') bHelp = !bHelp;
 
 	// randomize
 	if (!mod_CONTROL && key == ' ') { doRandomize(); }
@@ -2422,7 +2424,7 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs &eventArgs) {
 
 	// TODO: not working on windows.. We need to add int code
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-	undoManger.keyPressed(eventArgs);
+	undoManager.keyPressed(eventArgs);
 #endif
 
 	//----
