@@ -59,13 +59,13 @@ public:
 
 private:
 
-	void drawImGui_Windows();
-	void drawImGui_Main();
-	void drawImGui_Params();
-	void drawImGui_RangeEditor();
-	void drawImGui_RangeEditorResets();
-	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
-	void drawImGui_Index();
+	void drawImGuiWindows();
+	void drawImGuiWindow_Main();
+	void drawImGuiWindow_Params();
+	void drawImGuiWindow_Ranges();
+	void drawImGuiWidgets_RangeEditorResets();
+	void drawImGuiWidgets_RangeEditorVecRow(int indexParam, int dimParam);
+	void drawImGuiWindows_Index();
 
 	void drawHelp();
 	void buildHelp();
@@ -78,9 +78,12 @@ public:
 
 	ofParameter<bool> bGui;
 	ofParameter<bool> bGui_Main;
+	ofParameter<bool> bGui_Index;
 	ofParameter<bool> bGui_Params;
 	ofParameter<bool> bGui_RangesEditor;
-	ofParameter<bool> bGui_Index;
+
+	ofParameter<bool> bGui_ModeIndex;//could be removed
+	ofParameter<bool> bGui_ModeParams;//could be removed
 
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bHelp;
@@ -113,7 +116,7 @@ public:
 		indexTarget.set("Index", 0, 0, index.getMax());
 
 		surfingIndexRandomizer.setPath(path_Global);
-		surfingIndexRandomizer.setup(indexTarget, bGui_Index);
+		surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex);
 	}
 
 	//--
@@ -216,5 +219,16 @@ private:
 	ofxSurfingUndoHelper undoManager;
 
 #endif
+
+	public:
+
+		int getAmountEnabledParams() {
+			int count = 0;
+			for (size_t i = 0; i < enablersForParams.size(); i++)
+			{
+				if (enablersForParams[i]) count++;
+			}
+			return count;
+		}
 };
 

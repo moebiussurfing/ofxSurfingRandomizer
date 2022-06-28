@@ -1,17 +1,14 @@
-
 #pragma once
 
 #include "ofMain.h"
 
 /*
 
-TODO:
+	TODO:
 
-	+ split the use of index alone. to hide main gui
-
+	+ split the use of index alone. to hide main gui..
 
 */
-
 
 //--------
 // OPTIONS
@@ -25,39 +22,62 @@ TODO:
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfingImGui.h"
 
-//#ifdef INCLUDE_ofxSurfingRandomizer
-//#include "ofxSurfingRandomizer.h"
-//#endif
-
 class SurfingIndexRandomizer
 {
-
 public:
 
 	SurfingIndexRandomizer();
 	~SurfingIndexRandomizer();
 
-	//#ifdef INCLUDE_ofxSurfingRandomizer
-	//private:
-	//	ofxSurfingRandomizer randomizer;
-	//#endif
+	// Linked params for the index and for the gui visible toggle!
+	//--------------------------------------------------------------
+	void setup(ofParameter<int>& indexParam, ofParameter<bool> bOpenGui) {
+		//TODO:
+		//bGui.makeReferenceTo(bOpenGui);
+		
+		indexSelected.makeReferenceTo(indexParam);
+		setup(indexParam.getMax() + 1);
+	}
 
-	// clicker layout
+	void setup(int _numPresets);
+
+	void startup();
+	void update();
+	void exit();
+
+	void drawImGuiWidgets_IndexMain();
+	void drawImGuiWidgets_IndexEditor();
+
+	//-
+
+public:
+
+	ofParameter<bool> bGui_Editor;
+	ofParameter<bool> bGui;
+	//ofParameter<bool> bGui_Parent{ "-1",false };
+
+	ofParameter<int> indexSelected;// main group preset selector (current)
+
+	//-
+
+	//void doCheckRandomReady();
 
 private:
 
-	ofParameter<int> amntBtnsClicker{ "Max Buttons", 1, 1, 1 };
+	// Clicker layout
+
+	ofParameter<int> amntBtnsClicker{ "ButtsRow", 1, 1, 1 };
 	ofParameter<bool> respBtnsClicker{ "Responsive", true };
 	ofParameter<bool> bExtraClicker{ "Extra", false };
 
 public:
 
-	ofParameterGroup params_Clicker{ "Clicker" };
+	ofParameterGroup params_Clicker{ "Clicker" };//some gui settings layout to store
 
 private:
 
-	ofParameterGroup params_PresetsProbs{ "Index Probs" };
-	ofParameterGroup params_PresetDurations{ "Index Duration" };
+	ofParameterGroup params_PresetsProbs{ "PROBS" };
+	ofParameterGroup params_PresetDurations{ "DURATION" };
 
 public:
 
@@ -73,15 +93,10 @@ public:
 	float getPlayerPct() {
 		return timerPlayerPct;
 	}
-
-public:
-
-	void startup();
-	//void doCheckRandomReady();
-
-	void update();
-	//void keyPressed(int key);
-	void exit();
+	////--------------------------------------------------------------
+	//float getPlayerProgress() {
+	//	return timerPlayerPct;
+	//}
 
 private:
 
@@ -111,18 +126,6 @@ public:
 		filename_RandomizerSettings = folder;
 	}
 
-public:
-
-	//void drawImGui();
-	void drawImGuiWidgets_IndexMain();
-	void drawImGuiWidgets_IndexEditor();
-
-	//-
-
-	ofParameter<bool> bGui_Editor;
-	ofParameter<bool> bGui;
-	ofParameter<bool> bGui_Parent{ "-1",false };
-
 	//--------------------------------------------------------------
 	void setBoolGui(ofParameter<bool> &b) {
 		bGui.makeReferenceTo(b);
@@ -133,22 +136,6 @@ public:
 	//void setBoolGuiPtr(ofParameter<bool> &b) {
 	//	bGui_Main = &b;
 	//}
-
-public:
-
-	//--------------------------------------------------------------
-	void setup(ofParameter<int> & indexParam, ofParameter<bool> bOpenGui) { // linked params
-		bGui.makeReferenceTo(bOpenGui);
-		indexSelected.makeReferenceTo(indexParam);
-		setup(indexParam.getMax() + 1);
-	}
-	void setup(int _numPresets);
-
-	//-
-
-public:
-
-	ofParameter<int> indexSelected;// main group preset selector (current)
 
 	//----
 
@@ -168,7 +155,7 @@ private:
 
 	//----
 
-	// randomizer
+	// Randomizer
 
 private:
 
@@ -177,7 +164,7 @@ private:
 public:
 
 	ofParameter<bool> bPlay; // play randomizer
-	ofParameter<bool> bRandomizeIndex; // trig randomize index
+	ofParameter<bool> bRandomRunIndex; // trig randomize index
 	ofParameter<float> randomizeDurationBpm; // bpm
 	ofParameter<int> randomizeDuration;
 	ofParameter<int> randomizeDurationShort;
@@ -188,9 +175,10 @@ public:
 private:
 
 	ofParameter<bool> bEnableRandomizerIndex;
-	//ofParameter<bool> bEnableLatch; // this mode trigs the preset but goes back to preset 0 after duration timer
 	ofParameter<bool> bResetProbs;
 	ofParameter<int> randomizedDice; // to test
+
+	//ofParameter<bool> bEnableLatch; // this mode trigs the preset but goes back to preset 0 after duration timer
 	bool bLatchRun = false;
 
 private:
@@ -209,7 +197,7 @@ private:
 	void buildRandomizers();
 	void setup_RandomizerIndexes(); // engine to get a random between all posible dices (from 0 to dicesTotalAmount) and then select the preset associated to the resulting dice.
 	int doRandomIndexChanged();
-	void doResetDices(); // reset all probs to 0
+	void doReset(); // reset all probs to 0
 	int dicesTotalAmount; // total dices summing the prob of any preset probability (PROB1 + PROB2 + ...)
 
 	int timerRandomizer;
@@ -219,9 +207,6 @@ public:
 	void doRandom(); // randomize wich preset (usually 1 to 8) is selected (not the params of the preset)
 
 	//--
-
-//private:
-//	ofParameterGroup params_randomizer;
 
 private:
 
@@ -236,7 +221,7 @@ private:
 	//
 	//----
 
-	// randomizer helpers
+	// Randomizer Helpers
 
 public:
 
@@ -277,7 +262,7 @@ private:
 	//--------------------------------------------------------------
 	void doRandomizePresetFromFavs() // trig randomize and select one of the favs presets
 	{
-		bRandomizeIndex = true;
+		bRandomRunIndex = true;
 	}
 
 public:
@@ -287,11 +272,12 @@ public:
 	//	ofLogNotice(__FUNCTION__);
 	//	doRandomPreset();
 	//}
-	//--------------------------------------------------------------
+	
+	//-------------------------------------------------------------
 	ofParameterGroup& getParamsRandomizers() {
 		ofParameterGroup _g{ "RANDOMIZERS" };
 		_g.add(bPlay);
-		_g.add(bRandomizeIndex);
+		_g.add(bRandomRunIndex);
 		_g.add(randomizeDurationBpm);
 		_g.add(randomizeDuration);
 		_g.add(randomizeDurationShort);
@@ -301,14 +287,19 @@ public:
 	}
 
 public:
+
+	//-------------------------------------------------------------
 	void setModeRandomizeAvoidRepeat(bool b) {
 		bAvoidRepeatRand = b;
 	}
+	
+	//-------------------------------------------------------------
 	void setModeEditor(bool b) {
 		MODE_Editor = b;
 	}
 
 private:
+
 	bool DISABLE_CALLBACKS = true; // to avoid startup crashes and objects are not initialized properly
 };
 

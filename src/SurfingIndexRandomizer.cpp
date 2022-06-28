@@ -22,7 +22,10 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	indexSelected.set("Index", 0, 0, amountPresets - 1);
 
-	bGui_Editor.set("RAND INDEX EDITOR", false);
+	//TODO:
+	bGui.set("RAND INDEX MAIN", false);
+
+	bGui_Editor.set("RAND INDEX EDIT", false);
 
 	//-
 
@@ -38,7 +41,6 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 	params_Clicker.add(amntBtnsClicker);
 	params_Clicker.add(respBtnsClicker);
 	params_Clicker.add(bExtraClicker);
-
 	params_Clicker.add(bMinimize);
 
 	//-
@@ -48,8 +50,8 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 
 	// To store settings
 	params_RandomizerSettings.add(params_RandomizerIndex);
-	//params_RandomizerSettings.add(params_Clicker);
 	params_RandomizerSettings.add(bGui_Editor);
+	//params_RandomizerSettings.add(params_Clicker);
 
 	//-
 
@@ -258,10 +260,12 @@ void SurfingIndexRandomizer::doRandom()
 	}
 }
 
+/*
 //--------------------------------------------------------------
-void SurfingIndexRandomizer::doResetDices()
+void SurfingIndexRandomizer::doReset()
 {
-	for (auto& p : presetsRandomFactor) {
+	for (auto& p : presetsRandomFactor)
+	{
 		p = 1;
 	}
 
@@ -303,6 +307,69 @@ void SurfingIndexRandomizer::doResetDices()
 	presetsRandomModeShort[presetsRandomModeShort.size() - 1] = true;
 	presetsRandomModeShort[presetsRandomModeShort.size() - 2] = true;
 	presetsRandomModeShort[presetsRandomModeShort.size() - 3] = true;
+}
+*/
+
+//--------------------------------------------------------------
+void SurfingIndexRandomizer::doReset()
+{
+	ofLogNotice(__FUNCTION__);
+
+	int sz = presetsRandomFactor.size();
+	int div = sz / 4;
+
+	for (size_t i = 0; i < sz; i++)
+	{
+		if (i < div + 1) {
+			presetsRandomFactor[i] = 10;
+			presetsRandomModeShort[i] = false;
+		}
+		else if (i < 3 * div) {
+			presetsRandomFactor[i] = 5;
+			presetsRandomModeShort[i] = false;
+		}
+		else {
+			presetsRandomFactor[i] = 1;
+			presetsRandomModeShort[i] = true;
+		}
+	}
+
+	doDices();
+
+	randomizeDurationShortRatio = 0.25f;
+	randomizeDurationBpm = 120.f;
+	//randomizeDurationShort = randomizeDuration * randomizeDurationShortRatio;
+
+	//--
+
+	/*
+	for (auto& p : presetsRandomFactor)
+	{
+		p = 0;
+	}
+
+	if (presetsRandomFactor.size() > 0)
+	{
+		presetsRandomFactor[0] = 1;
+		dicesTotalAmount = 1;
+		randomizedDice = 0;
+	}
+	else
+	{
+		dicesTotalAmount = 0;
+	}
+
+	randomizedDice.setMax(dicesTotalAmount - 1);
+
+	randomizeDuration = 1000;
+	randomizeDurationShort = randomizeDuration * randomizeDurationShortRatio;
+
+	// reset all to long
+	for (auto& p : presetsRandomModeShort)
+	{
+		p.set(false);
+	}
+	*/
 }
 
 //--------------------------------------------------------------
@@ -380,7 +447,7 @@ void SurfingIndexRandomizer::update()
 					{
 						// TODO: can be improved calling directly the method! 
 						// bc this flag will be readed on update()..
-						bRandomizeIndex = true;
+						bRandomRunIndex = true;
 					}
 				}
 			}
@@ -398,9 +465,9 @@ void SurfingIndexRandomizer::update()
 					//{
 					//	if (bLatchRun) loadPreset(0);
 					//}
-					//else bRandomizeIndex = true;
+					//else bRandomRunIndex = true;
 
-					bRandomizeIndex = true;
+					bRandomRunIndex = true;
 				}
 			}
 		}
@@ -445,21 +512,21 @@ void SurfingIndexRandomizer::update()
 void SurfingIndexRandomizer::setup_RandomizerIndexes()
 {
 	bPlay.set("PLAY INDEX", false);
-	bPlay.setSerializable(false);
-	bRandomizeIndex.set("RAND INDEX", false);
+	bRandomRunIndex.set("RUN INDEX", false);
 	bEnableRandomizerIndex.set("Enable", true);
-	//bEnableLatch.set("Latch", false);
-	bAvoidRepeatRand.set("Avoid Repeat", true);
-	randomizeDuration.set("t Duration", 1000, 10, randomize_MAX_DURATION);
-	randomizeDurationShortRatio.set("t Ratio", 0.25, 0.005, 1);
-	randomizeDurationShort.set("t Short", 250, 10, randomize_MAX_DURATION);// locked
 	randomizeDurationBpm.set("t BPM", 120, 10, 400);
+	randomizeDuration.set("t Duration", 1000, 10, randomize_MAX_DURATION);
+	randomizeDurationShortRatio.set("t2 Ratio", 0.25, 0.005, 1);
+	randomizeDurationShort.set("t2 Short", 250, 10, randomize_MAX_DURATION);// locked
 	randomizedDice.set("DICE", 0, 0, amountPresets - 1);
+	bAvoidRepeatRand.set("Avoid Repeat", true);
 	bResetProbs.set("Reset Probs", false);
+	//bEnableLatch.set("Latch", false);
 
 	// Exclude
+	//bPlay.setSerializable(false);
 	randomizeDurationShort.setSerializable(false);// lock
-	bRandomizeIndex.setSerializable(false);
+	bRandomRunIndex.setSerializable(false);
 	bResetProbs.setSerializable(false);
 
 	// Erase
@@ -512,53 +579,28 @@ void SurfingIndexRandomizer::setup_RandomizerIndexes()
 	params_RandomizerIndex.setName("RANDOM INDEX CONTROLS");
 	params_RandomizerIndex.add(bPlay);
 	params_RandomizerIndex.add(bEnableRandomizerIndex);
-	params_RandomizerIndex.add(bRandomizeIndex);
+	params_RandomizerIndex.add(bRandomRunIndex);
 	params_RandomizerIndex.add(randomizeDurationBpm);
 	params_RandomizerIndex.add(randomizeDuration);
 	params_RandomizerIndex.add(randomizeDurationShortRatio);
 	params_RandomizerIndex.add(randomizeDurationShort); // locked
-	//params_RandomizerIndex.add(bEnableLatch);
 	params_RandomizerIndex.add(bAvoidRepeatRand);
 	params_RandomizerIndex.add(params_PresetsProbs); // probs
 	params_RandomizerIndex.add(params_PresetDurations); // toggles
 	params_RandomizerIndex.add(bResetProbs);
+	//params_RandomizerIndex.add(bEnableLatch);
 
 #ifdef DEBUG_randomTest
 	params_RandomizerIndex.add(randomizedDice);
 #endif
 }
 
-////----------------------------------------------------------------
-//void SurfingIndexRandomizer::keyPressed(int key)
-//{
-//	////bool bEnableKeyRandomizers = false;
-//	////if (bEnableKeyRandomizers) 
-//	//{
-//	//	//timer to randomize and choice a random preset from the kit
-//	//	if (key == 'R')
-//	//	{
-//	//		setTogglePlayRandomizerPreset();
-//	//	}
-//	//	else if (key == 'r')
-//	//	{
-//	//		doRandom();
-//	//	}
-//}
-
-////--------------------------------------------------------------
-//void SurfingIndexRandomizer::drawImGui()
-//{
-//	drawImGuiWidgets_IndexMain();
-//	drawImGuiWidgets_IndexEditor();
-//}
-
 //--------------------------------------------------------------
 void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 {
 	if (bGui)
 	{
-		string str;
-
+		// Calculate common widgets sizes to fit current window being responsive.
 		float _spcx;
 		float _spcy;
 		float _w100;
@@ -570,74 +612,69 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 		float _h;
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-		//-
+		//--
 
 		// Minimize
 		ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
-		//guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
-		//---
-
-		if (!bMinimize)
-		{
-			//ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor);
-			//guiManager.Add(bGui_Editor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ofxImGuiSurfing::AddToggleRoundedButton(bGui_Editor, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-
-			//RND MAIN from parent scope!
-			if (bGui_Parent.getName() != "-1")
-				ofxImGuiSurfing::AddToggleRoundedButton(bGui_Parent, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-		}
-
-		//--
-
-		// 1. Presets randomizers
+		ofxImGuiSurfing::AddSpacingSeparated();
 
 		//-
 
-		ImGui::Spacing();
-
-		// 1.0.1 Play randomizer index
-
-		// blink by timer
-		float tn = getPlayerPct();
-		ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w100, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
-
-		//--
-
-		// 1.0.2 Draw progress bar for the randomizer timer
+		// Enable
+		if (!bMinimize)
 		{
-			ofxImGuiSurfing::ProgressBar2(tn); // to get the short timers scaled to bar
-			//ofxImGuiSurfing::ProgressBar2(randomizerProgressPrc);
-			//ofxImGuiSurfing::ProgressBar2(randomizerProgress);
+			ofxImGuiSurfing::AddBigToggle(bEnableRandomizerIndex, _w100, _h * 1.5f);
+			if (!bEnableRandomizerIndex) return;
+
+			ofxImGuiSurfing::AddSpacingSeparated();
 		}
 
+		// Run Random
+		ofxImGuiSurfing::AddBigButton(bRandomRunIndex, ImVec2(-1, -1));
+
 		ImGui::Spacing();
+
+		//---
+
+		// 1 Player
+
+		// Blink by timer
+		float tn = getPlayerPct();
+		ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w100, 2 * _h, "PLAYING INDEX", "PLAY INDEX", true, 1 - tn);
+
+		// 2 Draw progress bar for the randomizer timer
+		ofxImGuiSurfing::ProgressBar2(tn); // to get the short timers scaled to bar
+
+		ImGui::Spacing();
+
+		if (!bMinimize)
+		{
+			ofxImGuiSurfing::AddCheckBox(bAvoidRepeatRand);
+			//ofxImGuiSurfing::AddCheckBox(bEnableLatch);
+		}
+
+		ofxImGuiSurfing::AddSpacingSeparated();
 
 		//--
 
-		// Index Selector
+		// 3. Index Selector
 
-		str = "Index: " + ofToString(indexSelected.get());
-		ImGui::Text(str.c_str());
-
-		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 		ofxImGuiSurfing::AddParameter(indexSelected);
-		ImGui::PopItemWidth();
 
-		ImGui::Spacing();
-		//ImGui::Spacing();
+		ofxImGuiSurfing::AddSpacing();
 
 		//--
 
 		// Clicker
 		{
-			//widgetsManager.refreshPanelShape();
-			_w100 = getWidgetsWidth(1);
-			_w50 = getWidgetsWidth(2);
-			float __h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
+			_w100 = ofxImGuiSurfing::getWidgetsWidth(1);
+			_w50 = ofxImGuiSurfing::getWidgetsWidth(2);
+
+			float __h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
 			ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h);
+
 			ImGui::Spacing();
 		}
 
@@ -645,75 +682,52 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 
 		if (!bMinimize)
 		{
-			// 1.0.1B Bpm slider
+			if (!bGui_Editor) 
+			{
+				ofxImGuiSurfing::AddSpacingSeparated();
 
-			//auto parameter = randomizeDurationBpm;
-			//auto tmpRef = randomizeDurationBpm.get();
-			//auto name = ofxImGui::GetUniqueName(randomizeDurationBpm);
-			//if (ImGui::SliderFloat(ofxImGui::GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-			//{
-			//	parameter.set(tmpRef);
-			//}
+				ImGui::Text("CLOCK");
+				ofxImGuiSurfing::AddSpacing();
 
-			ImGui::Spacing();
+				// BPM 
 
-			//ImGui::PushItemWidth(_w50);
-			ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
-			//ofxImGuiSurfing::AddDragFloatSlider(randomizeDurationBpm);
-			//ImGui::PopItemWidth();
+				ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
 
-			//--
+				//--
 
-			ImGui::Spacing();
-			if (ImGui::Button("Half", ImVec2(_w50, _h))) { randomizeDurationBpm /= 2.f; }
-			ImGui::SameLine();
-			if (ImGui::Button("Double", ImVec2(_w50, _h))) { randomizeDurationBpm *= 2.f; }
-			if (ImGui::Button("Reset", ImVec2(_w100, _h))) { randomizeDurationBpm = 120; }
+				ImGui::Spacing();
+
+				if (ImGui::Button("Half", ImVec2(_w50, _h))) { randomizeDurationBpm /= 2.f; }
+				ImGui::SameLine();
+				if (ImGui::Button("Double", ImVec2(_w50, _h))) { randomizeDurationBpm *= 2.f; }
+
+				if (ImGui::Button("Reset Clock", ImVec2(_w100, _h))) { randomizeDurationBpm = 120.f; }
+			}
 
 			//--
+
+			ofxImGuiSurfing::AddSpacingSeparated();
 
 			ofxImGuiSurfing::AddToggleRoundedButton(bExtraClicker);
+			ofxImGuiSurfing::AddSpacing();
 			if (bExtraClicker)
 			{
 				ImGui::Indent();
 
-				ImGui::Text("Clicker:");
-				ofxImGuiSurfing::AddToggleRoundedButton(respBtnsClicker);
-				if (respBtnsClicker)
+				if (ImGui::TreeNodeEx("CLICKER", ImGuiTreeNodeFlags_Framed))
 				{
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-					ofxImGuiSurfing::AddStepperInt(amntBtnsClicker);
-					ImGui::PopItemWidth();
+					ofxImGuiSurfing::AddToggleRoundedButton(respBtnsClicker);
+					if (respBtnsClicker)
+					{
+						ofxImGuiSurfing::AddStepperInt(amntBtnsClicker);
+					}
+
+					ImGui::TreePop();
 				}
 
 				ImGui::Unindent();
 			}
 		}
-
-		//--
-
-		//// TODO: undo engine
-		//if (MODE_Editor)
-		//{
-		//	float wHalf = 100;
-		//	if (ImGui::Button("UNDO", ImVec2(wHalf, 20)))
-		//	{
-		//		//ofLogNotice(__FUNCTION__) << "UNDO <-";
-		//		//undoStringParams.undo();
-		//		//doRefreshUndoParams();
-		//	}
-		//	ImGui::SameLine();
-		//	if (ImGui::Button("REDO", ImVec2(wHalf, 20)))
-		//	{
-		//		//ofLogNotice(__FUNCTION__) << "REDO ->";
-		//		//undoStringParams.redo();
-		//		//doRefreshUndoParams();
-		//	}
-		//	//string str = "";
-		//	//str += ofToString(undoStringParams.getUndoLength()) + "/";
-		//	//str += ofToString(undoStringParams.getRedoLength());
-		//	//ImGui::Text(str.c_str());
-		//}
 	}
 }
 
@@ -722,7 +736,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 {
 	if (bGui_Editor)
 	{
-		// Pre calculate common widgets sizes to fit current window, "to be responsive".
+		// Calculate common widgets sizes to fit current window being responsive.
 		float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
 		float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
 		float _w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
@@ -734,48 +748,45 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 		// Minimize
 		ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
 
-		//-
+		ofxImGuiSurfing::AddSpacingSeparated();
 
-		// Enable
-		ofxImGuiSurfing::AddBigToggle(bEnableRandomizerIndex, _w1, _h * 1.5f);
+		//--
 
-		if (bEnableRandomizerIndex)
+		//if (bEnableRandomizerIndex)
 		{
-			// Blink by timer progress
-			//float tn = getPlayerPct();
-			//ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
-			////ofxImGuiSurfing::AddBigButton(bRandomizeIndex, ImVec2(-1, -1));
-			////ofxImGuiSurfing::AddParameter(indexSelected);
-			//ImGui::Spacing();
-
-			//--
-
 			// BPM
+
+			if (bMinimize)
+			{
+				if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
+				ImGui::SameLine();
+				if (ImGui::Button("Double", ImVec2(_w2, _h))) { randomizeDurationBpm *= 2.f; }
+				if (ImGui::Button("Reset Clock", ImVec2(_w1, _h))) {
+					randomizeDurationBpm = 120.f;
+				}
+
+				ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
+				ofxImGuiSurfing::AddParameter(randomizeDuration);
+				ofxImGuiSurfing::AddParameter(randomizeDurationShort);
+				ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
+			}
 
 			if (!bMinimize)
 			{
-				bool bOpen = false;
-
-				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-				_flagt |= ImGuiTreeNodeFlags_Framed;
-
-				if (ImGui::TreeNodeEx("BPM", _flagt))
+				if (ImGui::TreeNodeEx("BPM", ImGuiTreeNodeFlags_Framed))
 				{
 					_w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
 					_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
 
-					ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
-
-					if (!bMinimize) {
-						ofxImGuiSurfing::AddParameter(randomizeDuration);
-						ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
-						ofxImGuiSurfing::AddParameter(randomizeDurationShort);
-					}
-
 					if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
 					ImGui::SameLine();
 					if (ImGui::Button("Double", ImVec2(_w2, _h))) { randomizeDurationBpm *= 2.f; }
-					if (ImGui::Button("Reset", ImVec2(_w1, _h))) { randomizeDurationBpm = 120; }
+					if (ImGui::Button("Reset Clock", ImVec2(_w1, _h))) { randomizeDurationBpm = 120.f; }
+
+					ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
+					ofxImGuiSurfing::AddParameter(randomizeDuration);
+					ofxImGuiSurfing::AddParameter(randomizeDurationShort);
+					ofxImGuiSurfing::AddParameter(randomizeDurationShortRatio);
 
 					ImGui::TreePop();
 				}
@@ -785,26 +796,16 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 
 			if (!bMinimize)
 			{
-				ImGui::Spacing();
-				//ofxImGuiSurfing::AddToggleRoundedButton(bEnableLatch);
-				ofxImGuiSurfing::AddToggleRoundedButton(bAvoidRepeatRand);
-			}
+				ofxImGuiSurfing::AddSpacingSeparated();
 
-			// Blink by timer progress
-
-			float tn = getPlayerPct();
-			ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, 2 * _h, "PLAYING RND", "PLAY RND", true, 1 - tn);
-
-			ofxImGuiSurfing::AddBigButton(bRandomizeIndex, ImVec2(-1, -1));
-			ofxImGuiSurfing::AddParameter(indexSelected);
-
-			if (!bMinimize)
-			{
-				ImGui::Spacing();
+				// Probs
 				ofxImGuiSurfing::AddGroup(params_PresetsProbs, ImGuiTreeNodeFlags_None);
+
+				// Duration
 				ofxImGuiSurfing::AddGroup(params_PresetDurations, ImGuiTreeNodeFlags_None);//closed
 
 				ImGui::Spacing();
+
 				ofxImGuiSurfing::AddBigButton(bResetProbs, _w1, _h);
 			}
 		}
@@ -836,7 +837,7 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter& e)
 
 		// Exclude log
 		if ((name != bAvoidRepeatRand.getName()) &&
-			(name != bRandomizeIndex.getName()) //&&
+			(name != bRandomRunIndex.getName()) //&&
 			//(name != "index") &&
 			//(name != indexSelected.getName())
 			)
@@ -860,11 +861,11 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter& e)
 		//--
 
 		// Randomizer
-		else if (name == bRandomizeIndex.getName() && bRandomizeIndex)
+		else if (name == bRandomRunIndex.getName() && bRandomRunIndex)
 		{
 			//ofLogNotice(__FUNCTION__) << group.getName() << "RANDOMIZE !";
 
-			bRandomizeIndex = false;
+			bRandomRunIndex = false;
 			doRandom();
 		}
 
@@ -926,9 +927,10 @@ void SurfingIndexRandomizer::Changed_Control(ofAbstractParameter& e)
 #endif
 		else if (name == bResetProbs.getName() && bResetProbs)
 		{
-			ofLogNotice(__FUNCTION__) << "RESET DICES: " << e;
-			doResetDices();
+			ofLogNotice(__FUNCTION__) << "Reset Probs";
 			bResetProbs = false;
+
+			doReset();
 		}
 
 		//--

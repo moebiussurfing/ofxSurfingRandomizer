@@ -10,7 +10,7 @@ void ofApp::setup()
 	// Randomizer
 
 	// Target A. 
-	// Setup with Params
+	// Params
 
 	randomizer.setup(params);
 
@@ -18,14 +18,16 @@ void ofApp::setup()
 
 	// Presets Manager
 
+	presetsManager.setDiablePlayer(); // -> Force disable player bc now we have the randomizer player.
+
 	presetsManager.addGroup(params);
 
 	//--
 
 	// Target B. 
 	// Index
-	// Link index with the Presets Manager selector!
 
+	// Link index with the Presets Manager selector!
 	randomizer.setIndexPtr(presetsManager.index);
 
 	//--
@@ -34,6 +36,9 @@ void ofApp::setup()
 	
 	// Force not both keys callbacks enabled to avoid collide!
 	presetsManager.bKeys = !randomizer.bKeys;
+
+	// Create some presets
+	presetsManager.doPopulatePresetsRandomized();
 
 	//TODO: fix
 	// Force visible on first start 
@@ -47,11 +52,11 @@ void ofApp::setupParams()
 	// For Target A. 
 	// Params to be randomized
 
-	params.setName("paramsGroup");
-	params.add(alpha.set("alpha", 0.5f, 0, 1.0f));
-	params.add(size.set("size", 400, 10, 800));
-	params.add(round.set("round", 0.5, 0, 1));
-	params.add(rotation.set("rotation", 180, 0, 360));
+	params.setName("myScene");
+	params.add(alpha.set("Alpha", 0.5f, 0, 1.0f));
+	params.add(size.set("Size", 400, 10, 800));
+	params.add(round.set("Round", 0.5, 0, 1));
+	params.add(rotation.set("Rotation", 180, 0, 360));
 }
 
 //--------------------------------------------------------------
