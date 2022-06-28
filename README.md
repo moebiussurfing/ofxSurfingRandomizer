@@ -3,9 +3,7 @@
 ## Overview
 An **openFrameworks** add-on to perform **Two** types of useful **Randomizers** for your scenes.  
 
-
-https://user-images.githubusercontent.com/2106149/134599431-350c0c03-2041-4ba6-aed0-eb8fc7980234.mp4
-
+![](examples/1-Rand_Basic/Capture.PNG)
 
 The Randomizers will target over:  
 
