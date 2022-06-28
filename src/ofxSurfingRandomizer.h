@@ -6,10 +6,19 @@
 
 	TODO:
 
+	+ display index and group names
+	+ split toggles windows
+		move to params mode / ranges
+		make tree foldering
+		use pushIDs to avoid collide
+		allow adding on runtime?
+	+ on ranges window, make columns to put short checkboxes 
+		right to the prob sliders
+
+	+ tune range slider on ImGui: drag from center
 	+ add multidim vec and colors
 	+ add resets for vec
 	+ add another mode. center + % spread variation
-	+ tune range slider on ImGui: drag from center
 
 */
 
@@ -116,7 +125,7 @@ public:
 		indexTarget.set("Index", 0, 0, index.getMax());
 
 		surfingIndexRandomizer.setPath(path_Global);
-		surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex);
+		surfingIndexRandomizer.setup(indexTarget/*, bGui_ModeIndex*/);
 	}
 
 	//--

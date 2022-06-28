@@ -31,7 +31,8 @@ public:
 
 	// Linked params for the index and for the gui visible toggle!
 	//--------------------------------------------------------------
-	void setup(ofParameter<int>& indexParam, ofParameter<bool> bOpenGui) {
+	void setup(ofParameter<int>& indexParam/*, ofParameter<bool> bOpenGui*/) {
+	//void setup(ofParameter<int>& indexParam, ofParameter<bool> bOpenGui) {
 		//TODO:
 		//bGui.makeReferenceTo(bOpenGui);
 		

@@ -29,11 +29,6 @@
 
 */
 
-
-#define USE_ONLY_RECTANGLES 
-// -> This is to simplify the understanding of the add-on. 
-// Index controls only the color.
-
 #include "ofMain.h"
 
 #include "ofxSurfingRandomizer.h"
@@ -56,8 +51,6 @@ public:
 	ofParameter<float> round;
 	ofParameter<float> rotation;
 	ofParameter<int> size;
-	ofParameter<glm::vec2> position;
-	ofParameter<glm::vec3> rotator;
 
 	//-> The parameters will be the randomization Target 1.
 	ofParameterGroup params;

@@ -11,14 +11,14 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_AppState = path_Global + "Rand_AppSession.json";
 	path_MemoryState = path_Global + "Rand_MemoryState.json";
 
-	bGui.set("SURFING RAND", true);
+	bGui.set("RAND", true);
 	bGui_Main.set("RAND MAIN", false);
 	bGui_RangesEditor.set("RAND RANGES", false);
 	bGui_Index.set("RAND INDEX", false);
 	bGui_Params.set("RAND PARAMS", false);
 
-	bGui_ModeIndex.set("MODE INDEX", true);//->show by default
-	bGui_ModeParams.set("MODE PARAMS", true);//->show by default
+	bGui_ModeIndex.set("MODE INDEX", false);//->show by default
+	bGui_ModeParams.set("MODE PARAMS", false);//->show by default
 
 	params_AppState.setName("Surfing Rand");
 	params_AppState.add(bGui);
@@ -92,7 +92,8 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 		indexTarget.set("Index", 0, 0, NUM_INDEX_ITEMS - 1);
 
 		surfingIndexRandomizer.setPath(path_Global);
-		surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex); // linked params
+		surfingIndexRandomizer.setup(indexTarget); // linked params
+		//surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex); // linked params
 	}
 
 	//--
@@ -706,7 +707,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 				guiManager.Add(surfingIndexRandomizer.bGui, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 				guiManager.Add(surfingIndexRandomizer.bGui_Editor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
-				if (!surfingIndexRandomizer.bGui && !surfingIndexRandomizer.bGui_Editor)
+				if (!surfingIndexRandomizer.bGui /*&& !surfingIndexRandomizer.bGui_Editor*/)
 				{
 					//if (!guiManager.bMinimize)
 					{
@@ -2598,8 +2599,10 @@ void ofxSurfingRandomizer::keyPressed(ofKeyEventArgs& eventArgs) {
 	if (mod_CONTROL && key == OF_KEY_BACKSPACE) { doResetParamsFull(RESET_PARAM_MIN); }
 	if (!mod_CONTROL && key == OF_KEY_BACKSPACE) { doResetParamsFull(RESET_RANGE_MIN); }
 
-	// Play / Tester
+	// Play Randomizer
+	// Params
 	if (!mod_CONTROL && key == OF_KEY_RETURN) bPlay = !bPlay;
+	// Index
 	if (mod_CONTROL && key == OF_KEY_RETURN) surfingIndexRandomizer.bPlay = !surfingIndexRandomizer.bPlay;
 
 	// Index Browse

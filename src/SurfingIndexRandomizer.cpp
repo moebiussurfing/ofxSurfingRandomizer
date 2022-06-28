@@ -61,6 +61,10 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 	ofAddListener(params_Control.parameterChangedE(), this, &SurfingIndexRandomizer::Changed_Control);
 	ofAddListener(params_RandomizerIndex.parameterChangedE(), this, &SurfingIndexRandomizer::Changed_Control);
 
+	//TODO:
+	//default probs
+	doReset();
+
 	//----
 
 	// Startup
