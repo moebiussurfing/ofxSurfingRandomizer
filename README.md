@@ -119,11 +119,14 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). [_FORK_ from @**Daandelange**]  
 * [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/)  
+* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Disabled by default._]  
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). [_Not required. Only for some examples._] 
+  
+Already included into `/libs`. No need to add manually into PG.  
 * [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) [_FORK_]  
 * [ofxMSAInteractiveObject](https://github.com/moebiussurfing/ofxMSAInteractiveObject) [_FORK_]  
-* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Disabled by default._]  
 * [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [_Optional. Disabled by default._]  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). [_Only for some examples_]  
+
   </p>
 </details>
 
@@ -131,7 +134,7 @@ Clone these add-ons and include into the **OF PROJECT GENERATOR**:
   <summary>Tested Systems</summary>
   <p>
 
-  - **Windows 10** / **VS 2017** / **OF ~0.11**
+  - **Windows 10** / **VS 2017**  **VS 2022** / **OF ~0.11**
   </p>
 </details>
 
