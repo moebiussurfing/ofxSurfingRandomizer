@@ -2,25 +2,16 @@
 
 #include "ofMain.h"
 
-
 /*
-
-	BUG:
-
-	+ command rnd index fail
-
 
 	TODO:
 
-	+ fix many errors
 	+ add multidim vec and colors
 	+ add resets for vec
 	+ add another mode. center + % spread variation
-	+ tune range slider on ImGui
-		drag from center
+	+ tune range slider on ImGui: drag from center
 
 */
-
 
 //----
 
@@ -37,8 +28,7 @@
 #include "ofxSurfingHelpers.h"
 #include "TextBoxWidget.h"
 #include "ofxSurfing_Timers.h"
-
-#include "SurfingIndexRandomizer.h" // index randomizer
+#include "SurfingIndexRandomizer.h" // Index randomizer
 
 #define DEFAULT_MIN_PCT 0.1f
 #define DEFAULT_MAX_PCT 0.9f
@@ -56,35 +46,26 @@ public:
 
 	void setup(ofParameterGroup& group);
 	void setupGui();
+	void startup();
 	void draw(ofEventArgs& args);
 	void update(ofEventArgs& args);
-	void exit();
 	void keyPressed(ofKeyEventArgs& eventArgs);
-
-	void startup();
+	void exit();
 
 	// Legacy API, could remove
 	// -> Exposed public to avoid bug that interferes between ImGui instances..
 	void draw_ImGui();
 	void drawGui() { draw_ImGui(); };
 
-	//--------------------------------------------------------------
-	void setGuiVisible(bool b)
-	{
-		bGui = b;
-		bGui_Main = b;//TODO:
-	}
-
 private:
 
+	void drawImGui_Windows();
 	void drawImGui_Main();
 	void drawImGui_Params();
 	void drawImGui_RangeEditor();
 	void drawImGui_RangeEditorResets();
 	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
 	void drawImGui_Index();
-
-	void drawImGui_Windows();
 
 	void drawHelp();
 	void buildHelp();
@@ -104,12 +85,21 @@ public:
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bHelp;
 
+	//--------------------------------------------------------------
+	void setGuiVisible(bool b)
+	{
+		bGui = b;
+		bGui_Main = b;//TODO:
+	}
+
 	//--
 
 private:
 
+	ofParameter<int> indexTarget{ "Index", 0, 0, 9 };
+
 	SurfingIndexRandomizer surfingIndexRandomizer;
-	ofParameter<int> indexTarget{ "index", 0, 0, 9 };
+
 	bool bCustomIndex = false;
 
 public:
@@ -126,7 +116,9 @@ public:
 		surfingIndexRandomizer.setup(indexTarget, bGui_Index);
 	}
 
-	//-
+	//--
+
+public:
 
 	ofParameter<bool> bPlay;
 	ofParameter<bool> bPlay_Index;
@@ -153,7 +145,8 @@ private:
 
 	// Commands
 
-private:
+//private:
+public:
 
 	enum ResetPramsType
 	{
@@ -218,7 +211,6 @@ private:
 	//--
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-
 private:
 
 	ofxSurfingUndoHelper undoManager;

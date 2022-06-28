@@ -1356,7 +1356,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	for (int i = 0; i < enablersForParams.size(); i++)
 	{
 		doRandomize(i, false);
-}
+	}
 
 	//--
 
@@ -1367,7 +1367,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	//if (undoManager.bAutoStore) undoManager.doStoreUndo();
 #endif
 
-	}
+}
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::doRandomize(int index, bool bForce)
@@ -2017,25 +2017,35 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 void ofxSurfingRandomizer::buildHelp()
 {
 	std::string helpInfo = "";
+
 	helpInfo += "RANDOMIZER \n";
-	helpInfo += "HELP \n";
+	helpInfo += "HELP \n\n";
+
+	helpInfo += "KEY COMMANDS\n\n";
 
 	if (!bKeys) {
-		helpInfo += "\n";
-		helpInfo += "KEY TOGGLE IS DISABLED. \n";
-		helpInfo += "ENABLE KEY TOGGLE! \n";
+		helpInfo += "Keys toggle is disabled. \n";
+		helpInfo += "Enable Keys toggle! \n";
 	}
 	else {
+		helpInfo += "G                GUI \n";
+		helpInfo += "I                HELP INFO \n";
 		helpInfo += "\n";
-		helpInfo += "KEY COMMANDS\n";
+
+		helpInfo += "PARAMS  \n";
+		helpInfo += "Space                  RAND \n";
+		helpInfo += "Backspace              RESET RANGED \n";
+		helpInfo += "Ctrl + Backspace       RESET \n";
 		helpInfo += "\n";
-		helpInfo += "SPACE                  PARAMS RAND \n";
-		helpInfo += "BACKSPACE              PARAMS RESET RANGED \n";
-		helpInfo += "Ctrl+BACKSPACE         PARAMS RESET \n";
-		helpInfo += "Ctrl+SPACE             INDEX RAND \n";
-		helpInfo += "LEFT-RIGHT             INDEX BROWSE \n";
-		helpInfo += "RETURN                 PLAY TEST \n";
-		helpInfo += "Ctrl+RETURN            PLAY TEST INDEX \n";
+
+		helpInfo += "INDEX \n";
+		helpInfo += "Ctrl + Space           RAND \n";
+		helpInfo += "< >                    BROWSE \n";
+		helpInfo += "\n";
+
+		helpInfo += "TESTER / PLAYER \n";
+		helpInfo += "Return                 PARAMS \n";
+		helpInfo += "Ctrl + Return          INDEX \n";
 	}
 
 	//helpInfo = ofToUpper(helpInfo);//make uppercase

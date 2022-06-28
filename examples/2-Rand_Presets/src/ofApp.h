@@ -1,6 +1,5 @@
 #pragma once
 
-
 /*
 
 	This example shows how we apply the randomizations 
@@ -34,7 +33,6 @@
 
 #include "ofxSurfingRandomizer.h"
 #include "ofxSurfingPresets.h"
-
 #include "ofxWindowApp.h"
 
 class ofApp : public ofBaseApp
@@ -44,10 +42,12 @@ public:
     void setup();
     void setupParams();
     void draw();
-    void drawScene();
 
 	ofxSurfingRandomizer randomizer;
 	ofxSurfingPresets presetsManager;
+
+	//-> The parameters will be the randomization Target A.
+	ofParameterGroup params;
 
 	// Scene Params
 	ofParameter<float> alpha;
@@ -55,15 +55,8 @@ public:
 	ofParameter<float> rotation;
 	ofParameter<int> size;
 
-	//-> The parameters will be the randomization Target A.
-	ofParameterGroup params;
-
-	//-> Index will the randomization Target B. 
-	// This int will set the color.
-	ofParameter<int> index{ "index", 0, 0, 4 }; 
-	ofEventListener listenerIndex;
-
-	void drawShape(int type, int x, int y, int size);
+    void drawScene();
+	void drawShape(int x, int y, int size);
 
 	ofxWindowApp windowApp;
 };
