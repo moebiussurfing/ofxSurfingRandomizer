@@ -28,7 +28,7 @@
 
 // Undo Engine
 
-#define INCLUDE__OFX_UNDO_ENGINE
+//#define INCLUDE__OFX_UNDO_ENGINE // -> Comment to disable feature and his dependency
 
 //----
 
@@ -49,40 +49,62 @@
 
 class ofxSurfingRandomizer
 {
-	enum ResetPramsType
-	{
-		RESET_PARAM_MIN = 0,
-		RESET_PARAM_FULL_CENTER,
-		RESET_PARAM_RANGE_CENTER,
-		RESET_PARAM_MAX,
-		RESET_RANGE_MIN,
-		RESET_RANGE_MAX,
-	};
-
-#ifdef INCLUDE__OFX_UNDO_ENGINE
-
-private:
-
-	ofxSurfingUndoHelper undoManager;
-
-#endif
-
-	//----
-
 public:
 
 	ofxSurfingRandomizer();
 	~ofxSurfingRandomizer();
 
 	void setup(ofParameterGroup& group);
-	void draw(ofEventArgs & args);
-	void update(ofEventArgs & args);
+	void setupGui();
+	void draw(ofEventArgs& args);
+	void update(ofEventArgs& args);
 	void exit();
-	void keyPressed(ofKeyEventArgs &eventArgs);
+	void keyPressed(ofKeyEventArgs& eventArgs);
 
 	void startup();
 
-	//-
+	// Legacy API, could remove
+	// -> Exposed public to avoid bug that interferes between ImGui instances..
+	void draw_ImGui();
+	void drawGui() { draw_ImGui(); };
+
+	//--------------------------------------------------------------
+	void setGuiVisible(bool b)
+	{
+		bGui = b;
+		bGui_Main = b;//TODO:
+	}
+
+private:
+
+	void drawImGui_Main();
+	void drawImGui_Params();
+	void drawImGui_RangeEditor();
+	void drawImGui_RangeEditorResets();
+	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
+	void drawImGui_Index();
+
+	void drawImGui_Windows();
+
+	void drawHelp();
+	void buildHelp();
+
+	//--
+
+	// Exposed to external GUI's
+
+public:
+
+	ofParameter<bool> bGui;
+	ofParameter<bool> bGui_Main;
+	ofParameter<bool> bGui_Params;
+	ofParameter<bool> bGui_RangesEditor;
+	ofParameter<bool> bGui_Index;
+
+	ofParameter<bool> bKeys;
+	ofParameter<bool> bHelp;
+
+	//--
 
 private:
 
@@ -121,30 +143,27 @@ private:
 	int tf;
 	float tn;
 
-public:
+	const int WIDGET_R_DRAG = 70;
+	const int WIDGET_R_SLIDER = 200;
+	std::string spcl = "    "; // Space between min-max range slider label
 
-	void draw_ImGui(); // -> exposed public to avoid bug that interferes between ImGui instances..
+	TextBoxWidget textBoxWidget;
+
+	//--
+
+	// Commands
 
 private:
 
-	void drawImGui_Main();
-	void drawImGui_Params();
-	void drawImGui_RangeEditor();
-	void drawImGui_RangeEditorResets();
-	void drawImGui_RangeEditorVecRow(int indexParam, int dimParam);
-	void drawImGui_Index();
-
-	const int WIDGET_R_DRAG = 70;
-	const int WIDGET_R_SLIDER = 200;
-	std::string spcl = "    ";//space between min-max range slider label
-
-	void drawImGui_Widgets();
-	void drawHelp();
-	TextBoxWidget textBoxWidget;
-
-	//-
-
-	// commands
+	enum ResetPramsType
+	{
+		RESET_PARAM_MIN = 0,
+		RESET_PARAM_FULL_CENTER,
+		RESET_PARAM_RANGE_CENTER,
+		RESET_PARAM_MAX,
+		RESET_RANGE_MIN,
+		RESET_RANGE_MAX,
+	};
 
 public:
 
@@ -163,22 +182,13 @@ private:
 	void doDisableAll();
 	void doEnableAll();
 
-	//-
+	//--
 
 	ofxSurfing_ImGui_Manager guiManager;
 
-public:
-
-	void setAutodraw(bool autodraw) { // required to set to true when only one ofxImGUi instance will be used between all the ofApp project add-ons using ofxImGui
-		bAutoDraw = autodraw;
-	}
-
-private:
-
-	bool bAutoDraw = true;
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
-	//-
+	//--
 
 private:
 
@@ -197,56 +207,22 @@ private:
 
 	//-
 
-	// exposed to external gui's
+private:
 
-public:
+	// Settings
+	string path_Global = "ofxSurfingRandomizer/";
+	string path_Editor; // the editor settings
+	string path_AppState; // the control/panels states
+	string path_MemoryState; // there's a memory state to play with reset/random workflow
 
-	ofParameter<bool> bGui_Global;
-	ofParameter<bool> bGui_Main;
-	ofParameter<bool> bGui_Params;
-	ofParameter<bool> bGui_RangesEditor;
-	ofParameter<bool> bGui_Index;
+	//--
 
-	ofParameter<bool> bKeys;
-	ofParameter<bool> bHelp;
-
-	//-
-
-//	//--------------------------------------------------------------
-//	void setImGuiAutodraw(bool b){ guiManager.setImGuiAutodraw(b); }//required to set to false when only one ImGui instance is created
-//
-//	//--------------------------------------------------------------
-//	void setImGuiSharedMode(bool b) {
-//		guiManager.setSharedMode(b); // Force shared context
-//	}
+#ifdef INCLUDE__OFX_UNDO_ENGINE
 
 private:
 
-	// settings
-	string path_Global = "ofxSurfingRandomizer/";
-	string path_Editor;//the editor settings
-	string path_AppState;//the control/panels states
-	string path_MemoryState;//there's a memory state to play with reset/random workflow
+	ofxSurfingUndoHelper undoManager;
 
-	//----
-
-	//TODO:
-	//a custom group ImGui populater for custom group editor...
-	//helpers
-	//if (info == typeid(bool))
-	//{
-	//	if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-	//	{
-	//		parameter.set(tmpRef);
-	//		return true;
-	//	}
-	//	return false;
-	//}
-	//auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-	//if (parameterBool)
-	//{
-	//	ofxImGui::AddParameter(*parameterBool);
-	//	continue;
-	//}
-	};
+#endif
+};
 

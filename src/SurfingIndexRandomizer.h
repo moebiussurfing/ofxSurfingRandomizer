@@ -80,7 +80,7 @@ public:
 	//void doCheckRandomReady();
 
 	void update();
-	void keyPressed(int key);
+	//void keyPressed(int key);
 	void exit();
 
 private:
@@ -113,9 +113,9 @@ public:
 
 public:
 
-	void drawImGui();
-	void drawImGui_IndexMain();
-	void drawImGui_IndexEditor();
+	//void drawImGui();
+	void drawImGuiWidgets_IndexMain();
+	void drawImGuiWidgets_IndexEditor();
 
 	//-
 
@@ -137,7 +137,7 @@ public:
 public:
 
 	//--------------------------------------------------------------
-	void setup(ofParameter<int> & indexParam, ofParameter<bool> bOpenGui) {
+	void setup(ofParameter<int> & indexParam, ofParameter<bool> bOpenGui) { // linked params
 		bGui.makeReferenceTo(bOpenGui);
 		indexSelected.makeReferenceTo(indexParam);
 		setup(indexParam.getMax() + 1);
@@ -183,12 +183,12 @@ public:
 	ofParameter<int> randomizeDurationShort;
 	ofParameter<float> randomizeDurationShortRatio;
 
-	ofParameter<bool> bMODE_AvoidRandomRepeat; // this mode re makes randomize again if new index preset it's the same than previous!
+	ofParameter<bool> bAvoidRepeatRand; // this mode re makes randomize again if new index preset it's the same than previous!
 
 private:
 
 	ofParameter<bool> bEnableRandomizerIndex;
-	//ofParameter<bool> MODE_LatchTrig; // this mode trigs the preset but goes back to preset 0 after duration timer
+	//ofParameter<bool> bEnableLatch; // this mode trigs the preset but goes back to preset 0 after duration timer
 	ofParameter<bool> bResetProbs;
 	ofParameter<int> randomizedDice; // to test
 	bool bLatchRun = false;
@@ -302,7 +302,7 @@ public:
 
 public:
 	void setModeRandomizeAvoidRepeat(bool b) {
-		bMODE_AvoidRandomRepeat = b;
+		bAvoidRepeatRand = b;
 	}
 	void setModeEditor(bool b) {
 		MODE_Editor = b;
