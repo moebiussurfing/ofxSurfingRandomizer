@@ -11,7 +11,7 @@ A. The desired **ofParameters** (int/float/bool) of an **ofParameterGroup**.
 
 B. An **Index** selector. (_int/preset/state..._)   
 
-## Why?
+## Why ?
 
   - Useful to **Explore not expected Combinations** of the **ofParameters Randomizer** (A) that "modulate" your scene.  
 
@@ -22,7 +22,7 @@ B. An **Index** selector. (_int/preset/state..._)
   - Each allowed index (ie: from 0 to 8) has a settable probability to make some states more or less frequently switched to. 
 
 
-## A. RANGED RANDOMIZATION 
+## A. ofParameters RANDOMIZER
 ### USAGE  
 1. Just pass your ```ofParameterGroup``` parameters container.
 2. Enable the desired parameters from the group.
@@ -31,9 +31,7 @@ B. An **Index** selector. (_int/preset/state..._)
 5. Trig the randomization.
 6. Use the Tester player to repeat randomizations during tweaking.
 
-![image](/readme_images/Capture1.PNG?raw=true "image")  
-
-## B. INDEX RANDOMIZER 
+## B. Iindex RANDOMIZER 
 ### USAGE  
 1. Initialize the Min-Max of your index/int parameter. (ie: how many presets/states are available)
 2. Set the probability for each index.
@@ -41,8 +39,6 @@ B. An **Index** selector. (_int/preset/state..._)
 4. Set the global BPM clock speed.
 5. Pass your *ofParameter<int>* target index to receive the index randoms (in ofApp).
 6. Use the Tester player to repeat randomizations during tweaking.
-
-![image](/readme_images/Capture2.PNG?raw=true "image")  
 
 <details>
   <summary>Other Features</summary>
@@ -115,15 +111,15 @@ void ofApp::setup()
 
 Clone these add-ons and include into the **OF PROJECT GENERATOR**:
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/). [_FORK_ from @**Daandelange**]  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). / _FORK_ from @**Daandelange**  
 * [ofxImGuiSurfing](https://github.com/moebiussurfing/ofxImGuiSurfing/)  
-* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) [_Optional. Disabled by default._]  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). [_Not required. Only for some examples._] 
+* [ofxSurfingUndoHelper](https://github.com/moebiussurfing/ofxSurfingUndoHelper/) / _Optional. Disabled by default._  
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. Only for some examples._ 
   
 Already included into `/libs`. No need to add manually into PG.  
-* [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) [_FORK_]  
-* [ofxMSAInteractiveObject](https://github.com/moebiussurfing/ofxMSAInteractiveObject) [_FORK_]  
-* [ofxUndo](https://github.com/moebiussurfing/ofxUndo) [_Optional. Disabled by default._]  
+* [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) / _Fork_  
+* [ofxMSAInteractiveObject](https://github.com/moebiussurfing/ofxMSAInteractiveObject) / _Fork_  
+* [ofxUndo](https://github.com/moebiussurfing/ofxUndo) / _Optional. Disabled by default._  
 
   </p>
 </details>
