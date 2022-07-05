@@ -6,6 +6,10 @@
 
 	TODO:
 
+	+ split index/params
+
+	+ add store/recall handly
+
 	+ display index and group names
 	+ split toggles windows
 		move to params mode / ranges
@@ -15,10 +19,13 @@
 	+ on ranges window, make columns to put short checkboxes 
 		right to the prob sliders
 
+	+ range
+	+ draw value too, not only min max
 	+ tune range slider on ImGui: drag from center
 	+ add multidim vec and colors
 	+ add resets for vec
 	+ add another mode. center + % spread variation
+	+ ransomizer: disable store enablers
 
 */
 
@@ -53,6 +60,7 @@ public:
 	ofxSurfingRandomizer();
 	~ofxSurfingRandomizer();
 
+	void setup();
 	void setup(ofParameterGroup& group);
 	void setupGui();
 	void startup();
@@ -65,6 +73,8 @@ public:
 	// -> Exposed public to avoid bug that interferes between ImGui instances..
 	void draw_ImGui();
 	void drawGui() { draw_ImGui(); };
+
+	void rebuildParamsGroup(ofParameterGroup& group);
 
 private:
 
@@ -177,8 +187,18 @@ public:
 	void doResetParamsFull(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
 	void doResetRangesFull();//set ranges to abs min/max from each parameter
 	void doResetRangesHalf();//set ranges to abs min/max from each parameter but a bit closed
+	
+	bool isRandomized() { 
+		if (bIsRandomized) {
+			bIsRandomized = false;
+			return true;
+		}
+		else return false;
+	};
 
 private:
+
+	bool bIsRandomized = false;
 
 	void doSaveState();//save the memory state
 	void doLoadState();//load the memory state
@@ -200,12 +220,12 @@ private:
 	void setupEditor(ofParameterGroup& group);
 	void addGroup(ofParameterGroup& group);
 
-	ofParameterGroup params;//the external parameters or targets
+	ofParameterGroup params; // the external parameters or targets
 
 	ofParameterGroup params_Editor;
-	ofParameterGroup params_EditorGroups;//the range limits to randomize each param
+	ofParameterGroup params_EditorGroups; // the range limits to randomize each param
 
-	ofParameterGroup params_EditorEnablers;//the enabled params to randomize
+	ofParameterGroup params_EditorEnablers; // the enabled params to randomize
 	vector<ofParameter<bool>> enablersForParams;
 
 	ofParameterGroup params_AppState;

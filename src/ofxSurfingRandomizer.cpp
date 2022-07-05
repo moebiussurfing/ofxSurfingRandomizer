@@ -67,12 +67,20 @@ void ofxSurfingRandomizer::setupGui() {
 }
 
 //--------------------------------------------------------------
+void ofxSurfingRandomizer::setup() {
+}
+
+//--------------------------------------------------------------
 void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	ofxSurfingHelpers::CheckFolder(path_Global);
 
+	//TODO: split params for core stuff
+	
+	//--
+	 
 	// Store the external target Params
-	params = group;
+	//params = group;
 
 	//--
 
@@ -101,6 +109,11 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 	// Gui
 
 	setupGui();
+
+	//-
+
+	// Help Info
+	textBoxWidget.setup();
 
 	//--
 
@@ -654,8 +667,8 @@ void ofxSurfingRandomizer::drawImGuiWindows() {
 #ifdef INCLUDE__OFX_UNDO_ENGINE
 		undoManager.drawImGui();
 #endif
-		}
 	}
+}
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::drawImGuiWindow_Main()
@@ -677,7 +690,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 			float _w3 = guiManager.getWidgetsWidth(3);
 			float _w4 = guiManager.getWidgetsWidth(4);
 			float _h1 = guiManager.getWidgetsHeight();
-			float _h2 = 2 * _h1;
+			float _h2 = 3 * _h1;
 
 			std::string n;
 
@@ -716,7 +729,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 
 						guiManager.Add(indexTarget);
 
-						// Trig Random
+						// Trig Random Index
 						ofxImGuiSurfing::AddBigButton(surfingIndexRandomizer.bRandomRunIndex, ImVec2(-1, -1));
 
 						_w1 = guiManager.getWidgetsWidth(1);
@@ -938,13 +951,14 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 
 						ImGui::TreePop();
 					}
-					guiManager.AddSpacingSeparated();
-
-					guiManager.Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
 
 					guiManager.Unindent();
 				}
 			}
+					
+			guiManager.AddSpacingSeparated();
+
+			guiManager.Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
 
 			//----
 
@@ -1057,7 +1071,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Params() {
 
 	if (bGui_Params)
 	{
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
 
 		if (guiManager.beginWindowSpecial(bGui_Params))
 		{
@@ -1476,7 +1490,7 @@ void ofxSurfingRandomizer::doRandomize() {
 	for (int i = 0; i < enablersForParams.size(); i++)
 	{
 		doRandomize(i, false);
-}
+	}
 
 	//--
 
@@ -1484,9 +1498,10 @@ void ofxSurfingRandomizer::doRandomize() {
 	// worfklow
 	// store current point to undo history
 	undoManager.doStoreUndoWhenAuto();
-	//if (undoManager.bAutoStore) undoManager.doStoreUndo();
+	//if (undoManager.bAutoAddStatesToUndo) undoManager.doStoreUndo();
 #endif
 
+	bIsRandomized = true;
 }
 
 //--------------------------------------------------------------
@@ -2114,6 +2129,12 @@ void ofxSurfingRandomizer::exit()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 {
+	// Store the external target Params
+	params.clear();
+	params = group;
+ 
+	//--
+
 	// Clear
 
 	params_EditorGroups.clear(); // a group for each param
@@ -2126,11 +2147,12 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 	// Initiate
 
 	addGroup(group);
+}
 
-	//-
-
-	// Help Info
-	textBoxWidget.setup();
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::rebuildParamsGroup(ofParameterGroup& group) 
+{
+	setupEditor(group);
 }
 
 //--------------------------------------------------------------
@@ -2214,6 +2236,11 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 		//// exclude params not marked as serializable
 		//if (!p->isSerializable()) continue;
 		////if (!parameter->isSerializable()) return;
+		
+		//--
+		 
+		// default state for enablers toggles
+		bool _defaultState = true;
 
 		//--
 
@@ -2276,7 +2303,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			//-
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
@@ -2308,7 +2335,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			//-
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
@@ -2342,7 +2369,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			//-
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
@@ -2371,7 +2398,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			params_EditorGroups.add(_g);
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
@@ -2408,7 +2435,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			params_EditorGroups.add(_g);
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
@@ -2448,7 +2475,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 
 			params_EditorGroups.add(_g);
 
-			ofParameter<bool> b0{ _name, false };
+			ofParameter<bool> b0{ _name, _defaultState };
 			enablersForParams.push_back(b0);
 			params_EditorEnablers.add(b0);
 
