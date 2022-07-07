@@ -11,8 +11,8 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_AppState = path_Global + "Rand_AppSession.json";
 	path_MemoryState = path_Global + "Rand_MemoryState.json";
 
-	bGui.set("RAND", true);
-	bGui_Main.set("RAND MAIN", false);
+	bGui.set("RAND", true);//global
+	bGui_Main.set("RAND MAIN", true);//main window
 	bGui_RangesEditor.set("RAND RANGES", false);
 	bGui_Index.set("RAND INDEX", false);
 	bGui_Params.set("RAND PARAMS", false);
@@ -2167,7 +2167,7 @@ void ofxSurfingRandomizer::buildHelp()
 
 	if (!bKeys) {
 		helpInfo += "Keys toggle is disabled. \n";
-		helpInfo += "Enable Keys toggle! \n";
+		helpInfo += "Enable that toggle! \n";
 	}
 	else {
 		helpInfo += "G                      GUI \n";
@@ -2198,6 +2198,9 @@ void ofxSurfingRandomizer::buildHelp()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::startup()
 {
+	bGui.makeReferenceTo(bGui_Main);
+	//bGui_Main.makeReferenceTo(bGui);
+
 	// Some customizations
 
 	// Link advanced params
