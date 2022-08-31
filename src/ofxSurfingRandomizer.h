@@ -43,7 +43,7 @@
 #include "ofxSurfingImGui.h"
 #include "ofxSurfingHelpers.h"
 #include "TextBoxWidget.h"
-#include "ofxSurfing_Timers.h"
+#include "surfingTimers.h"
 #include "SurfingIndexRandomizer.h" // Index randomizer
 
 #define DEFAULT_MIN_PCT 0.1f
@@ -209,7 +209,7 @@ private:
 
 	//--
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	ofParameter<bool> bMinimize{ "Minimize", false };
 

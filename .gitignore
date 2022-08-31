@@ -572,3 +572,4 @@ example-RandomScene/bin/data/ofxSurfingRandomizer/SurfingRandom_Ranges.json
 example-RandomScene/bin/imgui.ini
 example-RandomScene/bin/data/ofxSurfingRandomizer/SurfingRandom_Ranges.json
 examples/2-RandomScene/bin/imgui.ini
+examples/1-Rand_Basic/bin/imgui.ini
