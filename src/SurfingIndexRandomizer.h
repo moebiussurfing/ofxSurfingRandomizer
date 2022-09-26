@@ -31,11 +31,10 @@ public:
 
 	// Linked params for the index and for the gui visible toggle!
 	//--------------------------------------------------------------
-	void setup(ofParameter<int>& indexParam/*, ofParameter<bool> bOpenGui*/) {
-	//void setup(ofParameter<int>& indexParam, ofParameter<bool> bOpenGui) {
+	void setup(ofParameter<int>& indexParam) {
 		//TODO:
 		//bGui.makeReferenceTo(bOpenGui);
-		
+
 		indexSelected.makeReferenceTo(indexParam);
 		setup(indexParam.getMax() + 1);
 	}

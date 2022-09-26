@@ -10,35 +10,6 @@ ofxSurfingRandomizer::ofxSurfingRandomizer() {
 	path_Editor = path_Global + "Rand_Ranges.json";
 	path_AppState = path_Global + "Rand_AppSession.json";
 	path_MemoryState = path_Global + "Rand_MemoryState.json";
-
-	bGui.set("RAND", true);//global
-	bGui_Main.set("RAND MAIN", true);//main window
-	bGui_RangesEditor.set("RAND RANGES", false);
-	bGui_Index.set("RAND INDEX", false);
-	bGui_Params.set("RAND PARAMS", false);
-
-	bGui_ModeIndex.set("MODE INDEX", false);//->show by default
-	bGui_ModeParams.set("MODE PARAMS", false);//->show by default
-
-	params_AppState.setName("Surfing Rand");
-	params_AppState.add(bGui);
-	params_AppState.add(bGui_ModeIndex);
-	params_AppState.add(bGui_ModeParams);
-	params_AppState.add(bGui_Main);
-	params_AppState.add(bGui_Index);
-	params_AppState.add(bGui_Params);
-	params_AppState.add(bGui_RangesEditor);
-
-	params_AppState.add(bMinimize);
-	params_AppState.add(bPlay.set("PLAY", false));
-	params_AppState.add(bKeys.set("Keys", true));
-	params_AppState.add(bHelp.set("Help", false));
-	params_AppState.add(bTarget.set("Target", false));
-	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
-	params_AppState.add(surfingIndexRandomizer.params_Clicker);
-
-	// Exclude
-	//bPlay.setSerializable(false);
 }
 
 //--------------------------------------------------------------
@@ -57,51 +28,92 @@ void ofxSurfingRandomizer::setupGui() {
 	ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 	ui.setup();
 
-	ui.addWindowSpecial(bGui_Main);
-	ui.addWindowSpecial(bGui_RangesEditor);
-	ui.addWindowSpecial(bGui_Params);
-	ui.addWindowSpecial(surfingIndexRandomizer.bGui);
-	ui.addWindowSpecial(surfingIndexRandomizer.bGui_Editor);
+	if (bUseIndex || bUseParams)
+	{
+		ui.addWindowSpecial(bGui_Main);
+	}
+
+	if (bUseParams) {
+		ui.addWindowSpecial(bGui_MainParams);
+		ui.addWindowSpecial(bGui_RangesEditor);
+		ui.addWindowSpecial(bGui_Params);
+	}
+	if (bUseIndex) {
+		ui.addWindowSpecial(surfingIndexRandomizer.bGui);
+		ui.addWindowSpecial(surfingIndexRandomizer.bGui_Editor);
+	}
 
 	ui.startup();
 }
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setup() {
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	ofxSurfingHelpers::CheckFolder(path_Global);
 
+	bGui.set("RND", true);//global
+	bGui_Main.set("RND MAIN", true);//main window
+	bGui_MainParams.set("RND PARAMS", true);
+	bGui_RangesEditor.set("RND RANGES", true);
+
+	bGui_MainIndex.set("MAIN INDEX", true);
+	bGui_Index.set("RND INDEX", true);
+	bGui_Params.set("PARAMS", true);
+
+	bGui_ModeIndex.set("MODE INDEX", true);//->show by default
+
+	params_AppState.setName("Surfing Rand");
+	params_AppState.add(bGui);
+	params_AppState.add(bGui_ModeIndex);
+	params_AppState.add(bGui_Main);
+	params_AppState.add(bGui_Index);
+	params_AppState.add(bGui_Params);
+	params_AppState.add(bGui_RangesEditor);
+
+	params_AppState.add(bMinimize);
+	params_AppState.add(bPlay.set("PLAY", false));
+	params_AppState.add(bKeys.set("Keys", true));
+	params_AppState.add(bTarget.set("Target", false));
+	params_AppState.add(playSpeed.set("Speed", 0.5, 0, 1));
+	params_AppState.add(surfingIndexRandomizer.params_Clicker);
+
 	//TODO: split params for core stuff
-	
-	//--
-	 
-	// Store the external target Params
-	//params = group;
 
 	//--
+
+	if (bUseParams)
+	{
+		// Store the external target Params
+		//params = group;
+		
+		//// Store the external target Params
+		//params.clear();
+		//params = group;
+
+		//--
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-	undoManager.setPathGlobal(path_Global);
-	undoManager.setup(params);
-	//params_AppState.add(undoManager.getParamsAppState());
+		undoManager.setPathGlobal(path_Global);
+		undoManager.setup(params);
+		//params_AppState.add(undoManager.getParamsAppState());
 #endif
+	}
 
 	//--
 
-	// Index randomizer
-
-	if (!bCustomIndex)
+	if (bUseIndex)
 	{
-		const int NUM_INDEX_ITEMS = 9;
-		indexTarget.set("Index", 0, 0, NUM_INDEX_ITEMS - 1);
+		// Index randomizer
 
-		surfingIndexRandomizer.setPath(path_Global);
-		surfingIndexRandomizer.setup(indexTarget); // linked params
-		//surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex); // linked params
+		if (!bCustomIndex)
+		{
+			const int NUM_INDEX_ITEMS = 9;
+			indexTarget.set("Index", 0, 0, NUM_INDEX_ITEMS - 1);
+
+			surfingIndexRandomizer.setPath(path_Global);
+			surfingIndexRandomizer.setup(indexTarget); // linked params
+			//surfingIndexRandomizer.setup(indexTarget, bGui_ModeIndex); // linked params
+		}
 	}
 
 	//--
@@ -117,11 +129,15 @@ void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
 
 	//--
 
+	startup();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::setup(ofParameterGroup& group) {
+
 	setupEditor(group); // Build the range editor for all the params.
 
-	//--
-
-	startup();
+	setup();
 }
 
 //--------------------------------------------------------------
@@ -648,26 +664,31 @@ void ofxSurfingRandomizer::drawImGuiWidgets_RangeEditorResets()
 void ofxSurfingRandomizer::drawImGuiWindows() {
 
 	if (!bGui) return;
+
+	// main
+	if (bUseIndex || bUseParams)
 	{
 		drawImGuiWindow_Main();
+	}
 
-		//if (bGui_ModeIndex)
-		{
-			drawImGuiWindows_Index();
-		}
+	// params
+	if (bUseParams) {
+		drawImGuiWindow_MainParams();
+		drawImGuiWindow_Params();
+		drawImGuiWindow_Ranges();
+	}
 
-		//if (bGui_ModeParams)
-		{
-			drawImGuiWindow_Params();
-			drawImGuiWindow_Ranges();
-		}
+	// index
+	if (bUseIndex) {
+		//drawImGuiWindow_MainIndex();
+		drawImGuiWindows_Index();
+	}
 
-		//--
+	//--
 
 #ifdef INCLUDE__OFX_UNDO_ENGINE
-		undoManager.drawImGui();
+	undoManager.drawImGui();
 #endif
-	}
 }
 
 //--------------------------------------------------------------
@@ -683,6 +704,165 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 
 		if (ui.BeginWindowSpecial(bGui_Main))
 		{
+			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			ui.Add(bKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+
+			ui.AddSpacingSeparated();
+
+			// Panels
+
+			//--
+
+			// Target 1
+			// Index
+			if (bUseIndex) {
+				ui.AddLabelBig("INDEX");
+				ui.Add(surfingIndexRandomizer.bGui, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+				ui.Add(surfingIndexRandomizer.bGui_Editor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+
+				ui.AddSpacingSeparated();
+			}
+
+			//----
+
+			// Target 2
+			// Params
+			if (bUseParams) {
+				ui.AddLabelBig("PARAMS");
+				ui.Add(bGui_MainParams, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+				if (bGui_MainParams && !ui.bMinimize)
+				{
+					ui.Indent();
+					ui.Add(bGui_RangesEditor, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+					ui.Add(bGui_Params, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+					ui.Unindent();
+				}
+				ui.AddSpacingSeparated();
+			}
+
+			//----
+
+			ui.Add(ui.bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
+
+			//----
+
+			ui.EndWindowSpecial();
+		}
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::update(ofEventArgs& args)
+{
+	// Tester
+	// Play timed randoms
+
+	static const int _secs = 2;
+	if (bPlay)
+	{
+		//int max = 60 * _secs;
+		int max = ofMap(playSpeed, 0, 1, 60, 5) * _secs;
+		tf = ofGetFrameNum() % max;
+		tn = ofMap(tf, 0, max, 0, 1);
+		if (tf == 0)
+		{
+			// Params
+			doRandomize();
+
+			//// Target Selector
+			//if (!bTarget) surfingIndexRandomizer.doRandom();
+			//else doRandomize();
+		}
+	}
+
+	//--
+
+	// Randomizers Group
+
+	surfingIndexRandomizer.update();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::draw_ImGui()
+{
+	if (!bGui) return;
+
+	//----
+
+	ui.Begin();
+	{
+		drawImGuiWindows();
+	}
+	ui.End();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::draw(ofEventArgs& args)
+{
+	if (!bGui) return;
+
+	//--
+
+	//if (bHelp) 
+	if (ui.bHelpInternal)
+	{
+		static bool bKeys_PRE = false;
+		if (bKeys != bKeys_PRE) {
+			bKeys_PRE = bKeys;
+			buildHelp();
+		}
+
+		drawHelp();
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawHelp() {
+
+	textBoxWidget.draw();
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGuiWindows_Index() {
+
+	//if (!bGui_ModeIndex) return;
+
+	//--
+
+	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+	if (surfingIndexRandomizer.bGui) {
+
+		// Index
+
+		if (ui.BeginWindowSpecial(surfingIndexRandomizer.bGui))
+		{
+			surfingIndexRandomizer.drawImGuiWidgets_IndexMain();
+			ui.EndWindowSpecial();
+		}
+	}
+
+	//--
+
+	if (surfingIndexRandomizer.bGui_Editor) {
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+
+		// Index Editor
+
+		if (ui.BeginWindowSpecial(surfingIndexRandomizer.bGui_Editor))
+		{
+			surfingIndexRandomizer.drawImGuiWidgets_IndexEditor();
+			ui.EndWindowSpecial();
+		}
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGuiWindow_MainIndex() {
+
+	if (bGui_MainIndex)
+	{
+		if (ui.BeginWindowSpecial(bGui_MainIndex))
+		{
 			// Widgets sizes
 			float _spcx = ui.getWidgetsSpacingX();
 			float _w1 = ui.getWidgetsWidth(1);
@@ -691,25 +871,6 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 			float _w4 = ui.getWidgetsWidth(4);
 			float _h1 = ui.getWidgetsHeight();
 			float _h2 = 3 * _h1;
-
-			std::string n;
-
-			bool bOpen;
-			ImGuiColorEditFlags _flagc;
-
-			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			ui.Add(bKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			ui.AddSpacingSeparated();
-
-			//--
-
-			// Panels
-
-			// Target 1
-			// Index
-
-			ui.AddLabelBig("INDEX");
-			ui.Add(bGui_ModeIndex, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
 
 			//--
 
@@ -758,311 +919,133 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 				ui.Unindent();
 			}
 
-			ui.AddSpacingBig();
-			ui.AddSpacingSeparated();
+			//ui.AddSpacingBig();
+			//ui.AddSpacingSeparated();
 
-			//----
-
-
-			// Target 2
-			// Params
-
-			ui.AddLabelBig("PARAMS");
-			ui.Add(bGui_ModeParams, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
-
-			//--
-
-			if (bGui_ModeParams)
-			{
-				ui.Indent();
-
-				ui.Add(bGui_Params, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-				ui.Add(bGui_RangesEditor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-
-				if (!bGui_RangesEditor)
-				{
-					ui.AddSpacingBigSeparated();
-
-					// Run Random Params
-					if (ui.AddButton("RUN PARAMS", OFX_IM_BUTTON_BIG)) doRandomize();
-
-					// Play Random Params
-					string son, soff;
-					son = "PLAYING PARAMS";
-					soff = "PLAY PARAMS";
-					_w1 = ui.getWidgetsWidth(1);
-					ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, _h2, son, soff, true, 1 - tn);
-					ofxImGuiSurfing::ProgressBar2(tn);
-					ui.Add(playSpeed, OFX_IM_SLIDER, 2);
-				}
-
-				//--
-
-				// Enable Toggles Params
-
-				//if (bGui_RangesEditor)
-				{
-					ui.AddSpacingBigSeparated();
-
-					if (ImGui::CollapsingHeader("ENABLE PARAMS", ImGuiWindowFlags_NoCollapse))
-					{
-						ui.refreshLayout();
-						ui.AddSpacing();
-
-						if (ui.AddButton("NONE", OFX_IM_BUTTON, 2))
-						{
-							doDisableAll();
-						}
-						ui.SameLine();
-						if (ui.AddButton("ALL", OFX_IM_BUTTON, 2))
-						{
-							doEnableAll();
-						}
-
-						ui.AddSpacingSeparated();
-						ui.AddSpacing();
-
-						//--
-
-						// Toggles
-
-						for (int i = 0; i < params_EditorEnablers.size(); i++)
-						{
-							// ofAbstractParameter
-							auto& p = params_EditorEnablers[i];
-							auto type = p.type();
-							bool isBool = type == typeid(ofParameter<bool>).name();
-
-							std::string name = p.getName();
-
-							if (isBool) // Just in case... 
-							{
-								// 1. Toggle Enable
-
-								ofParameter<bool> pb = p.cast<bool>();
-								float _w75 = 3 * (_w1 / 4 - _spcx / 4);
-								ofxImGuiSurfing::AddBigToggle(pb, _w75, _h1, false);
-
-								ImGui::SameLine();
-
-								//-
-
-								// 2. Random Button 
-
-								ImGui::PushID(i); // required to allow same name in all buttons
-								if (ImGui::Button("RUN", ImVec2(_w4, _h1)))
-								{
-									doRandomize(i, true);
-								}
-								ImGui::PopID();
-							}
-						}
-					}
-				}
-
-				ui.Unindent();
+			ui.EndWindowSpecial();
 			}
+		}
+	}
+//--------------------------------------------------------------
+void ofxSurfingRandomizer::drawImGuiWindow_MainParams() {
 
-			//----
+	if (bGui_MainParams)
+	{
+		if (ui.BeginWindowSpecial(bGui_MainParams))
+		{
+			// Widgets sizes
+			float _spcx = ui.getWidgetsSpacingX();
+			float _w1 = ui.getWidgetsWidth(1);
+			float _w2 = ui.getWidgetsWidth(2);
+			float _w3 = ui.getWidgetsWidth(3);
+			float _w4 = ui.getWidgetsWidth(4);
+			float _h1 = ui.getWidgetsHeight();
+			float _h2 = 3 * _h1;
 
-			// Extra
+			ui.Add(bGui_RangesEditor, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
-			if (!ui.bMinimize)
+			if (!bGui_RangesEditor)
 			{
 				ui.AddSpacingBigSeparated();
 
-				ui.Add(ui.bExtra, OFX_IM_TOGGLE_ROUNDED);
-				if (ui.bExtra)
+				// Run Random Params
+				if (ui.AddButton("RUN PARAMS", OFX_IM_BUTTON_BIG)) doRandomize();
+
+				// Play Random Params
+				string son, soff;
+				son = "PLAYING PARAMS";
+				soff = "PLAY PARAMS";
+				_w1 = ui.getWidgetsWidth(1);
+				ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, _h2, son, soff, true, 1 - tn);
+				ofxImGuiSurfing::ProgressBar2(tn);
+				ui.Add(playSpeed, OFX_IM_SLIDER, 2);
+			}
+
+			//--
+
+			// Enable Toggles Params
+
+			//if (bGui_RangesEditor)
+			{
+				ui.AddSpacingBigSeparated();
+
+				if (ImGui::CollapsingHeader("ENABLE PARAMS", ImGuiWindowFlags_NoCollapse))
 				{
-					ui.Indent();
+					ui.refreshLayout();
+					ui.AddSpacing();
 
-					/*
-						// Commands
-						{
-							ui.AddSpacing();
+					if (ui.AddButton("NONE", OFX_IM_BUTTON, 2))
+					{
+						doDisableAll();
+					}
+					ui.SameLine();
+					if (ui.AddButton("ALL", OFX_IM_BUTTON, 2))
+					{
+						doEnableAll();
+					}
 
-							if (ImGui::CollapsingHeader("COMMANDS", ImGuiWindowFlags_NoCollapse))
-							{
-								ui.refreshLayout();
-
-								if (ui.AddButton("RUN INDEX", OFX_IM_BUTTON_MEDIUM)) surfingIndexRandomizer.doRandom();
-								if (ui.AddButton("RUN PARAMS", OFX_IM_BUTTON_MEDIUM)) doRandomize();
-
-								//-
-
-								/*
-								ui.AddSpacing();
-								// Tester
-								if (!ui.bMinimize)
-								{
-									bOpen = false;
-									ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-									_flagw |= ImGuiTreeNodeFlags_Framed;
-
-									ui.Indent();
-									if (ImGui::TreeNodeEx("TESTER", _flagw))
-									{
-										ui.refreshLayout();
-
-										_w1 = ui.getWidgetsWidth(1);
-
-										ofxImGuiSurfing::AddBigToggleNamed(bTarget, _w1, _h2, "Target PARAMS", "Target INDEX");
-
-										string son, soff;
-										if (bTarget) {
-											son = "Testing PARAMS";
-											soff = "Test PARAMS";
-										}
-										else {
-											son = "Testing INDEX";
-											soff = "Test INDEX";
-										}
-										ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, _h2, son, soff, true, 1 - tn);
-
-										if (bPlay)
-										{
-											ofxImGuiSurfing::ProgressBar2(tn);
-											ui.Add(playSpeed, OFX_IM_SLIDER, 2);
-										}
-
-										ImGui::TreePop();
-									}
-									ui.Unindent();
-								}
-							}
-						}
-					*/
+					ui.AddSpacingSeparated();
+					ui.AddSpacing();
 
 					//--
 
-					// Tools
-					ui.AddSpacingSeparated();
+					// Toggles
 
-					// State memory
-					if (ImGui::TreeNodeEx("MEMORY", ImGuiTreeNodeFlags_Framed))
+					for (int i = 0; i < params_EditorEnablers.size(); i++)
 					{
-						ui.refreshLayout();
+						// ofAbstractParameter
+						auto& p = params_EditorEnablers[i];
+						auto type = p.type();
+						bool isBool = type == typeid(ofParameter<bool>).name();
 
-						if (ui.AddButton("STORE", OFX_IM_BUTTON, 2)) doSaveState();
+						std::string name = p.getName();
 
-						ImGui::SameLine();
+						if (isBool) // Just in case... 
+						{
+							// 1. Toggle Enable
 
-						if (ui.AddButton("RECALL", OFX_IM_BUTTON, 2)) doLoadState();
+							ofParameter<bool> pb = p.cast<bool>();
+							float _w75 = 3 * (_w1 / 4 - _spcx / 4);
+							ofxImGuiSurfing::AddBigToggle(pb, _w75, _h1, false);
 
-						ImGui::TreePop();
+							ImGui::SameLine();
+
+							//-
+
+							// 2. Random Button 
+
+							ImGui::PushID(i); // required to allow same name in all buttons
+							if (ImGui::Button("RUN", ImVec2(_w4, _h1)))
+							{
+								doRandomize(i, true);
+							}
+							ImGui::PopID();
+						}
 					}
-
-					ui.Unindent();
 				}
 			}
-					
+
+			//--
+
+			// Tools
 			ui.AddSpacingSeparated();
 
-			ui.Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			// State memory
+			if (ImGui::TreeNodeEx("MEMORY", ImGuiTreeNodeFlags_Framed))
+			{
+				ui.refreshLayout();
 
-			//----
+				if (ui.AddButton("STORE", OFX_IM_BUTTON, 2)) doSaveState();
+
+				ImGui::SameLine();
+
+				if (ui.AddButton("RECALL", OFX_IM_BUTTON, 2)) doLoadState();
+
+				ImGui::TreePop();
+			}
 
 			ui.EndWindowSpecial();
 		}
-	}
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::update(ofEventArgs& args)
-{
-	// Tester
-	// Play timed randoms
-
-	static const int _secs = 2;
-	if (bPlay)
-	{
-		//int max = 60 * _secs;
-		int max = ofMap(playSpeed, 0, 1, 60, 5) * _secs;
-		tf = ofGetFrameNum() % max;
-		tn = ofMap(tf, 0, max, 0, 1);
-		if (tf == 0)
-		{
-			// Params
-			doRandomize();
-
-			//// Target Selector
-			//if (!bTarget) surfingIndexRandomizer.doRandom();
-			//else doRandomize();
-		}
-	}
-
-	//-
-
-	// Randomizers Group
-
-	surfingIndexRandomizer.update();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::draw_ImGui()
-{
-	if (!bGui) return;
-
-	//----
-
-	ui.Begin();
-	{
-		drawImGuiWindows();
-	}
-	ui.End();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::draw(ofEventArgs& args)
-{
-	if (!bGui) return;
-
-	//--
-
-	if (bHelp) {
-		static bool bKeys_PRE = false;
-		if (bKeys != bKeys_PRE) {
-			bKeys_PRE = bKeys;
-			buildHelp();
-		}
-
-		drawHelp();
-	}
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::drawHelp() {
-
-	textBoxWidget.draw();
-}
-
-//--------------------------------------------------------------
-void ofxSurfingRandomizer::drawImGuiWindows_Index() {
-
-	//if (!bGui_ModeIndex) return;
-
-	//--
-
-	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
-
-	// Index
-
-	if (ui.BeginWindowSpecial(surfingIndexRandomizer.bGui))
-	{
-		surfingIndexRandomizer.drawImGuiWidgets_IndexMain();
-		ui.EndWindowSpecial();
-	}
-
-	//--
-
-	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
-
-	// Index Editor
-
-	if (ui.BeginWindowSpecial(surfingIndexRandomizer.bGui_Editor))
-	{
-		surfingIndexRandomizer.drawImGuiWidgets_IndexEditor();
-		ui.EndWindowSpecial();
 	}
 }
 
@@ -1075,7 +1058,8 @@ void ofxSurfingRandomizer::drawImGuiWindow_Params() {
 
 		if (ui.BeginWindowSpecial(bGui_Params))
 		{
-			ui.AddGroup(params, true, ImGuiCond_Appearing);
+			ui.AddGroup(params);
+			//ui.AddGroup(params, true, ImGuiCond_Appearing);
 
 			ui.EndWindowSpecial();
 		}
@@ -2121,7 +2105,11 @@ void ofxSurfingRandomizer::exit()
 {
 	// Settings
 	ofxSurfingHelpers::saveGroup(params_AppState, path_AppState);
-	ofxSurfingHelpers::saveGroup(params_Editor, path_Editor);
+
+	if (bUseParams) {
+		ofxSurfingHelpers::CheckFolder(path_Global);
+		ofxSurfingHelpers::saveGroup(params_Editor, path_Editor);
+	}
 }
 
 //--
@@ -2129,10 +2117,10 @@ void ofxSurfingRandomizer::exit()
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 {
-	// Store the external target Params
-	params.clear();
-	params = group;
- 
+	//// Store the external target Params
+	//params.clear();
+	//params = group;
+
 	//--
 
 	// Clear
@@ -2147,10 +2135,12 @@ void ofxSurfingRandomizer::setupEditor(ofParameterGroup& group)
 	// Initiate
 
 	addGroup(group);
+
+	bUseParams = true;
 }
 
 //--------------------------------------------------------------
-void ofxSurfingRandomizer::rebuildParamsGroup(ofParameterGroup& group) 
+void ofxSurfingRandomizer::rebuildParamsGroup(ofParameterGroup& group)
 {
 	setupEditor(group);
 }
@@ -2173,21 +2163,22 @@ void ofxSurfingRandomizer::buildHelp()
 		helpInfo += "G                      GUI \n";
 		helpInfo += "I                      HELP INFO \n";
 		helpInfo += "\n";
-
-		helpInfo += "PARAMS  \n";
-		helpInfo += "Space                  RAND \n";
-		helpInfo += "Backspace              RESET RANGED \n";
-		helpInfo += "+Ctrl                  RESET \n";
-		helpInfo += "\n";
-
-		helpInfo += "INDEX \n";
-		helpInfo += "Ctrl + Space           RAND \n";
-		helpInfo += "< >                    BROWSE \n";
-		helpInfo += "\n";
-
+		if (bUseParams) {
+			helpInfo += "PARAMS  \n";
+			helpInfo += "Space                  RAND \n";
+			helpInfo += "Backspace              RESET RANGED \n";
+			helpInfo += "+Ctrl                  RESET \n";
+			helpInfo += "\n";
+		}
+		if (bUseIndex) {
+			helpInfo += "INDEX \n";
+			helpInfo += "Ctrl + Space           RAND \n";
+			helpInfo += "< >                    BROWSE \n";
+			helpInfo += "\n";
+		}
 		helpInfo += "TESTER / PLAYER \n";
-		helpInfo += "Return                 PARAMS \n";
-		helpInfo += "+Ctrl                  INDEX \n";
+		if (bUseParams) helpInfo += "Return                 PARAMS \n";
+		if (bUseIndex) helpInfo += "+Ctrl                  INDEX \n";
 	}
 
 	//helpInfo = ofToUpper(helpInfo);//make uppercase
@@ -2204,7 +2195,7 @@ void ofxSurfingRandomizer::startup()
 	// Some customizations
 
 	// Link advanced params
-	bHelp.makeReferenceTo(ui.bHelpInternal);
+	//bHelp.makeReferenceTo(ui.bHelpInternal);
 	bKeys.makeReferenceTo(ui.bKeys);
 
 	buildHelp();
@@ -2214,34 +2205,43 @@ void ofxSurfingRandomizer::startup()
 
 	//--
 
-	bPlay_Index.makeReferenceTo(surfingIndexRandomizer.bPlay);
+	if (bUseIndex) {
+		bPlay_Index.makeReferenceTo(surfingIndexRandomizer.bPlay);
 
-	surfingIndexRandomizer.bRandomRunIndex.setName("TEST RANDOM");
-	surfingIndexRandomizer.bAvoidRepeatRand.set(false); // Preferred workflow here
+		surfingIndexRandomizer.bRandomRunIndex.setName("TEST RANDOM");
+		surfingIndexRandomizer.bAvoidRepeatRand.set(false); // Preferred workflow here
+	}
 
 	//--
 
 	// Settings
+	if (bUseParams) {
+		params_Editor.setName("Ranges Editor");
+		params_Editor.add(params_EditorEnablers);
+		params_Editor.add(params_EditorGroups);
+	}
 
-	params_Editor.setName("Ranges Editor");
-	params_Editor.add(params_EditorEnablers);
-	params_Editor.add(params_EditorGroups);
+	if (bUseParams) ofxSurfingHelpers::loadGroup(params_Editor, path_Editor);
 
-	ofxSurfingHelpers::loadGroup(params_Editor, path_Editor);
 	ofxSurfingHelpers::loadGroup(params_AppState, path_AppState);
 }
 
 //--------------------------------------------------------------
 void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
+	bUseParams = true;
+	
+	// Store the external target Params
+	params.clear();
+	params = group;
 
 	for (auto p : group) // ofAbstractParameter
 	{
 		//// exclude params not marked as serializable
 		//if (!p->isSerializable()) continue;
 		////if (!parameter->isSerializable()) return;
-		
+
 		//--
-		 
+
 		// default state for enablers toggles
 		bool _defaultState = true;
 
@@ -2598,6 +2598,7 @@ void ofxSurfingRandomizer::addGroup(ofParameterGroup& group) {
 	//{
 	//	params_EditorEnablers.add(pb);
 	//}
+
 }
 
 //--------------------------------------------------------------

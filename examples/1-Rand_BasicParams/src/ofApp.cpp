@@ -19,40 +19,7 @@ void ofApp::setup()
 	// Randomizer
 
 	// A. Setup with Params
-	randomizer.addGroup(params);
-
-	// B. Index
-	randomizer.setIndexPtr(index);
-
-	randomizer.setup();
-
-	// Lambda callback to receive the randomized index target
-	//--------------------------------------------------------------
-	listenerIndex = index.newListener([this](int& i)
-		{
-			ofLogNotice("ofApp") << "Index: " << index.get();
-
-			refreshColorByIndex(); //-> Will set the color getting the index.
-
-			// Example for another common usage:
-			// presets.load(index);
-		});
-
-	refreshColorByIndex();
-}
-
-//--------------------------------------------------------------
-void ofApp::refreshColorByIndex()
-{
-	switch (index)
-	{
-	case 0: colorByIndex = ofColor::green; break;
-	case 1: colorByIndex = ofColor::yellow; break;
-	case 2: colorByIndex = ofColor::orange; break;
-	case 3: colorByIndex = ofColor::red; break;
-	case 4: colorByIndex = ofColor::blue; break;
-	default: break;
-	}
+	randomizer.setup(params);
 }
 
 //--------------------------------------------------------------
@@ -71,7 +38,9 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawScene()
 {
-	static ofColor colorBg = 32;
+	ofColor colorBg = 32;
+	color = 200;
+
 	ofClear(colorBg);
 
 	ofPushStyle();
@@ -81,7 +50,7 @@ void ofApp::drawScene()
 
 		// alpha
 		float _a = ofMap(alpha, alpha.getMin(), alpha.getMax(), 0.1, 1);
-		ofSetColor(colorByIndex.r, colorByIndex.g, colorByIndex.b, colorByIndex.a * _a);
+		ofSetColor(color.r, color.g, color.b, color.a * _a);
 
 		// size
 		float _sz = 100 + size /3;
@@ -94,6 +63,8 @@ void ofApp::drawScene()
 
 		float _s = ofMap(rotation, rotation.getMin(), rotation.getMax(), 0, 0.1);
 		float _scale = 1;
+
+		int index = 0;
 
 		drawShape(index, -_sz / 2, -_sz / 2, _sz);
 

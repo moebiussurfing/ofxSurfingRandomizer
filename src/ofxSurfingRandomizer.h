@@ -16,7 +16,7 @@
 		make tree foldering
 		use pushIDs to avoid collide
 		allow adding on runtime?
-	+ on ranges window, make columns to put short checkboxes 
+	+ on ranges window, make columns to put short checkboxes
 		right to the prob sliders
 
 	+ range
@@ -60,8 +60,19 @@ public:
 	ofxSurfingRandomizer();
 	~ofxSurfingRandomizer();
 
+private:
+
+	bool bUseIndex = false;
+	bool bUseParams = false;
+
+public:
+
 	void setup();
+	void addGroup(ofParameterGroup& group);
 	void setup(ofParameterGroup& group);
+
+private:
+
 	void setupGui();
 	void startup();
 	void draw(ofEventArgs& args);
@@ -69,17 +80,24 @@ public:
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void exit();
 
+private:
+	
 	// Legacy API, could remove
 	// -> Exposed public to avoid bug that interferes between ImGui instances..
 	void draw_ImGui();
-	void drawGui() { draw_ImGui(); };
 
 	void rebuildParamsGroup(ofParameterGroup& group);
+
+public:
+	
+	void drawGui() { draw_ImGui(); };
 
 private:
 
 	void drawImGuiWindows();
 	void drawImGuiWindow_Main();
+	void drawImGuiWindow_MainIndex();
+	void drawImGuiWindow_MainParams();
 	void drawImGuiWindow_Params();
 	void drawImGuiWindow_Ranges();
 	void drawImGuiWidgets_RangeEditorResets();
@@ -93,20 +111,23 @@ private:
 
 	// Exposed to external GUI's
 
-public:
+private:
 
 	ofParameter<bool> bGui;
 	ofParameter<bool> bGui_Main;
+	ofParameter<bool> bGui_MainParams;
+	ofParameter<bool> bGui_MainIndex;
 	ofParameter<bool> bGui_Index;
 	ofParameter<bool> bGui_Params;
 	ofParameter<bool> bGui_RangesEditor;
 
 	ofParameter<bool> bGui_ModeIndex;//could be removed
-	ofParameter<bool> bGui_ModeParams;//could be removed
+	//ofParameter<bool> bGui_ModeParams;//could be removed
 
 	ofParameter<bool> bKeys;
-	ofParameter<bool> bHelp;
+	//ofParameter<bool> bHelp;
 
+public:
 	//--------------------------------------------------------------
 	void setGuiVisible(bool b)
 	{
@@ -116,9 +137,10 @@ public:
 
 	//--
 
-private:
-
+public:
 	ofParameter<int> indexTarget{ "Index", 0, 0, 9 };
+
+private:
 
 	SurfingIndexRandomizer surfingIndexRandomizer;
 
@@ -127,9 +149,19 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setIndexPtr(ofParameter<int> index)
+	void setup(ofParameter<int>& index)
+	{
+		setIndexPtr(index);
+
+		setup();
+	}
+
+	//--------------------------------------------------------------
+	void setIndexPtr(ofParameter<int>& index)
 	{
 		bCustomIndex = true;
+		bUseIndex = true;
+
 		indexTarget.makeReferenceTo(index);
 
 		indexTarget.set("Index", 0, 0, index.getMax());
@@ -187,8 +219,8 @@ public:
 	void doResetParamsFull(ResetPramsType type = RESET_PARAM_MIN);//set to minimals from range or abs param itself
 	void doResetRangesFull();//set ranges to abs min/max from each parameter
 	void doResetRangesHalf();//set ranges to abs min/max from each parameter but a bit closed
-	
-	bool isRandomized() { 
+
+	bool isRandomized() {
 		if (bIsRandomized) {
 			bIsRandomized = false;
 			return true;
@@ -218,7 +250,6 @@ private:
 private:
 
 	void setupEditor(ofParameterGroup& group);
-	void addGroup(ofParameterGroup& group);
 
 	ofParameterGroup params; // the external parameters or targets
 
@@ -249,15 +280,15 @@ private:
 
 #endif
 
-	public:
+public:
 
-		int getAmountEnabledParams() {
-			int count = 0;
-			for (size_t i = 0; i < enablersForParams.size(); i++)
-			{
-				if (enablersForParams[i]) count++;
-			}
-			return count;
+	int getAmountEnabledParams() {
+		int count = 0;
+		for (size_t i = 0; i < enablersForParams.size(); i++)
+		{
+			if (enablersForParams[i]) count++;
 		}
+		return count;
+	}
 };
 

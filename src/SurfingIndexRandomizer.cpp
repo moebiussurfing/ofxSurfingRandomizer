@@ -23,9 +23,8 @@ void SurfingIndexRandomizer::setup(int _numPresets) {
 	indexSelected.set("Index", 0, 0, amountPresets - 1);
 
 	//TODO:
-	bGui.set("RAND INDEX MAIN", false);
-
-	bGui_Editor.set("RAND INDEX EDIT", false);
+	bGui.set("INDEX MAIN", false);
+	bGui_Editor.set("INDEX EDIT", false);
 
 	//-
 
@@ -635,7 +634,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 		}
 
 		// Run Random
-		ofxImGuiSurfing::AddBigButton(bRandomRunIndex, ImVec2(-1, -1));
+		ofxImGuiSurfing::AddBigButton(bRandomRunIndex, ImVec2(_w100, _h * 1.5f));
 
 		ImGui::Spacing();
 
@@ -679,7 +678,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 
 			ofxImGuiSurfing::AddMatrixClicker(indexSelected, respBtnsClicker, amntBtnsClicker, true, __h);
 
-			ImGui::Spacing();
+			//ImGui::Spacing();
 		}
 
 		//--
@@ -705,11 +704,11 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 				ImGui::SameLine();
 				if (ImGui::Button("Double", ImVec2(_w50, _h))) { randomizeDurationBpm *= 2.f; }
 
-				if (ImGui::Button("Reset Clock", ImVec2(_w100, _h))) { randomizeDurationBpm = 120.f; }
+				if (ImGui::Button("Reset", ImVec2(_w100, _h))) { randomizeDurationBpm = 120.f; }
 			}
 
 			//--
-
+			/*
 			ofxImGuiSurfing::AddSpacingSeparated();
 
 			ofxImGuiSurfing::AddToggleRoundedButton(bExtraClicker);
@@ -731,6 +730,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 
 				ImGui::Unindent();
 			}
+			*/
 		}
 	}
 }
@@ -765,7 +765,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 				if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
 				ImGui::SameLine();
 				if (ImGui::Button("Double", ImVec2(_w2, _h))) { randomizeDurationBpm *= 2.f; }
-				if (ImGui::Button("Reset Clock", ImVec2(_w1, _h))) {
+				if (ImGui::Button("Reset", ImVec2(_w1, _h))) {
 					randomizeDurationBpm = 120.f;
 				}
 
@@ -785,7 +785,7 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 					if (ImGui::Button("Half", ImVec2(_w2, _h))) { randomizeDurationBpm /= 2.f; }
 					ImGui::SameLine();
 					if (ImGui::Button("Double", ImVec2(_w2, _h))) { randomizeDurationBpm *= 2.f; }
-					if (ImGui::Button("Reset Clock", ImVec2(_w1, _h))) { randomizeDurationBpm = 120.f; }
+					if (ImGui::Button("Reset", ImVec2(_w1, _h))) { randomizeDurationBpm = 120.f; }
 
 					ofxImGuiSurfing::AddParameter(randomizeDurationBpm);
 					ofxImGuiSurfing::AddParameter(randomizeDuration);
