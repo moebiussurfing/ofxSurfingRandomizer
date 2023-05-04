@@ -617,10 +617,10 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 
 		//--
 
-		// Minimize
-		ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
+		//// Minimize
+		//ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
 
-		ofxImGuiSurfing::AddSpacingSeparated();
+		//ofxImGuiSurfing::AddSpacingSeparated();
 
 		//-
 
@@ -647,7 +647,8 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexMain()
 		ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w100, 2 * _h, "PLAYING INDEX", "PLAY INDEX", true, 1 - tn);
 
 		// 2 Draw progress bar for the randomizer timer
-		ofxImGuiSurfing::ProgressBar2(tn); // to get the short timers scaled to bar
+		//ofxImGuiSurfing::ProgressBar(tn); // to get the short timers scaled to bar
+		ofxImGuiSurfing::AddProgressBar(tn);
 
 		ImGui::Spacing();
 
@@ -749,10 +750,10 @@ void SurfingIndexRandomizer::drawImGuiWidgets_IndexEditor()
 
 		//-
 
-		// Minimize
-		ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
+		//// Minimize
+		//ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ImVec2(1.5 * _h, 1.5 * (2 / 3.f) * _h));
 
-		ofxImGuiSurfing::AddSpacingSeparated();
+		//ofxImGuiSurfing::AddSpacingSeparated();
 
 		//--
 

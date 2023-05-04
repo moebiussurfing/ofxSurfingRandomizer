@@ -44,6 +44,8 @@ void ofxSurfingRandomizer::setupGui() {
 	}
 
 	ui.startup();
+
+	surfingIndexRandomizer.bMinimize.makeReferenceTo(ui.bMinimize);
 }
 
 //--------------------------------------------------------------
@@ -219,7 +221,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Ranges()
 			son = "PLAYING PARAMS";
 			ofxImGuiSurfing::AddBigToggleNamed(bPlay, _ww, _h2, son, soff, true, 1 - tn);
 
-			ofxImGuiSurfing::ProgressBar2(tn);
+			ofxImGuiSurfing::AddProgressBar(tn);
 
 			if (!bMinimize) ui.Add(playSpeed, OFX_IM_SLIDER);
 
@@ -700,7 +702,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_Main()
 
 	// Main Panel
 	{
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 		if (ui.BeginWindowSpecial(bGui_Main))
 		{
@@ -901,7 +903,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_MainIndex() {
 						//if (surfingIndexRandomizer.bPlay) 
 						{
 							float _tn = surfingIndexRandomizer.getPlayerPct();
-							ofxImGuiSurfing::ProgressBar2(_tn);
+							ofxImGuiSurfing::ProgressBar(_tn);
 						}
 
 						ofxImGuiSurfing::AddParameter(surfingIndexRandomizer.randomizeDurationBpm);
@@ -957,7 +959,7 @@ void ofxSurfingRandomizer::drawImGuiWindow_MainParams() {
 				soff = "PLAY PARAMS";
 				_w1 = ui.getWidgetsWidth(1);
 				ofxImGuiSurfing::AddBigToggleNamed(bPlay, _w1, _h2, son, soff, true, 1 - tn);
-				ofxImGuiSurfing::ProgressBar2(tn);
+				ofxImGuiSurfing::AddProgressBar(tn);
 				ui.Add(playSpeed, OFX_IM_SLIDER, 2);
 			}
 

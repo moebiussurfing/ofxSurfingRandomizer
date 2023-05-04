@@ -86,6 +86,8 @@ private:
 	// -> Exposed public to avoid bug that interferes between ImGui instances..
 	void draw_ImGui();
 
+public:
+	
 	void rebuildParamsGroup(ofParameterGroup& group);
 
 public:
@@ -111,9 +113,12 @@ private:
 
 	// Exposed to external GUI's
 
-private:
+public:
 
 	ofParameter<bool> bGui;
+
+private:
+	
 	ofParameter<bool> bGui_Main;
 	ofParameter<bool> bGui_MainParams;
 	ofParameter<bool> bGui_MainIndex;
