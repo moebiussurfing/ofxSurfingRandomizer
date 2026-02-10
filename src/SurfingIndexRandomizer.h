@@ -274,7 +274,7 @@ public:
 	//}
 	
 	//-------------------------------------------------------------
-	ofParameterGroup& getParamsRandomizers() {
+	ofParameterGroup getParamsRandomizers() {
 		ofParameterGroup _g{ "RANDOMIZERS" };
 		_g.add(bPlay);
 		_g.add(bRandomRunIndex);
